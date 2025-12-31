@@ -1,7 +1,11 @@
-import type { TournamentState, Player, Violation, Rule } from "./types";
+import type { TournamentState, Player, Violation, Rule, Team } from "./types";
 
-export function validateTeams<TPlayer extends Player, TRules extends Rule<TPlayer, string>[]>(
-  tournamentState: TournamentState<TPlayer, TRules>,
+export function validateTeams<
+  TPlayer extends Player,
+  TTeam extends Team<TRules>,
+  TRules extends Rule<string, TPlayer, TTeam>[],
+>(
+  tournamentState: TournamentState<TPlayer, TTeam, TRules>,
   currentTeams: Record<string, TPlayer[]>,
 ): Violation[] {
   const violations: Violation[] = [];
@@ -14,14 +18,3 @@ export function validateTeams<TPlayer extends Player, TRules extends Rule<TPlaye
   }
   return violations;
 }
-
-/**
- * Main entry point for the vie library
- * This is a skeleton implementation that will be filled in later
- */
-export function placeholder(): string {
-  return "vie library - to be implemented";
-}
-
-// Export version info
-export const VERSION = "1.0.0";

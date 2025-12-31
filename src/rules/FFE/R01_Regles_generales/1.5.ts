@@ -9,7 +9,7 @@ export interface PlayerWithFederation extends Player {
 
 const id = "R01-1.5";
 
-const rule: Rule<PlayerWithFederation, typeof id> = {
+const rule: Rule<typeof id, PlayerWithFederation> = {
   id,
   description: `À partir du 30 mars 2022, les joueurs et joueuses
   évoluant auprès de la FIDE avec le code RUS ou BLR (Russie et Biélorussie),

@@ -23,28 +23,36 @@ export interface Player {
   name: string;
 }
 
-export interface TournamentState<TPlayer extends Player, TRules extends Rule<TPlayer, string>[]> {
+export interface TournamentState<
+  TPlayer extends Player,
+  TTeam extends Team<TRules>,
+  TRules extends Rule<string, TPlayer, TTeam>[],
+> {
   /**
    * Les équipes participant au tournoi
    */
-  teams: Team<TRules>[];
+  teams: TTeam[];
   /**
    * L'historique des compositions, pour chaque ronde, indexé par l'identifiant de l'équipe
    */
   history: Record<string, TPlayer[][]>;
 }
 
-export interface Rule<TPlayer extends Player, TRuleId extends string> {
+export interface Rule<
+  TRuleId extends string,
+  TPlayer extends Player = Player,
+  TTeam extends Team = Team,
+> {
   id: TRuleId;
   description: string;
   validate(
-    tournamentState: TournamentState<TPlayer, Rule<TPlayer, string>[]>,
+    tournamentState: TournamentState<TPlayer, TTeam, Rule<string, TPlayer, TTeam>[]>,
     currentTeams: Record<string, TPlayer[]>,
     teamToValidate: string,
   ): Violation[];
 }
 
-export interface Ruleset<TRules extends Rule<any, string>[]> {
+export interface Ruleset<TRules extends Rule<string>[]> {
   /** Le nom affiché de l'ensemble de règles */
   name: string;
 
@@ -55,7 +63,7 @@ export interface Ruleset<TRules extends Rule<any, string>[]> {
   rules: TRules;
 }
 
-export interface Team<TRules extends Rule<any, string>[]> {
+export interface Team<TRules extends Rule<string>[] = Rule<string, Player, Team<any>>[]> {
   /** Identifiant unique de l'équipe */
   id: string;
 

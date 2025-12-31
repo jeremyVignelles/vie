@@ -3,23 +3,23 @@
   "version": "1.0.0",
   "description": "✅ Vérification Informatique des Équipes",
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "import": "./dist/index.js"
+    },
+    "./rules/*": {
+      "types": "./dist/rules/*.d.ts",
+      "import": "./dist/rules/*.js"
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "npm run build:bundle && npm run build:types",
-    "build:bundle": "rolldown --config rolldown.config.mjs",
-    "build:types": "tsc --emitDeclarationOnly --outDir dist",
+    "build": "tsc",
     "lint": "oxlint src",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -39,7 +39,6 @@
     "@vitest/coverage-v8": "^4.0.16",
     "oxfmt": "^0.21.0",
     "oxlint": "^1.36.0",
-    "rolldown": "^1.0.0-beta.58",
     "typescript": "^5.9.3",
     "vitest": "^4.0.16"
   },

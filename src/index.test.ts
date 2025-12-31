@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { Player, Rule } from "./types";
+import { Player, Rule, Team } from "./types";
 import { validateTeams } from "./index";
 import { makeRuleset } from "./tools";
 
@@ -7,7 +7,11 @@ interface PlayerWithRating extends Player {
   rating: number;
 }
 
-const sampleRuleMaxRating: Rule<PlayerWithRating, "max-rating"> = {
+interface TeamWithPaymentStatus extends Team {
+  hasPaid: boolean;
+}
+
+const sampleRuleMaxRating: Rule<"max-rating", PlayerWithRating> = {
   id: "max-rating",
   description: "The player's rating must not exceed 2000",
   validate(_tournamentState, currentTeams, teamToValidate) {
@@ -32,8 +36,30 @@ const sampleRuleMaxRating: Rule<PlayerWithRating, "max-rating"> = {
   },
 };
 
+const sampleRuleTeamPayment: Rule<"team-payment", Player, TeamWithPaymentStatus> = {
+  id: "team-payment",
+  description: "The team must have paid the registration fee",
+  validate(_tournamentState, _currentTeams, teamToValidate) {
+    const violations = [];
+    // This is a placeholder implementation
+    // In a real scenario, we would check the payment status of the team
+    const teamHasPaid = false; // Placeholder
+
+    if (!teamHasPaid) {
+      violations.push({
+        ruleId: "team-payment",
+        teamId: teamToValidate,
+        boardNumber: null,
+        message: `L'équipe avec l'identifiant ${teamToValidate} n'a pas payé les frais d'inscription.`,
+      });
+    }
+
+    return violations;
+  },
+};
+
 describe("validateTeams", () => {
-  it("should validate the team against the rules", () => {
+  it("should validate the team players against the rules", () => {
     const ruleset = makeRuleset("Max Rating Ruleset", undefined, [sampleRuleMaxRating]);
     const tournamentState = {
       teams: [
@@ -72,5 +98,32 @@ describe("validateTeams", () => {
     expect(validationViolation[0].message).toBe(
       `Le joueur Alice (ID: player-1) a un classement de 2000, ce qui dépasse la limite autorisée de 2000.`,
     );
+  });
+
+  it("should validate the team status against the rules", () => {
+    const ruleset = makeRuleset("Team Payment Ruleset", undefined, [sampleRuleTeamPayment]);
+    const tournamentState = {
+      teams: [
+        {
+          id: "team-2",
+          name: "Team 2",
+          ruleset,
+          hasPaid: false,
+        },
+      ],
+      history: {},
+    };
+
+    const validation = validateTeams(tournamentState, {
+      "team-2": [
+        { id: "player-5", name: "Eve" },
+        { id: "player-6", name: "Frank" },
+      ],
+    });
+
+    expect(validation).toHaveLength(1);
+    expect(validation[0].ruleId).toBe("team-payment");
+    expect(validation[0].teamId).toBe("team-2");
+    expect(validation[0].boardNumber).toBeNull();
   });
 });

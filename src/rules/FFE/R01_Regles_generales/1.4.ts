@@ -1,4 +1,4 @@
-import { Player, Rule } from "../../../types";
+import { Player, Rule, Team } from "../../../types";
 
 export interface PlayerWithLicense extends Player {
   /**
@@ -7,21 +7,34 @@ export interface PlayerWithLicense extends Player {
   licenseType: string;
 }
 
+export interface TeamWithTimeControl extends Team {
+  /**
+   * Est-ce que la compétition se joue à une cadence supérieure ou égale à 60 minutes
+   * (ou équivalent en cadence Fischer)
+   */
+  hasAtLeast60Minutes: boolean;
+}
+
 const id = "R01-1.4";
 
-const rule: Rule<PlayerWithLicense, typeof id> = {
+const rule: Rule<typeof id, PlayerWithLicense, TeamWithTimeControl> = {
   id,
   description: `Pour toute compétition se jouant à une cadence supérieure ou égale à 60 min
   (ou équivalent en cadence Fischer),les joueurs et joueuses doivent être titulaires d'une
   licence A valable pour la saison en cours.`,
-  validate(_tournamentState, currentTeams, teamToValidate) {
-    const team = currentTeams[teamToValidate];
-    if (!team) {
+  validate(tournamentState, currentTeams, teamToValidate) {
+    const teamPlayers = currentTeams[teamToValidate];
+    const teamInfo = tournamentState.teams.find((team) => team.id === teamToValidate);
+    if (!teamPlayers || !teamInfo) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
     }
 
+    if (teamInfo.hasAtLeast60Minutes === false) {
+      return [];
+    }
+
     const violations = [];
-    for (const [index, player] of team.entries()) {
+    for (const [index, player] of teamPlayers.entries()) {
       if (player.licenseType !== "A") {
         violations.push({
           ruleId: id,
