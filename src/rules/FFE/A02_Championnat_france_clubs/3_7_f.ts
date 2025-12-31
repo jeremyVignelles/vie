@@ -46,7 +46,7 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
 
     // Count non-null players and core players in current composition
     const nonNullPlayers = teamPlayers.filter((p) => p !== null);
-    const corePlayersInComposition = nonNullPlayers.filter((p) => p !== null && corePlayerIds.has(p.id));
+    const corePlayersInComposition = nonNullPlayers.filter((p) => corePlayerIds.has(p!.id));
 
     const totalPlayers = nonNullPlayers.length;
     const coreCount = corePlayersInComposition.length;
