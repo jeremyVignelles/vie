@@ -6,6 +6,7 @@ This is a TypeScript library project for "Vérification Informatique des Équipe
 ## Project Structure
 ```
 vie/
+├── .devcontainer/       # Dev container configuration
 ├── src/                 # Source TypeScript files
 │   ├── index.ts        # Main entry point
 │   └── *.test.ts       # Test files
@@ -22,11 +23,20 @@ vie/
 
 ## Development Setup
 
-### Prerequisites
+### Using Dev Container (Recommended)
+The project includes a pre-configured dev container with Node.js 20 and all dependencies:
+- **VS Code**: Open repo and select "Reopen in Container"
+- **GitHub Codespaces**: Create a codespace directly from GitHub
+
+The dev container automatically runs `npm install` and configures VS Code with recommended extensions.
+
+### Local Setup
+
+#### Prerequisites
 - Node.js >= 18.0.0
 - npm
 
-### Installation
+#### Installation
 ```bash
 npm install
 ```

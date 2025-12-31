@@ -9,6 +9,7 @@ This project is a complete TypeScript library skeleton with modern tooling.
 ✅ **Vite 7.3.0** - Next-gen development tooling  
 ✅ **Vitest 4.0.16** - Fast unit testing framework  
 ✅ **OXC (oxlint) 1.36.0** - Lightning-fast linter  
+✅ **Dev Container** - Pre-configured development environment  
 ✅ **GitHub Actions CI/CD** - Automated testing and NPM publishing  
 ✅ **Copilot Workspace Ready** - Instructions in `.github/agents/`
 
@@ -16,6 +17,9 @@ This project is a complete TypeScript library skeleton with modern tooling.
 
 ```
 vie/
+├── .devcontainer/
+│   ├── devcontainer.json            # Dev container configuration
+│   └── README.md                    # Dev container documentation
 ├── .github/
 │   ├── agents/
 │   │   └── copilot-instructions.md  # Copilot Workspace configuration
@@ -40,7 +44,20 @@ vie/
 
 ## 🚀 Quick Start
 
-### Installation
+### Using Dev Container (Recommended)
+
+The easiest way to get started:
+
+1. **VS Code**: Install the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers), open this repo, and click "Reopen in Container"
+2. **GitHub Codespaces**: Click "Code" → "Codespaces" → "Create codespace" on GitHub
+
+The dev container automatically sets up Node.js 20, installs dependencies, and configures VS Code with all necessary extensions.
+
+See [.devcontainer/README.md](.devcontainer/README.md) for more details.
+
+### Local Installation
+
+If you prefer local development:
 
 ```bash
 npm install

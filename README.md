@@ -21,12 +21,25 @@ console.log(VERSION); // "1.0.0"
 
 ## Development
 
-### Prerequisites
+### Using Dev Container (Recommended)
+
+The easiest way to get started is using the dev container:
+
+1. **VS Code**: Install the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers), open the repository, and select "Reopen in Container"
+2. **GitHub Codespaces**: Click "Code" → "Codespaces" → "Create codespace" on GitHub
+
+The dev container includes Node.js 20, all dependencies, and VS Code extensions pre-configured. See [.devcontainer/README.md](.devcontainer/README.md) for details.
+
+### Local Setup
+
+If you prefer to develop locally:
+
+#### Prerequisites
 
 - Node.js >= 18.0.0
 - npm
 
-### Setup
+#### Setup
 
 ```bash
 # Install dependencies
