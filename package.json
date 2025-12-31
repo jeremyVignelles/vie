@@ -37,6 +37,7 @@
   "devDependencies": {
     "@types/node": "^25.0.3",
     "@vitest/coverage-v8": "^4.0.16",
+    "oxfmt": "^0.21.0",
     "oxlint": "^1.36.0",
     "rolldown": "^1.0.0-beta.58",
     "typescript": "^5.9.3",
