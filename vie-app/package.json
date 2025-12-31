@@ -1,0 +1,26 @@
+{
+  "name": "vie-app",
+  "version": "1.0.0",
+  "description": "Application web pour VIE - Vérification Informatique des Équipes",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "oxlint src",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "vie": "file:.."
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "oxlint": "^1.36.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

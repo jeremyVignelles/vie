@@ -9,8 +9,7 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
+        "oxc.oxc-vscode",
         "ms-vscode.vscode-typescript-next",
         "vitest.explorer",
         "ms-azuretools.vscode-docker",
@@ -22,7 +21,7 @@
         "typescript.tsdk": "node_modules/typescript/lib",
         "typescript.enablePromptUseWorkspaceTsdk": true,
         "editor.formatOnSave": true,
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.defaultFormatter": "oxc.oxc-vscode",
         "editor.codeActionsOnSave": {
           "source.fixAll": "explicit"
         },
@@ -33,15 +32,6 @@
   },
 
   "postCreateCommand": "npm install",
-
-  "forwardPorts": [5173],
-
-  "portsAttributes": {
-    "5173": {
-      "label": "Vite Dev Server",
-      "onAutoForward": "notify"
-    }
-  },
 
   "remoteUser": "node"
 }

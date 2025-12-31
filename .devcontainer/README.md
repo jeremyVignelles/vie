@@ -11,7 +11,7 @@ This dev container provides a complete Node.js development environment for the V
   - Vitest Test Explorer
   - TypeScript support
   - GitHub Copilot
-  - ESLint & Prettier
+  - OXC (oxlint & oxfmt)
   - EditorConfig
 
 ## Usage
@@ -35,7 +35,6 @@ This dev container provides a complete Node.js development environment for the V
 The container automatically:
 - Installs Node.js 24 (Latest)
 - Runs `npm install` after container creation
-- Forwards port 5173 for Vite dev server
 - Configures VS Code with optimal settings for TypeScript development
 - Sets up Vitest integration
 
@@ -44,7 +43,6 @@ The container automatically:
 Once inside the container, you can run:
 
 ```bash
-npm run dev          # Start Vite dev server
 npm run build        # Build the library
 npm test             # Run tests
 npm run test:watch   # Run tests in watch mode
@@ -52,9 +50,18 @@ npm run lint         # Run oxlint
 npm run type-check   # TypeScript type checking
 ```
 
+For the web application, navigate to the `vie-app` directory:
+
+```bash
+cd vie-app
+npm install
+npm run dev          # Start Vite dev server (port 5173)
+```
+
 ## Port Forwarding
 
-- **Port 5173**: Vite development server (auto-forwarded)
+When working with the web application in `vie-app`:
+- **Port 5173**: Vite development server (manually forward if needed)
 
 ## Troubleshooting
 

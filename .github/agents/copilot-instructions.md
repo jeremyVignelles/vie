@@ -33,7 +33,7 @@ The dev container automatically runs `npm install` and configures VS Code with r
 ### Local Setup
 
 #### Prerequisites
-- Node.js >= 20.0.0
+- Node.js >= 24.0.0
 - npm
 
 #### Installation
@@ -61,13 +61,14 @@ npm install
 - **Node**: v24.x (latest)
 
 ## Coding Guidelines
+- **Language**: Development and interface are in French
 - Use strict TypeScript with all strict flags enabled
 - Write tests for all new features using Vitest
 - Follow ES2022+ standards
 - Export types alongside implementations
 - Use named exports (avoid default exports)
 - Keep functions small and focused
-- Add JSDoc comments for public APIs
+- Add JSDoc comments for public APIs (in French)
 
 ## Testing
 - Place test files next to source files with `.test.ts` extension

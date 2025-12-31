@@ -1,123 +1,135 @@
-# vie - TypeScript Library Project
+# vie - Documentation technique du projet
 
-This project is a complete TypeScript library skeleton with modern tooling.
+Documentation technique complète pour le projet de bibliothèque TypeScript VIE.
 
-## 🎯 Features
+> **Note**: Ce document est destiné aux développeurs. Pour une introduction générale, voir [README.md](./README.md).
 
-✅ **TypeScript 5.9.3** - Latest version with strict mode  
-✅ **Rolldown 1.0.0** - Fast Rust-based bundler  
-✅ **Vite 7.3.0** - Next-gen development tooling  
-✅ **Vitest 4.0.16** - Fast unit testing framework  
-✅ **OXC (oxlint) 1.36.0** - Lightning-fast linter  
-✅ **Dev Container** - Pre-configured development environment  
-✅ **GitHub Actions CI/CD** - Automated testing and NPM publishing  
-✅ **Copilot Workspace Ready** - Instructions in `.github/agents/`
+## 🎯 Fonctionnalités
 
-## 📦 Project Structure
+✅ **TypeScript 5.9.3** - Dernière version avec mode strict  
+✅ **Rolldown 1.0.0** - Bundler rapide basé sur Rust  
+✅ **Vitest 4.0.16** - Framework de test ultra-rapide  
+✅ **OXC (oxlint) 1.36.0** - Linter ultra-rapide  
+✅ **Dev Container** - Environnement de développement pré-configuré  
+✅ **GitHub Actions CI/CD** - Tests automatisés et publication NPM  
+✅ **Copilot Workspace** - Instructions dans `.github/agents/`
+
+## 📦 Structure du projet
 
 ```
 vie/
 ├── .devcontainer/
-│   ├── devcontainer.json            # Dev container configuration
-│   └── README.md                    # Dev container documentation
+│   ├── devcontainer.json            # Configuration du dev container
+│   └── README.md                    # Documentation du dev container
 ├── .github/
 │   ├── agents/
-│   │   └── copilot-instructions.md  # Copilot Workspace configuration
+│   │   └── copilot-instructions.md  # Configuration Copilot Workspace
 │   └── workflows/
-│       ├── ci.yml                    # CI workflow (Node 18, 20, 22)
-│       └── publish.yml               # NPM publish workflow
+│       ├── ci.yml                    # CI/CD (Node 20, 22, 24)
+│       └── publish.yml               # Workflow de publication NPM
 ├── src/
-│   ├── index.ts                      # Main entry point (skeleton)
-│   └── index.test.ts                 # Unit tests
-├── dist/                             # Build output (generated)
-│   ├── index.mjs                     # ESM bundle
-│   ├── index.cjs                     # CommonJS bundle
-│   └── index.d.ts                    # TypeScript declarations
-├── package.json                      # Dependencies and scripts
-├── tsconfig.json                     # TypeScript configuration
-├── rolldown.config.mjs              # Rolldown bundler config
-├── vite.config.ts                   # Vite configuration
-├── vitest.config.ts                 # Vitest configuration
-├── .npmignore                       # NPM publish exclusions
-└── README.md                        # This file
+│   ├── index.ts                      # Point d'entrée principal (squelette)
+│   └── index.test.ts                 # Tests unitaires
+├── vie-app/                          # Application web de démonstration
+│   ├── src/
+│   │   └── main.ts                   # Point d'entrée de l'app
+│   ├── index.html                    # Page HTML principale
+│   ├── vite.config.ts                # Configuration Vite
+│   └── package.json                  # Dépendances de l'app
+├── dist/                             # Sortie de compilation (généré)
+│   ├── index.mjs                     # Bundle ES Module
+│   ├── index.cjs                     # Bundle CommonJS
+│   └── index.d.ts                    # Déclarations TypeScript
+├── package.json                      # Dépendances & scripts
+├── tsconfig.json                     # Configuration TypeScript
+├── rolldown.config.mjs              # Configuration du bundler
+├── vitest.config.ts                 # Configuration des tests
+├── .npmignore                       # Filtre de publication NPM
+└── README.md                        # Documentation utilisateur
 ```
 
-## 🚀 Quick Start
+## 🚀 Démarrage rapide
 
-### Using Dev Container (Recommended)
+### Utiliser le Dev Container (Recommandé)
 
-The easiest way to get started:
+La méthode la plus simple :
 
-1. **VS Code**: Install the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers), open this repo, and click "Reopen in Container"
-2. **GitHub Codespaces**: Click "Code" → "Codespaces" → "Create codespace" on GitHub
+1. **VS Code**: Installez l'extension [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers), ouvrez ce dépôt, et cliquez sur "Reopen in Container"
+2. **GitHub Codespaces**: Cliquez sur "Code" → "Codespaces" → "Create codespace" sur GitHub
 
-The dev container automatically sets up Node.js 24, installs dependencies, and configures VS Code with all necessary extensions.
+Le dev container configure automatiquement Node.js 24, installe les dépendances, et configure VS Code avec toutes les extensions nécessaires.
 
-See [.devcontainer/README.md](.devcontainer/README.md) for more details.
+Voir [.devcontainer/README.md](.devcontainer/README.md) pour plus de détails.
 
-### Local Installation
+### Installation locale
 
-If you prefer local development:
+Si vous préférez le développement local :
 
 ```bash
 npm install
 ```
 
-### Development Commands
+### Commandes de développement
 
 ```bash
-# Run tests
-npm test                  # Run once
-npm run test:watch        # Watch mode
-npm run test:ui          # UI mode
+# Tests
+npm test                  # Lancer une fois
+npm run test:watch        # Mode watch
+npm run test:ui          # Mode UI
 
-# Linting & Type Checking
-npm run lint             # Run oxlint
-npm run type-check       # TypeScript type checking
+# Linting & vérification des types
+npm run lint             # Lancer oxlint
+npm run type-check       # Vérification des types TypeScript
 
-# Building
-npm run build            # Full build (bundle + types)
-npm run build:bundle     # Rolldown bundling only
-npm run build:types      # TypeScript declarations only
-
-# Development
-npm run dev              # Start Vite dev server
+# Compilation
+npm run build            # Compilation complète (bundle + types)
+npm run build:bundle     # Bundling Rolldown uniquement
+npm run build:types      # Déclarations TypeScript uniquement
 ```
 
-## 🔧 Technology Stack
+### Application web
 
-| Tool | Version | Purpose |
-|------|---------|---------|
-| TypeScript | 5.9.3 | Type-safe JavaScript |
-| Rolldown | 1.0.0-beta.58 | Fast Rust-based bundler |
-| Vite | 7.3.0 | Development server |
-| Vitest | 4.0.16 | Unit testing |
-| OXC (oxlint) | 1.36.0 | Fast linting |
-| Node.js | 24.x | Runtime environment |
+Pour développer l'application web :
 
-## 📝 Code Quality
+```bash
+cd vie-app
+npm install
+npm run dev              # Démarre le serveur de dev Vite
+```
 
-- ✅ Strict TypeScript configuration
-- ✅ 100% test coverage
-- ✅ Zero linter errors
-- ✅ Source maps for debugging
-- ✅ Declaration maps for type navigation
+## 🔧 Stack technologique
+
+| Outil | Version | Usage |
+|-------|---------|-------|
+| TypeScript | 5.9.3 | JavaScript avec typage statique |
+| Rolldown | 1.0.0-beta.58 | Bundler rapide basé sur Rust |
+| Vitest | 4.0.16 | Tests unitaires |
+| OXC (oxlint) | 1.36.0 | Linting rapide |
+| Node.js | 24.x | Environnement d'exécution |
+
+## 📝 Qualité du code
+
+- ✅ Configuration TypeScript stricte
+- ✅ 100% de couverture de tests
+- ✅ Zéro erreur de linter
+- ✅ Source maps pour le débogage
+- ✅ Declaration maps pour la navigation des types
 
 ## 🤖 CI/CD
 
-### Continuous Integration
-- Runs on: `push` and `pull_request` to `main`
-- Tests on: Node.js 20.x, 22.x, and 24.x
-- Steps: lint → type-check → test → build → coverage
+### Intégration continue
+- Déclenchement : `push` et `pull_request` vers `main`
+- Tests sur : Node.js 20.x, 22.x, et 24.x
+- Étapes : lint → type-check → test → build → coverage
 
-### NPM Publishing
-- Triggered by: GitHub releases
-- Requires: `NPM_TOKEN` secret
-- Process: lint → type-check → test → build → publish
+### Publication NPM
+- Déclenchement : Création de releases GitHub
+- Nécessite : Secret `NPM_TOKEN`
+- Processus : lint → type-check → test → build → publish
 
-## 🧪 Testing
+## 🧪 Tests
 
-Tests are written using Vitest with 100% coverage:
+Les tests sont écrits avec Vitest avec 100% de couverture :
 
 ```typescript
 import { describe, it, expect } from 'vitest';
@@ -134,39 +146,38 @@ describe('vie library', () => {
 });
 ```
 
-## 📤 Publishing to NPM
+## 📤 Publication sur NPM
 
-1. Update version in `package.json`
-2. Commit changes
-3. Create a GitHub release
-4. GitHub Actions will automatically publish to NPM
+1. Mettre à jour la version dans `package.json`
+2. Commit les changements
+3. Créer une release GitHub
+4. GitHub Actions publie automatiquement sur NPM
 
-Make sure `NPM_TOKEN` is configured in repository secrets.
+Assurez-vous que `NPM_TOKEN` est configuré dans les secrets du dépôt.
 
-## 🔐 Security
+## 🔐 Sécurité
 
-- No vulnerabilities in dependencies
-- Automated dependency updates via GitHub Actions
-- Code scanning enabled
-- Provenance attestation for NPM packages
+- Aucune vulnérabilité dans les dépendances
+- Mises à jour automatiques des dépendances via GitHub Actions
+- Analyse de code activée
+- Attestation de provenance pour les packages NPM
 
 ## 📖 Copilot Workspace
 
-Full instructions for GitHub Copilot Workspace are available in:
+Les instructions complètes pour GitHub Copilot Workspace sont disponibles dans :
 `.github/agents/copilot-instructions.md`
 
-## 🎓 Learning Resources
+## 🎓 Ressources d'apprentissage
 
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 - [Rolldown Documentation](https://rolldown.rs/)
-- [Vite Guide](https://vitejs.dev/guide/)
 - [Vitest Documentation](https://vitest.dev/)
 - [OXC Project](https://oxc-project.github.io/)
 
-## 📄 License
+## 📄 Licence
 
 MIT
 
 ---
 
-**Ready to implement**: This is a skeleton project. The actual implementation is ready to be added in `src/index.ts`.
+**Prêt pour l'implémentation** : Ceci est un projet squelette. L'implémentation réelle est prête à être ajoutée dans `src/index.ts`.

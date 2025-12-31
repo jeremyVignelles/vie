@@ -4,12 +4,17 @@ src/
 
 # Config files
 tsconfig.json
-vite.config.ts
 vitest.config.ts
 rolldown.config.mjs
 
+# Application folder (not part of library)
+vie-app/
+
 # GitHub
 .github/
+
+# Dev Container
+.devcontainer/
 
 # Development
 .vscode/
@@ -20,6 +25,9 @@ coverage/
 
 # Build artifacts
 *.tsbuildinfo
+
+# Documentation
+PROJECT.md
 
 # Logs
 *.log
