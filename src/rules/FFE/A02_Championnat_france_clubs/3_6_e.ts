@@ -15,22 +15,28 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub> = {
     }
 
     const violations: Violation[] = [];
-    let lastSeenRating = Number.MAX_SAFE_INTEGER;
+    const previousRatings: number[] = [];
+
     for (const [index, player] of teamPlayers.entries()) {
       if (player === null) {
         continue;
       }
 
-      if (player.rating > lastSeenRating + 100) {
-        violations.push({
-          ruleId: id,
-          teamId: teamToValidate,
-          boardNumber: index + 1,
-          message: `Le joueur à la table ${index + 1} a un classement Elo (${player.rating}) avec plus de 100 points d'écart par rapport au joueur précédent (${lastSeenRating}).`,
-        });
+      // Vérifier si le joueur actuel a un Elo supérieur de plus de 100 points
+      // par rapport à n'importe quel joueur précédent
+      for (const previousRating of previousRatings) {
+        if (player.rating > previousRating + 100) {
+          violations.push({
+            ruleId: id,
+            teamId: teamToValidate,
+            boardNumber: index + 1,
+            message: `Le joueur à la table ${index + 1} a un classement Elo (${player.rating}) avec plus de 100 points d'écart par rapport au joueur précédent (${previousRating}).`,
+          });
+          break; // Une seule violation par joueur
+        }
       }
 
-      lastSeenRating = player.rating;
+      previousRatings.push(player.rating);
     }
 
     return violations;
