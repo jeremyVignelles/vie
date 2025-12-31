@@ -9,13 +9,23 @@ const tournamentState = {
       name: "Team 1",
       ruleset: N4,
       hasAtLeast60Minutes: true,
+      clubs: ["club"],
     },
   ],
   history: {},
 };
 
 const currentTeams = {
-  "team-1": [{ id: "player-1", name: "Alice", rating: 1800, federation: "FRA", licenseType: "A" }],
+  "team-1": [
+    {
+      id: "player-1",
+      name: "Alice",
+      rating: 1800,
+      federation: "FRA",
+      licenseType: "A",
+      club: "club",
+    },
+  ],
 };
 const violations = validateTeams(tournamentState, currentTeams);
 
