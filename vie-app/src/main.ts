@@ -11,6 +11,7 @@ const tournamentState = {
       hasAtLeast60Minutes: true,
       clubs: ["club"],
       division: "N3",
+      groupId: "group-1",
     },
   ],
   history: {},

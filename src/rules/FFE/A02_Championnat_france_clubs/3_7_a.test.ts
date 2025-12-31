@@ -28,6 +28,7 @@ describe("A02-3.7.a - Règles Top 16", () => {
     clubs: ["club1"],
     hasAtLeast60Minutes: true,
     division,
+    groupId: division + "-1",
     ruleset: mockRuleset,
   });
 

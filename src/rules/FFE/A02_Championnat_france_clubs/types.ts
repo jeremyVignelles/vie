@@ -22,6 +22,9 @@ export interface TeamChampionnatFranceClub extends TeamFFE {
    * - "N4"
    */
   division: string;
+
+  /** Identifiant du groupe de l'équipe dans la division */
+  groupId: string;
 }
 
 export interface TeamCompositionChampionnatFranceClub<
