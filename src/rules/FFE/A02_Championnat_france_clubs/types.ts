@@ -9,6 +9,26 @@ export interface PlayerChampionnatFranceClub extends PlayerFFE {
 
   /** Est-ce que le joueur a déclaré forfait sur cette partie */
   forfeited?: boolean;
+
+  /** Est-ce que le joueur est muté (transféré d'un autre club cette saison) */
+  transferred?: boolean;
+
+  /**
+   * Est-ce que le joueur possède la nationalité française
+   */
+  isFrench?: boolean;
+
+  /**
+   * Est-ce que le joueur réside dans l'Union Européenne
+   * (utilisé pour les joueurs non français)
+   */
+  residesInEU?: boolean;
+
+  /**
+   * Est-ce que le joueur est un extracommunautaire résidant en France depuis au moins 5 ans
+   * (utilisé pour les joueurs non français et ne résidant pas dans l'UE)
+   */
+  longTermResident?: boolean;
 }
 
 export interface TeamChampionnatFranceClub extends TeamFFE {
@@ -37,4 +57,9 @@ export interface TeamCompositionChampionnatFranceClub<
 
   /** Est-ce que l'équipe a déclaré forfait sur cette partie */
   forfeited?: boolean;
+
+  /**
+   * Le numéro de la ronde (commence à 1)
+   */
+  roundNumber?: number;
 }

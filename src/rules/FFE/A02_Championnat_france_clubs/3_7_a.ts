@@ -38,10 +38,10 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
         continue;
       }
 
-      if (!hasFemaleFrenchPlayer && player.gender === "F" && player.federation === "FRA") {
+      if (!hasFemaleFrenchPlayer && player.gender === "F" && player.isFrench) {
         hasFemaleFrenchPlayer = true;
       } else {
-        if (!hasMaleFrenchPlayer && player.gender === "M" && player.federation === "FRA") {
+        if (!hasMaleFrenchPlayer && player.gender === "M" && player.isFrench) {
           hasMaleFrenchPlayer = true;
         }
 

@@ -46,6 +46,7 @@ describe("A02-3.7.a - Règles Top 16", () => {
     federation,
     licenseType: "A",
     club: "club1",
+    isFrench: federation === "FRA",
   });
 
   const createTeamComposition = (
