@@ -3,9 +3,6 @@
   "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bookworm",
   
   "features": {
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "20"
-    },
     "ghcr.io/devcontainers/features/git:1": {}
   },
 
@@ -30,7 +27,7 @@
           "source.fixAll": "explicit"
         },
         "vitest.enable": true,
-        "vitest.commandLine": "npm test"
+        "vitest.commandLine": "npm run test"
       }
     }
   },
