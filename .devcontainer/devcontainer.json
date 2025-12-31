@@ -1,6 +1,6 @@
 {
   "name": "VIE TypeScript Library",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-24-bookworm",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:24",
   
   "features": {
     "ghcr.io/devcontainers/features/git:1": {}
