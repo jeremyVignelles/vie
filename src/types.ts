@@ -85,6 +85,10 @@ export interface TeamComposition<TPlayer extends Player = Player> {
   /** L'identifiant unique de l'équipe */
   teamId: string;
 
-  /** La liste des joueurs alignés pour cette équipe */
+  /**
+   * La liste des joueurs alignés pour cette équipe, ou null en cas d'absent.
+   * Il doit y avoir autant de cases dans le tableau que de joueurs prévus dans l'équipe
+   * par le règlement.
+   */
   players: (TPlayer | null)[];
 }

@@ -1,5 +1,12 @@
 import type { TournamentState, Player, Violation, Rule, TeamInfo, TeamComposition } from "./types";
 
+/**
+ * Valide les équipes d'un tournoi sur une ronde donnée en appliquant les règles définies
+ *
+ * @param tournamentState L'état des équipes d'un club au sein du tournoi
+ * @param currentTeams Les compositions d'équipe à vérifier.
+ * @returns Les violations détectées
+ */
 export function validateTeams<
   TPlayer extends Player,
   TTeam extends TeamInfo<TRules>,
