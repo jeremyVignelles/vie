@@ -27,6 +27,7 @@ export interface TournamentState<
   TPlayer extends Player,
   TTeam extends TeamInfo<TRules>,
   TRules extends Rule<string, TPlayer, TTeam>[],
+  TTeamComposition extends TeamComposition<TPlayer> = TeamComposition<TPlayer>,
 > {
   /**
    * Les équipes participant au tournoi, dans l'ordre de numérotation si cela est important
@@ -35,19 +36,25 @@ export interface TournamentState<
   /**
    * L'historique des compositions, pour chaque ronde, indexé par l'identifiant de l'équipe
    */
-  history: Record<string, (TPlayer | null)[][]>;
+  history: Record<string, TTeamComposition[]>;
 }
 
 export interface Rule<
   TRuleId extends string,
   TPlayer extends Player = Player,
   TTeamInfo extends TeamInfo = TeamInfo,
+  TTeamComposition extends TeamComposition<TPlayer> = TeamComposition<TPlayer>,
 > {
   id: TRuleId;
   description: string;
   validate(
-    tournamentState: TournamentState<TPlayer, TTeamInfo, Rule<string, TPlayer, TTeamInfo>[]>,
-    currentTeams: Record<string, (TPlayer | null)[]>,
+    tournamentState: TournamentState<
+      TPlayer,
+      TTeamInfo,
+      Rule<string, TPlayer, TTeamInfo, TTeamComposition>[],
+      TTeamComposition
+    >,
+    currentTeams: TTeamComposition[],
     teamToValidate: string,
   ): Violation[];
 }
@@ -72,4 +79,12 @@ export interface TeamInfo<TRules extends Rule<string>[] = Rule<string, Player, T
 
   /** Les règles qui vont s'appliquer à l'équipe */
   ruleset: Ruleset<TRules>;
+}
+
+export interface TeamComposition<TPlayer extends Player = Player> {
+  /** L'identifiant unique de l'équipe */
+  teamId: string;
+
+  /** La liste des joueurs alignés pour cette équipe */
+  players: (TPlayer | null)[];
 }

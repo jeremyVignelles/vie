@@ -1,12 +1,13 @@
-import type { TournamentState, Player, Violation, Rule, TeamInfo } from "./types";
+import type { TournamentState, Player, Violation, Rule, TeamInfo, TeamComposition } from "./types";
 
 export function validateTeams<
   TPlayer extends Player,
   TTeam extends TeamInfo<TRules>,
   TRules extends Rule<string, TPlayer, TTeam>[],
+  TTeamComposition extends TeamComposition<TPlayer>,
 >(
   tournamentState: TournamentState<TPlayer, TTeam, TRules>,
-  currentTeams: Record<string, TPlayer[]>,
+  currentTeams: TTeamComposition[],
 ): Violation[] {
   const violations: Violation[] = [];
 

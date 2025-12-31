@@ -8,7 +8,7 @@ const rule: Rule<typeof id, PlayerFFE, TeamFFE> = {
   description: `Les joueurs et joueuses doivent être licenciés pour la saison en cours
   et ne peuvent jouer que pour le compte d'un seul club dans lequel ils sont licenciés.`,
   validate(tournamentState, currentTeams, teamToValidate) {
-    const teamPlayers = currentTeams[teamToValidate];
+    const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     const teamInfo = tournamentState.teams.find((team) => team.id === teamToValidate);
     if (!teamPlayers || !teamInfo) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);

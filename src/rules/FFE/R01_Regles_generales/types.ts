@@ -1,4 +1,4 @@
-import { Player, TeamInfo } from "../../../types";
+import { Player, TeamComposition, TeamInfo } from "../../../types";
 
 export interface PlayerFFE extends Player {
   /**
@@ -28,4 +28,13 @@ export interface TeamFFE extends TeamInfo {
    * (ou équivalent en cadence Fischer)
    */
   hasAtLeast60Minutes: boolean;
+}
+
+export interface TeamCompositionFFE<
+  TPlayer extends PlayerFFE = PlayerFFE,
+> extends TeamComposition<TPlayer> {
+  /**
+   * La date de la ronde au format AAAA-MM-JJ
+   */
+  date: string;
 }

@@ -9,7 +9,7 @@ const rule: Rule<typeof id, PlayerFFE, TeamFFE> = {
   (ou équivalent en cadence Fischer),les joueurs et joueuses doivent être titulaires d'une
   licence A valable pour la saison en cours.`,
   validate(tournamentState, currentTeams, teamToValidate) {
-    const teamPlayers = currentTeams[teamToValidate];
+    const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     const teamInfo = tournamentState.teams.find((team) => team.id === teamToValidate);
     if (!teamPlayers || !teamInfo) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);

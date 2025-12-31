@@ -11,13 +11,13 @@ const rule: Rule<typeof id, PlayerFFE> = {
   ou individuelles homologuées par la FFE.`,
 
   validate(_tournamentState, currentTeams, teamToValidate) {
-    const team = currentTeams[teamToValidate];
-    if (!team) {
+    const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
+    if (!teamPlayers) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
     }
 
     const violations = [];
-    for (const [index, player] of team.entries()) {
+    for (const [index, player] of teamPlayers.entries()) {
       if (player != null && (player.federation === "RUS" || player.federation === "BLR")) {
         violations.push({
           ruleId: id,

@@ -1,4 +1,4 @@
-import { PlayerFFE, TeamFFE } from "../R01_Regles_generales/types";
+import { PlayerFFE, TeamCompositionFFE, TeamFFE } from "../R01_Regles_generales/types";
 
 export interface PlayerChampionnatFranceClub extends PlayerFFE {
   /** Le classement elo du joueur (celui à prendre en compte pour la compétition) */
@@ -6,6 +6,9 @@ export interface PlayerChampionnatFranceClub extends PlayerFFE {
 
   /** Le genre du joueur ou de la joueuse */
   gender: "M" | "F";
+
+  /** Est-ce que le joueur a déclaré forfait sur cette partie */
+  forfeited?: boolean;
 }
 
 export interface TeamChampionnatFranceClub extends TeamFFE {
@@ -19,4 +22,16 @@ export interface TeamChampionnatFranceClub extends TeamFFE {
    * - "N4"
    */
   division: string;
+}
+
+export interface TeamCompositionChampionnatFranceClub<
+  TPlayer extends PlayerChampionnatFranceClub = PlayerChampionnatFranceClub,
+> extends TeamCompositionFFE<TPlayer> {
+  /**
+   * Est-ce que la ronde est une ronde de barrage ?
+   */
+  playoff?: boolean;
+
+  /** Est-ce que l'équipe a déclaré forfait sur cette partie */
+  forfeited?: boolean;
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { Player, Rule, Team } from "./types";
+import { Player, Rule, TeamInfo } from "./types";
 import { validateTeams } from "./index";
 import { makeRuleset } from "./tools";
 
@@ -7,7 +7,7 @@ interface PlayerWithRating extends Player {
   rating: number;
 }
 
-interface TeamWithPaymentStatus extends Team {
+interface TeamWithPaymentStatus extends TeamInfo {
   hasPaid: boolean;
 }
 
@@ -16,13 +16,13 @@ const sampleRuleMaxRating: Rule<"max-rating", PlayerWithRating> = {
   description: "The player's rating must not exceed 2000",
   validate(_tournamentState, currentTeams, teamToValidate) {
     const violations = [];
-    const team = currentTeams[teamToValidate];
-    if (!team) {
+    const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
+    if (!teamPlayers) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
     }
 
-    for (const [index, player] of team.entries()) {
-      if (player.rating >= 2000) {
+    for (const [index, player] of teamPlayers.entries()) {
+      if (player && player.rating >= 2000) {
         violations.push({
           ruleId: "max-rating",
           teamId: teamToValidate,
@@ -72,23 +72,29 @@ describe("validateTeams", () => {
       history: {},
     };
 
-    const validationOK = validateTeams(tournamentState, {
-      "team-1": [
-        { id: "player-1", name: "Alice", rating: 1800 },
-        { id: "player-2", name: "Bob", rating: 1900 },
-        { id: "player-3", name: "Charlie", rating: 1957 },
-        { id: "player-4", name: "David", rating: 1999 },
-      ],
-    });
+    const validationOK = validateTeams(tournamentState, [
+      {
+        teamId: "team-1",
+        players: [
+          { id: "player-1", name: "Alice", rating: 1800 },
+          { id: "player-2", name: "Bob", rating: 1900 },
+          { id: "player-3", name: "Charlie", rating: 1957 },
+          { id: "player-4", name: "David", rating: 1999 },
+        ],
+      },
+    ]);
 
-    const validationViolation = validateTeams(tournamentState, {
-      "team-1": [
-        { id: "player-1", name: "Alice", rating: 2000 },
-        { id: "player-2", name: "Bob", rating: 1900 },
-        { id: "player-3", name: "Charlie", rating: 1957 },
-        { id: "player-4", name: "David", rating: 1999 },
-      ],
-    });
+    const validationViolation = validateTeams(tournamentState, [
+      {
+        teamId: "team-1",
+        players: [
+          { id: "player-1", name: "Alice", rating: 2000 },
+          { id: "player-2", name: "Bob", rating: 1900 },
+          { id: "player-3", name: "Charlie", rating: 1957 },
+          { id: "player-4", name: "David", rating: 1999 },
+        ],
+      },
+    ]);
 
     expect(validationOK).toHaveLength(0);
     expect(validationViolation).toHaveLength(1);
@@ -114,13 +120,15 @@ describe("validateTeams", () => {
       history: {},
     };
 
-    const validation = validateTeams(tournamentState, {
-      "team-2": [
-        { id: "player-5", name: "Eve" },
-        { id: "player-6", name: "Frank" },
-      ],
-    });
-
+    const validation = validateTeams(tournamentState, [
+      {
+        teamId: "team-2",
+        players: [
+          { id: "player-5", name: "Eve" },
+          { id: "player-6", name: "Frank" },
+        ],
+      },
+    ]);
     expect(validation).toHaveLength(1);
     expect(validation[0].ruleId).toBe("team-payment");
     expect(validation[0].teamId).toBe("team-2");

@@ -8,7 +8,7 @@ const rule: Rule<typeof id> = {
   S'il n'y pas de nom inscrit sur la feuille de match à un certain échiquier,
   il ne doit pas y en avoir non plus aux échiquiers suivants.`,
   validate(_tournamentState, currentTeams, teamToValidate) {
-    const teamPlayers = currentTeams[teamToValidate];
+    const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     if (!teamPlayers) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
     }
