@@ -36,7 +36,7 @@ If you prefer to develop locally:
 
 #### Prerequisites
 
-- Node.js >= 18.0.0
+- Node.js >= 20.0.0
 - npm
 
 #### Setup

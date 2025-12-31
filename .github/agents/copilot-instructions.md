@@ -24,7 +24,7 @@ vie/
 ## Development Setup
 
 ### Using Dev Container (Recommended)
-The project includes a pre-configured dev container with Node.js 20 and all dependencies:
+The project includes a pre-configured dev container with Node.js 24 and all dependencies:
 - **VS Code**: Open repo and select "Reopen in Container"
 - **GitHub Codespaces**: Create a codespace directly from GitHub
 
@@ -33,7 +33,7 @@ The dev container automatically runs `npm install` and configures VS Code with r
 ### Local Setup
 
 #### Prerequisites
-- Node.js >= 18.0.0
+- Node.js >= 20.0.0
 - npm
 
 #### Installation
@@ -58,7 +58,7 @@ npm install
 - **Dev Server**: Vite 7.x
 - **Testing**: Vitest 4.x
 - **Linting**: OXC (oxlint) 1.x
-- **Node**: v20.x+ (latest LTS recommended)
+- **Node**: v24.x (latest)
 
 ## Coding Guidelines
 - Use strict TypeScript with all strict flags enabled
@@ -84,7 +84,7 @@ The build process generates:
 
 ## CI/CD
 - **CI**: Runs on every push and PR to main branch
-  - Tests on Node 18.x, 20.x, and 22.x
+  - Tests on Node 20.x, 22.x, and 24.x
   - Runs linter, type checker, tests, and build
   - Generates coverage reports
 - **Publish**: Triggered on GitHub releases

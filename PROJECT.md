@@ -51,7 +51,7 @@ The easiest way to get started:
 1. **VS Code**: Install the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers), open this repo, and click "Reopen in Container"
 2. **GitHub Codespaces**: Click "Code" → "Codespaces" → "Create codespace" on GitHub
 
-The dev container automatically sets up Node.js 20, installs dependencies, and configures VS Code with all necessary extensions.
+The dev container automatically sets up Node.js 24, installs dependencies, and configures VS Code with all necessary extensions.
 
 See [.devcontainer/README.md](.devcontainer/README.md) for more details.
 
@@ -93,7 +93,7 @@ npm run dev              # Start Vite dev server
 | Vite | 7.3.0 | Development server |
 | Vitest | 4.0.16 | Unit testing |
 | OXC (oxlint) | 1.36.0 | Fast linting |
-| Node.js | 20.x+ | Runtime environment |
+| Node.js | 24.x | Runtime environment |
 
 ## 📝 Code Quality
 
@@ -107,7 +107,7 @@ npm run dev              # Start Vite dev server
 
 ### Continuous Integration
 - Runs on: `push` and `pull_request` to `main`
-- Tests on: Node.js 18.x, 20.x, and 22.x
+- Tests on: Node.js 20.x, 22.x, and 24.x
 - Steps: lint → type-check → test → build → coverage
 
 ### NPM Publishing

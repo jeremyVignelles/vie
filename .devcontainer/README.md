@@ -4,7 +4,7 @@ This dev container provides a complete Node.js development environment for the V
 
 ## Features
 
-- **Node.js 20** (LTS) with npm
+- **Node.js 24** (Latest) with npm
 - **Git** for version control
 - **TypeScript** support with latest version
 - **VS Code extensions** pre-installed:
@@ -33,7 +33,7 @@ This dev container provides a complete Node.js development environment for the V
 ## What's Included
 
 The container automatically:
-- Installs Node.js 20 (LTS)
+- Installs Node.js 24 (Latest)
 - Runs `npm install` after container creation
 - Forwards port 5173 for Vite dev server
 - Configures VS Code with optimal settings for TypeScript development
