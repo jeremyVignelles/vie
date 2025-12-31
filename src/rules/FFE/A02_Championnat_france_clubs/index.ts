@@ -1,4 +1,4 @@
-import { extendRuleset, makeRuleset } from "../../../tools";
+import { extendRuleset } from "../../../tools";
 import { ReglesGenerales } from "../R01_Regles_generales/index";
 
 const version = "2025-2026";
