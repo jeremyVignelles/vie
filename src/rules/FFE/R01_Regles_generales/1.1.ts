@@ -1,27 +1,9 @@
-import { Player, Rule, Team } from "../../../types";
-
-export interface PlayerWithLicenseAndClub extends Player {
-  /**
-   * Le type de licence du joueur, A ou B, ou N si non licencié
-   */
-  licenseType: string;
-
-  /**
-   * L'identifiant du club du joueur
-   */
-  club: string;
-}
-
-export interface TeamWithClub extends Team {
-  /**
-   * Le ou les clubs (en cas d'entente) qui composent l'équipe
-   */
-  clubs: string[];
-}
+import { Rule, Violation } from "../../../types";
+import { PlayerFFE, TeamFFE } from "./types";
 
 const id = "R01-1.1";
 
-const rule: Rule<typeof id, PlayerWithLicenseAndClub, TeamWithClub> = {
+const rule: Rule<typeof id, PlayerFFE, TeamFFE> = {
   id,
   description: `Les joueurs et joueuses doivent être licenciés pour la saison en cours
   et ne peuvent jouer que pour le compte d'un seul club dans lequel ils sont licenciés.`,
@@ -32,9 +14,9 @@ const rule: Rule<typeof id, PlayerWithLicenseAndClub, TeamWithClub> = {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
     }
 
-    const violations = [];
+    const violations: Violation[] = [];
     for (const [index, player] of teamPlayers.entries()) {
-      if (player.licenseType === "N") {
+      if (player?.licenseType === "N") {
         violations.push({
           ruleId: id,
           teamId: teamToValidate,
@@ -43,7 +25,7 @@ const rule: Rule<typeof id, PlayerWithLicenseAndClub, TeamWithClub> = {
         });
       }
 
-      if (!teamInfo.clubs.includes(player.club)) {
+      if (player != null && !teamInfo.clubs.includes(player.club)) {
         violations.push({
           ruleId: id,
           teamId: teamToValidate,

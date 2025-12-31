@@ -1,8 +1,8 @@
-import type { TournamentState, Player, Violation, Rule, Team } from "./types";
+import type { TournamentState, Player, Violation, Rule, TeamInfo } from "./types";
 
 export function validateTeams<
   TPlayer extends Player,
-  TTeam extends Team<TRules>,
+  TTeam extends TeamInfo<TRules>,
   TRules extends Rule<string, TPlayer, TTeam>[],
 >(
   tournamentState: TournamentState<TPlayer, TTeam, TRules>,

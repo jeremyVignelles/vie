@@ -25,29 +25,29 @@ export interface Player {
 
 export interface TournamentState<
   TPlayer extends Player,
-  TTeam extends Team<TRules>,
+  TTeam extends TeamInfo<TRules>,
   TRules extends Rule<string, TPlayer, TTeam>[],
 > {
   /**
-   * Les équipes participant au tournoi
+   * Les équipes participant au tournoi, dans l'ordre de numérotation si cela est important
    */
   teams: TTeam[];
   /**
    * L'historique des compositions, pour chaque ronde, indexé par l'identifiant de l'équipe
    */
-  history: Record<string, TPlayer[][]>;
+  history: Record<string, (TPlayer | null)[][]>;
 }
 
 export interface Rule<
   TRuleId extends string,
   TPlayer extends Player = Player,
-  TTeam extends Team = Team,
+  TTeamInfo extends TeamInfo = TeamInfo,
 > {
   id: TRuleId;
   description: string;
   validate(
-    tournamentState: TournamentState<TPlayer, TTeam, Rule<string, TPlayer, TTeam>[]>,
-    currentTeams: Record<string, TPlayer[]>,
+    tournamentState: TournamentState<TPlayer, TTeamInfo, Rule<string, TPlayer, TTeamInfo>[]>,
+    currentTeams: Record<string, (TPlayer | null)[]>,
     teamToValidate: string,
   ): Violation[];
 }
@@ -63,7 +63,7 @@ export interface Ruleset<TRules extends Rule<string>[]> {
   rules: TRules;
 }
 
-export interface Team<TRules extends Rule<string>[] = Rule<string, Player, Team<any>>[]> {
+export interface TeamInfo<TRules extends Rule<string>[] = Rule<string, Player, TeamInfo<any>>[]> {
   /** Identifiant unique de l'équipe */
   id: string;
 

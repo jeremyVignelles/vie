@@ -1,15 +1,9 @@
-import { Player, Rule } from "../../../types";
-
-export interface PlayerWithFederation extends Player {
-  /**
-   * La fédération du joueur
-   */
-  federation: string;
-}
+import { Rule } from "../../../types";
+import { PlayerFFE } from "./types";
 
 const id = "R01-1.5";
 
-const rule: Rule<typeof id, PlayerWithFederation> = {
+const rule: Rule<typeof id, PlayerFFE> = {
   id,
   description: `À partir du 30 mars 2022, les joueurs et joueuses
   évoluant auprès de la FIDE avec le code RUS ou BLR (Russie et Biélorussie),
@@ -24,7 +18,7 @@ const rule: Rule<typeof id, PlayerWithFederation> = {
 
     const violations = [];
     for (const [index, player] of team.entries()) {
-      if (player.federation === "RUS" || player.federation === "BLR") {
+      if (player != null && (player.federation === "RUS" || player.federation === "BLR")) {
         violations.push({
           ruleId: id,
           teamId: teamToValidate,

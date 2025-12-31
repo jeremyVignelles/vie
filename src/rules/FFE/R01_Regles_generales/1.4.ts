@@ -1,23 +1,9 @@
-import { Player, Rule, Team } from "../../../types";
-
-export interface PlayerWithLicense extends Player {
-  /**
-   * Le type de licence du joueur, A ou B
-   */
-  licenseType: string;
-}
-
-export interface TeamWithTimeControl extends Team {
-  /**
-   * Est-ce que la compétition se joue à une cadence supérieure ou égale à 60 minutes
-   * (ou équivalent en cadence Fischer)
-   */
-  hasAtLeast60Minutes: boolean;
-}
+import { Rule } from "../../../types";
+import { PlayerFFE, TeamFFE } from "./types";
 
 const id = "R01-1.4";
 
-const rule: Rule<typeof id, PlayerWithLicense, TeamWithTimeControl> = {
+const rule: Rule<typeof id, PlayerFFE, TeamFFE> = {
   id,
   description: `Pour toute compétition se jouant à une cadence supérieure ou égale à 60 min
   (ou équivalent en cadence Fischer),les joueurs et joueuses doivent être titulaires d'une
@@ -35,7 +21,7 @@ const rule: Rule<typeof id, PlayerWithLicense, TeamWithTimeControl> = {
 
     const violations = [];
     for (const [index, player] of teamPlayers.entries()) {
-      if (player.licenseType !== "A") {
+      if (player != null && player.licenseType !== "A") {
         violations.push({
           ruleId: id,
           teamId: teamToValidate,
