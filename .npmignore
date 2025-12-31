@@ -1,0 +1,38 @@
+# Source files
+src/
+*.test.ts
+
+# Config files
+tsconfig.json
+vitest.config.ts
+rolldown.config.mjs
+
+# Application folder (not part of library)
+vie-app/
+
+# GitHub
+.github/
+
+# Dev Container
+.devcontainer/
+
+# Development
+.vscode/
+.idea/
+
+# Testing
+coverage/
+
+# Build artifacts
+*.tsbuildinfo
+
+# Documentation
+PROJECT.md
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.*
+!.env.example
