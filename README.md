@@ -1,2 +1,77 @@
 # vie
+
 ✅ Vérification Informatique des Équipes
+
+A TypeScript library for team information verification.
+
+## Installation
+
+```bash
+npm install vie
+```
+
+## Usage
+
+```typescript
+import { placeholder, VERSION } from 'vie';
+
+console.log(placeholder()); // "vie library - to be implemented"
+console.log(VERSION); // "1.0.0"
+```
+
+## Development
+
+### Prerequisites
+
+- Node.js >= 18.0.0
+- npm
+
+### Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Run tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run linter
+npm run lint
+
+# Type check
+npm run type-check
+
+# Build the library
+npm run build
+```
+
+### Scripts
+
+- `npm run dev` - Start development server with Vite
+- `npm run build` - Build the library (bundle + types)
+- `npm test` - Run tests once
+- `npm run test:watch` - Run tests in watch mode
+- `npm run lint` - Run oxlint
+- `npm run type-check` - Run TypeScript type checking
+
+## Technology Stack
+
+- **TypeScript** 5.9.x - Latest TypeScript version
+- **Rolldown** 1.0.x - Fast Rust-based bundler
+- **Vite** 7.x - Next generation frontend tooling
+- **Vitest** 4.x - Blazing fast unit test framework
+- **OXC** (oxlint) 1.x - Fast JavaScript/TypeScript linter
+
+## CI/CD
+
+This project uses GitHub Actions for:
+- Running tests on multiple Node.js versions (18.x, 20.x, 22.x)
+- Code coverage reporting
+- Automatic publishing to NPM on release
+
+## License
+
+MIT

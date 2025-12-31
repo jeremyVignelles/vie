@@ -1,0 +1,30 @@
+# Source files
+src/
+*.test.ts
+
+# Config files
+tsconfig.json
+vite.config.ts
+vitest.config.ts
+rolldown.config.mjs
+
+# GitHub
+.github/
+
+# Development
+.vscode/
+.idea/
+
+# Testing
+coverage/
+
+# Build artifacts
+*.tsbuildinfo
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.*
+!.env.example
