@@ -43,7 +43,7 @@ describe("A02-3.7.a - Règles Top 16", () => {
     name,
     rating,
     gender,
-    federation: isFrench ? "FRA" : false,
+    federation: isFrench ? "FRA" : "GER",
     licenseType: "A",
     club: "club1",
     isFrench,

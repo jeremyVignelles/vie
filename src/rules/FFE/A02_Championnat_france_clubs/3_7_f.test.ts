@@ -185,7 +185,6 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
     const team1 = createTeam("team1", "N1", "A");
     const player1 = createPlayer("p1", "Joueur 1");
     const player2 = createPlayer("p2", "Joueur 2");
-    const player3 = createPlayer("p3", "Joueur 3");
 
     // Player 1 is in core
     const history = {
