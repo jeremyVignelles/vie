@@ -21,6 +21,7 @@ const currentTeams = [
   {
     teamId: "team-1",
     date: "2024-10-01",
+    arbiter: null,
     players: [
       {
         id: "player-1",

@@ -6,6 +6,7 @@ import {
   TeamChampionnatFranceClub,
   TeamCompositionChampionnatFranceClub,
 } from "./types";
+import { ArbiterFFE } from "../R01_Regles_generales/types";
 
 describe("A02-3.7.k - Matchs de barrage", () => {
   const mockRuleset = { name: "Test", rules: [] };
@@ -17,6 +18,7 @@ describe("A02-3.7.k - Matchs de barrage", () => {
     PlayerChampionnatFranceClub,
     TeamChampionnatFranceClub,
     any,
+    ArbiterFFE,
     TeamCompositionChampionnatFranceClub
   > => ({
     teams,
@@ -60,6 +62,7 @@ describe("A02-3.7.k - Matchs de barrage", () => {
     players,
     date: "2025-01-01",
     playoff,
+    arbiter: null,
   });
 
   it("ne devrait pas s'appliquer aux matchs non-playoff", () => {

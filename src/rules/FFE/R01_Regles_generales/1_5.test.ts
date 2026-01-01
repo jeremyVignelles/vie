@@ -1,10 +1,16 @@
 import { describe, it, expect } from "vitest";
 import rule from "./1_5";
 import { TournamentState } from "../../../types";
-import { PlayerFFE, TeamCompositionFFE } from "./types";
+import { ArbiterFFE, PlayerFFE, TeamCompositionFFE } from "./types";
 
 describe("R01-1.5 - Interdiction joueurs RUS et BLR", () => {
-  const createTournamentState = (): TournamentState<PlayerFFE, any, any, TeamCompositionFFE> => ({
+  const createTournamentState = (): TournamentState<
+    PlayerFFE,
+    any,
+    any,
+    ArbiterFFE,
+    TeamCompositionFFE
+  > => ({
     teams: [],
     history: {},
   });
@@ -24,6 +30,7 @@ describe("R01-1.5 - Interdiction joueurs RUS et BLR", () => {
     teamId,
     players,
     date: "2025-01-01",
+    arbiter: null,
   });
 
   it("devrait valider des joueurs de fédérations autorisées", () => {

@@ -6,6 +6,7 @@ import {
   TeamChampionnatFranceClub,
   TeamCompositionChampionnatFranceClub,
 } from "./types";
+import { ArbiterFFE } from "../R01_Regles_generales/types";
 
 describe("A02-3.7.h - Nationalité étrangère", () => {
   const mockRuleset = { name: "Test", rules: [] };
@@ -17,6 +18,7 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
     PlayerChampionnatFranceClub,
     TeamChampionnatFranceClub,
     any,
+    ArbiterFFE,
     TeamCompositionChampionnatFranceClub
   > => ({
     teams,
@@ -60,6 +62,7 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
     teamId,
     players,
     date: "2025-01-01",
+    arbiter: null,
   });
 
   it("devrait valider une équipe avec 5 joueurs qualifiés (équipe de plus de 6)", () => {

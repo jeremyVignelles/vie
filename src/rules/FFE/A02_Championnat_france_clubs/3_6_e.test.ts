@@ -26,6 +26,7 @@ describe("A02-3.6.e - Ordre des joueurs par Elo", () => {
     teamId,
     players,
     date: "2025-01-01",
+    arbiter: null,
   });
 
   it("devrait valider une composition avec joueurs en ordre décroissant", () => {

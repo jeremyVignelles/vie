@@ -16,6 +16,7 @@ describe("A02-3.6.a - Pas de trous dans la composition", () => {
   const createTeamComposition = (teamId: string, players: (any | null)[]): TeamComposition => ({
     teamId,
     players,
+    arbiter: null,
   });
 
   it("devrait valider une composition sans trous", () => {

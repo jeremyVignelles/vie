@@ -6,6 +6,7 @@ import {
   TeamChampionnatFranceClub,
   TeamCompositionChampionnatFranceClub,
 } from "./types";
+import { ArbiterFFE } from "../R01_Regles_generales/types";
 
 describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
   const mockRuleset = { name: "Test", rules: [] };
@@ -17,6 +18,7 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
     PlayerChampionnatFranceClub,
     TeamChampionnatFranceClub,
     any,
+    ArbiterFFE,
     TeamCompositionChampionnatFranceClub
   > => ({
     teams,
@@ -54,6 +56,7 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
     teamId,
     players,
     date: "2025-01-01",
+    arbiter: null,
   });
 
   it("devrait valider un joueur qui n'a jamais joué dans une équipe plus forte", () => {

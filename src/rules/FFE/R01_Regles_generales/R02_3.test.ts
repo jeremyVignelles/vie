@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import rule from "./R02_3";
 import { TournamentState } from "../../../types";
-import { PlayerFFE, TeamFFE, TeamCompositionFFE } from "./types";
+import { PlayerFFE, TeamFFE, TeamCompositionFFE, ArbiterFFE } from "./types";
 
 describe("R02-3 - Interdiction de jouer plusieurs parties simultanément", () => {
   const mockRuleset = { name: "Test", rules: [] };
@@ -9,7 +9,7 @@ describe("R02-3 - Interdiction de jouer plusieurs parties simultanément", () =>
   const createTournamentState = (
     teams: TeamFFE[],
     history: Record<string, TeamCompositionFFE[]> = {},
-  ): TournamentState<PlayerFFE, TeamFFE, any, TeamCompositionFFE> => ({
+  ): TournamentState<PlayerFFE, TeamFFE, any, ArbiterFFE, TeamCompositionFFE> => ({
     teams,
     history,
   });
@@ -38,6 +38,7 @@ describe("R02-3 - Interdiction de jouer plusieurs parties simultanément", () =>
     teamId,
     players,
     date,
+    arbiter: null,
   });
 
   it("devrait valider une équipe sans joueurs jouant ailleurs le même jour", () => {

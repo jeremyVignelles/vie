@@ -6,6 +6,7 @@ import {
   TeamChampionnatFranceClub,
   TeamCompositionChampionnatFranceClub,
 } from "./types";
+import { ArbiterFFE } from "../R01_Regles_generales/types";
 
 describe("A02-3.7.e - Nombre de parties", () => {
   const mockRuleset = { name: "Test", rules: [] };
@@ -17,6 +18,7 @@ describe("A02-3.7.e - Nombre de parties", () => {
     PlayerChampionnatFranceClub,
     TeamChampionnatFranceClub,
     any,
+    ArbiterFFE,
     TeamCompositionChampionnatFranceClub
   > => ({
     teams,
@@ -60,6 +62,7 @@ describe("A02-3.7.e - Nombre de parties", () => {
     players,
     date: "2025-01-01",
     roundNumber,
+    arbiter: null,
   });
 
   it("devrait valider un joueur qui n'a pas dépassé la limite de rondes", () => {
@@ -68,7 +71,10 @@ describe("A02-3.7.e - Nombre de parties", () => {
 
     // History: player1 has played 2 rounds
     const history = {
-      team1: [createTeamComposition("team1", [player1], 1), createTeamComposition("team1", [player1], 2)],
+      team1: [
+        createTeamComposition("team1", [player1], 1),
+        createTeamComposition("team1", [player1], 2),
+      ],
     };
 
     const tournamentState = createTournamentState([team1], history);
@@ -112,9 +118,7 @@ describe("A02-3.7.e - Nombre de parties", () => {
 
     // History: player1 has played 11 rounds
     const history = {
-      team1: Array.from({ length: 11 }, (_, i) =>
-        createTeamComposition("team1", [player1], i + 1)
-      ),
+      team1: Array.from({ length: 11 }, (_, i) => createTeamComposition("team1", [player1], i + 1)),
     };
 
     const tournamentState = createTournamentState([team1], history);
@@ -137,9 +141,7 @@ describe("A02-3.7.e - Nombre de parties", () => {
 
     // History: player1 has played 10 rounds
     const history = {
-      team1: Array.from({ length: 10 }, (_, i) =>
-        createTeamComposition("team1", [player1], i + 1)
-      ),
+      team1: Array.from({ length: 10 }, (_, i) => createTeamComposition("team1", [player1], i + 1)),
     };
 
     const tournamentState = createTournamentState([team1], history);

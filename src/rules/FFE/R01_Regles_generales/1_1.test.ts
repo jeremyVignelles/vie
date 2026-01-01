@@ -1,14 +1,14 @@
 import { describe, it, expect } from "vitest";
 import rule from "./1_1";
 import { TournamentState } from "../../../types";
-import { PlayerFFE, TeamFFE, TeamCompositionFFE } from "./types";
+import { PlayerFFE, TeamFFE, TeamCompositionFFE, ArbiterFFE } from "./types";
 
 describe("R01-1.1 - Licence et club", () => {
   const mockRuleset = { name: "Test", rules: [] };
 
   const createTournamentState = (
     teams: TeamFFE[],
-  ): TournamentState<PlayerFFE, TeamFFE, any, TeamCompositionFFE> => ({
+  ): TournamentState<PlayerFFE, TeamFFE, any, ArbiterFFE, TeamCompositionFFE> => ({
     teams,
     history: {},
   });
@@ -41,6 +41,7 @@ describe("R01-1.1 - Licence et club", () => {
     teamId,
     players,
     date: "2025-01-01",
+    arbiter: null,
   });
 
   it("devrait valider une équipe avec des joueurs licenciés du même club", () => {

@@ -6,6 +6,7 @@ import {
   TeamChampionnatFranceClub,
   TeamCompositionChampionnatFranceClub,
 } from "./types";
+import { ArbiterFFE } from "../R01_Regles_generales/types";
 
 describe("A02-3.7.a - Règles Top 16", () => {
   const mockRuleset = { name: "Test", rules: [] };
@@ -16,6 +17,7 @@ describe("A02-3.7.a - Règles Top 16", () => {
     PlayerChampionnatFranceClub,
     TeamChampionnatFranceClub,
     any,
+    ArbiterFFE,
     TeamCompositionChampionnatFranceClub
   > => ({
     teams,
@@ -56,6 +58,7 @@ describe("A02-3.7.a - Règles Top 16", () => {
     teamId,
     players,
     date: "2025-01-01",
+    arbiter: null,
   });
 
   it("devrait ignorer les équipes qui ne sont pas en Top 16", () => {

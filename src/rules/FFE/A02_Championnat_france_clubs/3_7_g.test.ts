@@ -6,6 +6,7 @@ import {
   TeamChampionnatFranceClub,
   TeamCompositionChampionnatFranceClub,
 } from "./types";
+import { ArbiterFFE } from "../R01_Regles_generales/types";
 
 describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
   const mockRuleset = { name: "Test", rules: [] };
@@ -17,6 +18,7 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
     PlayerChampionnatFranceClub,
     TeamChampionnatFranceClub,
     any,
+    ArbiterFFE,
     TeamCompositionChampionnatFranceClub
   > => ({
     teams,
@@ -60,6 +62,7 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
     teamId,
     players,
     date: "2025-01-01",
+    arbiter: null,
   });
 
   it("devrait valider une équipe avec 3 joueurs mutés ou moins (équipe de plus de 6)", () => {
@@ -207,7 +210,14 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
     const player4 = createPlayer("p4", "Joueur 4", false);
 
     const tournamentState = createTournamentState([team1]);
-    const teamComposition = createTeamComposition("team1", [player1, null, player2, null, player3, player4]);
+    const teamComposition = createTeamComposition("team1", [
+      player1,
+      null,
+      player2,
+      null,
+      player3,
+      player4,
+    ]);
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
 

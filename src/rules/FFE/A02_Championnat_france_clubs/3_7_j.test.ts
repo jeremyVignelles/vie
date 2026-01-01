@@ -6,6 +6,7 @@ import {
   TeamChampionnatFranceClub,
   TeamCompositionChampionnatFranceClub,
 } from "./types";
+import { ArbiterFFE } from "../R01_Regles_generales/types";
 
 describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
   const mockRuleset = { name: "Test", rules: [] };
@@ -17,6 +18,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     PlayerChampionnatFranceClub,
     TeamChampionnatFranceClub,
     any,
+    ArbiterFFE,
     TeamCompositionChampionnatFranceClub
   > => ({
     teams,
@@ -59,6 +61,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     teamId,
     players,
     date: "2025-01-01",
+    arbiter: null,
   });
 
   it("ne devrait pas s'appliquer en T16", () => {
@@ -101,7 +104,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const team1 = createTeam("team1", "N4", ["club1"]);
     const team2 = createTeam("team2", "N1", ["club1"]);
     const team3 = createTeam("team3", "N2", ["club1"]);
-    
+
     const player1 = createPlayer("p1", "Joueur 1", 2400);
     const player2 = createPlayer("p2", "Joueur 2", 2300);
 
@@ -117,7 +120,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const team1 = createTeam("team1", "N4", ["club1"]);
     const team2 = createTeam("team2", "N1", ["club1"]);
     const team3 = createTeam("team3", "N2", ["club1"]);
-    
+
     const player1 = createPlayer("p1", "Joueur 1", 2401);
     const player2 = createPlayer("p2", "Joueur 2", 2300);
 
@@ -138,7 +141,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
   it("ne devrait pas s'appliquer si moins de 2 équipes en divisions supérieures", () => {
     const team1 = createTeam("team1", "N4", ["club1"]);
     const team2 = createTeam("team2", "N1", ["club1"]);
-    
+
     const player1 = createPlayer("p1", "Joueur 1", 2500);
 
     const tournamentState = createTournamentState([team1, team2]);
@@ -151,7 +154,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
 
   it("ne devrait pas s'appliquer si aucune équipe en divisions supérieures", () => {
     const team1 = createTeam("team1", "N4", ["club1"]);
-    
+
     const player1 = createPlayer("p1", "Joueur 1", 2500);
 
     const tournamentState = createTournamentState([team1]);
@@ -166,7 +169,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const team1 = createTeam("team1", "N4", ["club1"]);
     const team2 = createTeam("team2", "N1", ["club1"]);
     const team3 = createTeam("team3", "N2", ["club1"]);
-    
+
     const player1 = createPlayer("p1", "Joueur 1", 2300);
     const player2 = createPlayer("p2", "Joueur 2", 2450);
     const player3 = createPlayer("p3", "Joueur 3", 2300);
@@ -186,7 +189,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const team1 = createTeam("team1", "N4", ["club1", "club2"]);
     const team2 = createTeam("team2", "N1", ["club1"]);
     const team3 = createTeam("team3", "N2", ["club2"]);
-    
+
     const player1 = createPlayer("p1", "Joueur 1", 2450);
 
     const tournamentState = createTournamentState([team1, team2, team3]);
@@ -201,7 +204,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const team1 = createTeam("team1", "N4", ["club1"]);
     const team2 = createTeam("team2", "N1", ["club2"]);
     const team3 = createTeam("team3", "N2", ["club3"]);
-    
+
     const player1 = createPlayer("p1", "Joueur 1", 2500);
 
     const tournamentState = createTournamentState([team1, team2, team3]);
@@ -218,7 +221,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const team1 = createTeam("team1", "N4", ["club1"]);
     const team2 = createTeam("team2", "N1", ["club1"]);
     const team3 = createTeam("team3", "N2", ["club1"]);
-    
+
     const player1 = createPlayer("p1", "Joueur 1", 2300);
     const player2 = createPlayer("p2", "Joueur 2", 2450);
 
