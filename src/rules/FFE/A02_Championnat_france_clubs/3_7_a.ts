@@ -6,9 +6,8 @@ const id = "A02-3.7.a";
 const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceClub> = {
   id,
   description: `
-  • En Top 16, une liste de 16 joueurs/joueuses
-  (dont au moins une joueuse française et un joueur français) doit
-  être transmise à la Direction du Top 16 [...]. Les membres
+  • En Top 16, une liste de 16 joueurs/joueuses [...]
+  doit être transmise à la Direction du Top 16 [...]. Les membres
   de la liste doivent, à l’exception des joueuses françaises, avoir un classement
   Elo de 2000 minimum au moment du dépôt de la liste.
   Tout joueur ou joueuse ne figurant pas sur cette liste ne pourra pas jouer en Top 16.
@@ -29,40 +28,37 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
       return [];
     }
 
-    let hasMaleFrenchPlayer = false;
-    let hasFemaleFrenchPlayer = false;
     const violations: Violation[] = [];
+
+    // Identifier la meilleure joueuse française (celle avec le meilleur Elo)
+    const frenchFemales = teamPlayers
+      .map((player, index) => ({ player, index }))
+      .filter(({ player }) => player !== null && player.gender === "F" && player.isFrench)
+      .map(({ player, index }) => ({ player: player!, index }));
+
+    const bestFrenchFemale =
+      frenchFemales.length > 0
+        ? frenchFemales.reduce((best, current) =>
+            current.player.rating > best.player.rating ? current : best,
+          )
+        : null;
 
     for (const [index, player] of teamPlayers.entries()) {
       if (player === null) {
         continue;
       }
 
-      if (!hasFemaleFrenchPlayer && player.gender === "F" && player.federation === "FRA") {
-        hasFemaleFrenchPlayer = true;
-      } else {
-        if (!hasMaleFrenchPlayer && player.gender === "M" && player.federation === "FRA") {
-          hasMaleFrenchPlayer = true;
-        }
+      // Seule la meilleure joueuse française est exemptée de la règle des 2000 Elo
+      const isBestFrenchFemale = bestFrenchFemale !== null && index === bestFrenchFemale.index;
 
-        if (player.rating < 2000) {
-          violations.push({
-            ruleId: id,
-            teamId: teamToValidate,
-            boardNumber: index + 1,
-            message: `Le joueur ${player.name} (ID: ${player.id}) n'a pas le classement Elo minimum requis de 2000 pour figurer sur la liste du Top 16.`,
-          });
-        }
+      if (!isBestFrenchFemale && player.rating < 2000) {
+        violations.push({
+          ruleId: id,
+          teamId: teamToValidate,
+          boardNumber: index + 1,
+          message: `Le joueur ${player.name} (ID: ${player.id}) n'a pas le classement Elo minimum requis de 2000 pour figurer sur la liste du Top 16.`,
+        });
       }
-    }
-
-    if (!hasMaleFrenchPlayer || !hasFemaleFrenchPlayer) {
-      violations.push({
-        ruleId: id,
-        teamId: teamToValidate,
-        boardNumber: null,
-        message: `L'équipe doit comporter au moins un joueur français et une joueuse française pour figurer sur la liste du Top 16.`,
-      });
     }
 
     return violations;
