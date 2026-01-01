@@ -1,4 +1,4 @@
-import { PlayerFFE, TeamCompositionFFE, TeamFFE } from "../R01_Regles_generales/types";
+import { ArbiterFFE, PlayerFFE, TeamCompositionFFE, TeamFFE } from "../R01_Regles_generales/types";
 
 export interface PlayerChampionnatFranceClub extends PlayerFFE {
   /** Le classement elo du joueur (celui à prendre en compte pour la compétition) */
@@ -44,7 +44,8 @@ export interface TeamChampionnatFranceClub extends TeamFFE {
 
 export interface TeamCompositionChampionnatFranceClub<
   TPlayer extends PlayerChampionnatFranceClub = PlayerChampionnatFranceClub,
-> extends TeamCompositionFFE<TPlayer> {
+  TArbiter extends ArbiterFFE = ArbiterFFE,
+> extends TeamCompositionFFE<TPlayer, TArbiter> {
   /**
    * Est-ce que la ronde est une ronde de barrage ?
    */

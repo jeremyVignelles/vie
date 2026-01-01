@@ -23,11 +23,22 @@ export interface Player {
   name: string;
 }
 
+export interface Arbiter {
+  /**
+   * Le code FFE de l'arbitre pour les tournois de la fédération française des échecs
+   */
+  id: string;
+
+  /** Le nom complet de l'arbitre */
+  name: string;
+}
+
 export interface TournamentState<
   TPlayer extends Player,
   TTeam extends TeamInfo<TRules>,
-  TRules extends Rule<string, TPlayer, TTeam>[],
-  TTeamComposition extends TeamComposition<TPlayer> = TeamComposition<TPlayer>,
+  TRules extends Rule<string, TPlayer, TTeam, TArbiter>[],
+  TArbiter extends Arbiter = Arbiter,
+  TTeamComposition extends TeamComposition<TPlayer, TArbiter> = TeamComposition<TPlayer, TArbiter>,
 > {
   /**
    * Les équipes participant au tournoi, dans l'ordre de numérotation si cela est important
@@ -43,7 +54,8 @@ export interface Rule<
   TRuleId extends string,
   TPlayer extends Player = Player,
   TTeamInfo extends TeamInfo = TeamInfo,
-  TTeamComposition extends TeamComposition<TPlayer> = TeamComposition<TPlayer>,
+  TArbiter extends Arbiter = Arbiter,
+  TTeamComposition extends TeamComposition<TPlayer, TArbiter> = TeamComposition<TPlayer, TArbiter>,
 > {
   id: TRuleId;
   description: string;
@@ -51,7 +63,8 @@ export interface Rule<
     tournamentState: TournamentState<
       TPlayer,
       TTeamInfo,
-      Rule<string, TPlayer, TTeamInfo, TTeamComposition>[],
+      Rule<string, TPlayer, TTeamInfo, TArbiter, TTeamComposition>[],
+      TArbiter,
       TTeamComposition
     >,
     currentTeams: TTeamComposition[],
@@ -70,7 +83,9 @@ export interface Ruleset<TRules extends Rule<string>[]> {
   rules: TRules;
 }
 
-export interface TeamInfo<TRules extends Rule<string>[] = Rule<string, Player, TeamInfo<any>>[]> {
+export interface TeamInfo<
+  TRules extends Rule<string>[] = Rule<string, Player, TeamInfo<any>, Arbiter>[],
+> {
   /** Identifiant unique de l'équipe */
   id: string;
 
@@ -81,7 +96,10 @@ export interface TeamInfo<TRules extends Rule<string>[] = Rule<string, Player, T
   ruleset: Ruleset<TRules>;
 }
 
-export interface TeamComposition<TPlayer extends Player = Player> {
+export interface TeamComposition<
+  TPlayer extends Player = Player,
+  TArbiter extends Arbiter = Arbiter,
+> {
   /** L'identifiant unique de l'équipe */
   teamId: string;
 
@@ -91,4 +109,9 @@ export interface TeamComposition<TPlayer extends Player = Player> {
    * par le règlement.
    */
   players: (TPlayer | null)[];
+
+  /**
+   * L'arbitre désigné pour cette équipe, ou null si aucun n'est désigné.
+   */
+  arbiter: TArbiter | null;
 }

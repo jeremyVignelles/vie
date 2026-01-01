@@ -1,4 +1,4 @@
-import { Rule, Violation } from "../../../types";
+import { Arbiter, Rule, Violation } from "../../../types";
 import {
   PlayerChampionnatFranceClub,
   TeamChampionnatFranceClub,
@@ -11,6 +11,7 @@ const rule: Rule<
   typeof id,
   PlayerChampionnatFranceClub,
   TeamChampionnatFranceClub,
+  Arbiter,
   TeamCompositionChampionnatFranceClub
 > = {
   id,

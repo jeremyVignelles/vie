@@ -1,4 +1,4 @@
-import { Player, TeamComposition, TeamInfo } from "../../../types";
+import { Arbiter, Player, TeamComposition, TeamInfo } from "../../../types";
 
 export interface PlayerFFE extends Player {
   /**
@@ -30,9 +30,24 @@ export interface TeamFFE extends TeamInfo {
   hasAtLeast60Minutes: boolean;
 }
 
+export interface ArbiterFFE extends Arbiter {
+  /**
+   * Les titres d'arbitres reconnus par la FFE (dans l'ordre croissant de niveau):
+   * - AS: Arbitre Stagiaire
+   * - AFJ: Arbitre Fédéral Jeune
+   * - AFC: Arbitre Fédéral Club
+   * - AFO (1 ou 2): Arbitre Fédéral Open (niveau 1 ou 2)
+   * - AFE (1 ou 2): Arbitre Fédéral Élite (niveau 1 ou 2)
+   * - AF: Arbitre FIDE
+   * - AI: Arbitre International
+   */
+  arbiterTitle: "AS" | "AFJ" | "AFC" | "AFO1" | "AFO2" | "AFE1" | "AFE2" | "AF" | "AI";
+}
+
 export interface TeamCompositionFFE<
   TPlayer extends PlayerFFE = PlayerFFE,
-> extends TeamComposition<TPlayer> {
+  TArbiter extends ArbiterFFE = ArbiterFFE,
+> extends TeamComposition<TPlayer, TArbiter> {
   /**
    * La date de la ronde au format AAAA-MM-JJ
    */

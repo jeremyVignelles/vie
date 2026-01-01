@@ -1,4 +1,5 @@
 import { Rule, Violation } from "../../../types";
+import { ArbiterFFE } from "../R01_Regles_generales/types";
 import {
   PlayerChampionnatFranceClub,
   TeamChampionnatFranceClub,
@@ -11,6 +12,7 @@ const rule: Rule<
   typeof id,
   PlayerChampionnatFranceClub,
   TeamChampionnatFranceClub,
+  ArbiterFFE,
   TeamCompositionChampionnatFranceClub
 > = {
   id,
@@ -37,7 +39,7 @@ const rule: Rule<
     // Define division hierarchy
     const divisionOrder = ["T16", "N1", "N2", "N3", "N4"];
     const teamDivisionIndex = divisionOrder.indexOf(teamInfo.division);
-    
+
     if (teamDivisionIndex === -1) {
       // Unknown division, can't validate
       return violations;

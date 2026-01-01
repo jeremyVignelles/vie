@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import rule from "./3_8";
-import { TournamentState } from "../../../types";
+import { Arbiter, TournamentState } from "../../../types";
 import {
   PlayerChampionnatFranceClub,
   TeamChampionnatFranceClub,
@@ -17,6 +17,7 @@ describe("A02-3.8 - Forfaits sportifs", () => {
     PlayerChampionnatFranceClub,
     TeamChampionnatFranceClub,
     any,
+    Arbiter,
     TeamCompositionChampionnatFranceClub
   > => ({
     teams,
@@ -57,6 +58,7 @@ describe("A02-3.8 - Forfaits sportifs", () => {
     teamId,
     players,
     date: "2025-01-01",
+    arbiter: null,
   });
 
   describe("Top 16", () => {

@@ -1,9 +1,9 @@
 import { Rule } from "../../../types";
-import { PlayerFFE, TeamCompositionFFE, TeamFFE } from "./types";
+import { ArbiterFFE, PlayerFFE, TeamCompositionFFE, TeamFFE } from "./types";
 
 const id = "R02-3";
 
-const rule: Rule<typeof id, PlayerFFE, TeamFFE, TeamCompositionFFE> = {
+const rule: Rule<typeof id, PlayerFFE, TeamFFE, ArbiterFFE, TeamCompositionFFE> = {
   id,
   description: `Il est interdit de jouer plusieurs parties à la fois
     en compétition par équipes (interclubs, coupes). Si une personne est
