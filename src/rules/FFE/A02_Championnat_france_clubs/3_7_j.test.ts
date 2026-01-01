@@ -197,7 +197,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     expect(violations.length).toBeGreaterThan(0);
   });
 
-  it("ne devrait pas compter les équipes d'autres clubs", () => {
+  it("devrait compter toutes les équipes des divisions supérieures", () => {
     const team1 = createTeam("team1", "N4", ["club1"]);
     const team2 = createTeam("team2", "N1", ["club2"]);
     const team3 = createTeam("team3", "N2", ["club3"]);
@@ -209,7 +209,9 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
 
-    expect(violations).toEqual([]);
+    // Now counts all teams in higher divisions, so violations should be reported
+    expect(violations.length).toBe(1);
+    expect(violations[0].boardNumber).toBe(1);
   });
 
   it("devrait gérer les joueurs null correctement", () => {

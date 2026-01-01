@@ -20,7 +20,8 @@ export interface PlayerChampionnatFranceClub extends PlayerFFE {
 
   /**
    * Est-ce que le joueur est qualifié au sens de la règle 3.7.h
-   * (nationalité française, ressortissant UE résidant en France, ou extracommunautaire résidant en France depuis 5 ans)
+   * (ressortissant UE résidant en France, ou extracommunautaire résidant en France depuis 5 ans)
+   * Note: Les joueurs français sont automatiquement qualifiés et n'ont pas besoin de ce champ
    */
   isQualifiedResident?: boolean;
 }

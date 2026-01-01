@@ -25,15 +25,11 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
       return [];
     }
 
-    // Count teams in higher divisions from the same club(s)
-    const teamClubs = new Set(teamInfo.clubs);
+    // Count teams in higher divisions
     const teamsInHigherDivisions = tournamentState.teams.filter((team) => {
       if (team.id === teamToValidate) return false;
       
-      if (!higherDivisions.includes(team.division)) return false;
-      
-      // Check if this team shares any club with our team
-      return team.clubs.some((club) => teamClubs.has(club));
+      return higherDivisions.includes(team.division);
     });
 
     // If less than 2 teams in higher divisions, the rule doesn't apply

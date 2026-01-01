@@ -84,39 +84,6 @@ describe("A02-3.7.a - Règles Top 16", () => {
     expect(violations).toEqual([]);
   });
 
-  it("devrait détecter l'absence de joueur français masculin", () => {
-    const team = createTeam("team1", "T16");
-    const tournamentState = createTournamentState([team]);
-
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", false);
-    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", true);
-    const teamComposition = createTeamComposition("team1", [player1, player2]);
-
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
-
-    expect(violations).toHaveLength(1);
-    expect(violations[0]).toMatchObject({
-      ruleId: "A02-3.7.a",
-      teamId: "team1",
-      boardNumber: null,
-    });
-    expect(violations[0].message).toContain("au moins un joueur français et une joueuse française");
-  });
-
-  it("devrait détecter l'absence de joueuse française", () => {
-    const team = createTeam("team1", "T16");
-    const tournamentState = createTournamentState([team]);
-
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
-    const player2 = createPlayer("p2", "Joueur 2", 2300, "M", true);
-    const teamComposition = createTeamComposition("team1", [player1, player2]);
-
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
-
-    expect(violations).toHaveLength(1);
-    expect(violations[0].message).toContain("au moins un joueur français et une joueuse française");
-  });
-
   it("devrait détecter un joueur avec Elo < 2000 (non joueuse française obligatoire)", () => {
     const team = createTeam("team1", "T16");
     const tournamentState = createTournamentState([team]);
@@ -134,22 +101,6 @@ describe("A02-3.7.a - Règles Top 16", () => {
       teamId: "team1",
       boardNumber: 3,
     });
-    expect(violations[0].message).toContain("n'a pas le classement Elo minimum requis de 2000");
-  });
-
-  it("la première joueuse française compte comme joueuse obligatoire", () => {
-    const team = createTeam("team1", "T16");
-    const tournamentState = createTournamentState([team]);
-
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
-    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", true);
-    const player3 = createPlayer("p3", "Joueuse 3", 1700, "F", true);
-    const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
-
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
-
-    expect(violations).toHaveLength(1);
-    expect(violations[0].boardNumber).toBe(3);
     expect(violations[0].message).toContain("n'a pas le classement Elo minimum requis de 2000");
   });
 
@@ -177,23 +128,8 @@ describe("A02-3.7.a - Règles Top 16", () => {
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
 
-    // 3 violations pour les Elo < 2000 + 1 pour l'absence de joueurs français
-    expect(violations).toHaveLength(4);
-  });
-
-  it("la joueuse française avec le meilleur Elo est considérée comme obligatoire", () => {
-    const team = createTeam("team1", "T16");
-    const tournamentState = createTournamentState([team]);
-
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
-    const player2 = createPlayer("p2", "Joueuse 2", 2100, "F", true);
-    const player3 = createPlayer("p3", "Joueuse 3", 1900, "F", true);
-    const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
-
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
-
-    expect(violations).toHaveLength(1);
-    expect(violations[0].boardNumber).toBe(3);
+    // 3 violations pour les Elo < 2000
+    expect(violations).toHaveLength(3);
   });
 
   it("devrait gérer les positions vides (null)", () => {

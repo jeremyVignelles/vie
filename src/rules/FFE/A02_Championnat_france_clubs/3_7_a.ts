@@ -7,7 +7,7 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
   id,
   description: `
   • En Top 16, une liste de 16 joueurs/joueuses
-  (dont au moins une joueuse française et un joueur français) doit
+  doit
   être transmise à la Direction du Top 16 [...]. Les membres
   de la liste doivent, à l’exception des joueuses françaises, avoir un classement
   Elo de 2000 minimum au moment du dépôt de la liste.
@@ -29,8 +29,6 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
       return [];
     }
 
-    let hasMaleFrenchPlayer = false;
-    let hasFemaleFrenchPlayer = false;
     const violations: Violation[] = [];
 
     for (const [index, player] of teamPlayers.entries()) {
@@ -38,31 +36,15 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
         continue;
       }
 
-      if (!hasFemaleFrenchPlayer && player.gender === "F" && player.isFrench) {
-        hasFemaleFrenchPlayer = true;
-      } else {
-        if (!hasMaleFrenchPlayer && player.gender === "M" && player.isFrench) {
-          hasMaleFrenchPlayer = true;
-        }
-
-        if (player.rating < 2000) {
-          violations.push({
-            ruleId: id,
-            teamId: teamToValidate,
-            boardNumber: index + 1,
-            message: `Le joueur ${player.name} (ID: ${player.id}) n'a pas le classement Elo minimum requis de 2000 pour figurer sur la liste du Top 16.`,
-          });
-        }
+      // Check Elo requirement (all players except French females must have >= 2000)
+      if (!(player.gender === "F" && player.isFrench) && player.rating < 2000) {
+        violations.push({
+          ruleId: id,
+          teamId: teamToValidate,
+          boardNumber: index + 1,
+          message: `Le joueur ${player.name} (ID: ${player.id}) n'a pas le classement Elo minimum requis de 2000 pour figurer sur la liste du Top 16.`,
+        });
       }
-    }
-
-    if (!hasMaleFrenchPlayer || !hasFemaleFrenchPlayer) {
-      violations.push({
-        ruleId: id,
-        teamId: teamToValidate,
-        boardNumber: null,
-        message: `L'équipe doit comporter au moins un joueur français et une joueuse française pour figurer sur la liste du Top 16.`,
-      });
     }
 
     return violations;

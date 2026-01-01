@@ -32,8 +32,8 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
         continue;
       }
 
-      // Check if player is qualified
-      if (player.isQualifiedResident === true) {
+      // Check if player is qualified (French OR qualified resident)
+      if (player.isFrench === true || player.isQualifiedResident === true) {
         qualifiedCount++;
       }
     }
