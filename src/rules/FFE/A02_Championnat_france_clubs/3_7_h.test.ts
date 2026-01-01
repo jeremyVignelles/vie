@@ -40,9 +40,7 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
   const createPlayer = (
     id: string,
     name: string,
-    isFrench: boolean = true,
-    residesInEU: boolean = false,
-    longTermResident: boolean = false,
+    isQualifiedResident: boolean = true,
     rating: number = 2400,
   ): PlayerChampionnatFranceClub => ({
     id,
@@ -52,9 +50,7 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
     federation: "FRA",
     licenseType: "A",
     club: "club1",
-    isFrench,
-    residesInEU,
-    longTermResident,
+    isQualifiedResident,
   });
 
   const createTeamComposition = (
@@ -68,14 +64,14 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
 
   it("devrait valider une équipe avec 5 joueurs qualifiés (équipe de plus de 6)", () => {
     const team1 = createTeam("team1", "N1", "A");
-    const player1 = createPlayer("p1", "Joueur 1", true, false, false);
-    const player2 = createPlayer("p2", "Joueur 2", true, false, false);
-    const player3 = createPlayer("p3", "Joueur 3", false, true, false);
-    const player4 = createPlayer("p4", "Joueur 4", false, false, true);
-    const player5 = createPlayer("p5", "Joueur 5", true, false, false);
-    const player6 = createPlayer("p6", "Joueur 6", false, false, false);
-    const player7 = createPlayer("p7", "Joueur 7", false, false, false);
-    const player8 = createPlayer("p8", "Joueur 8", false, false, false);
+    const player1 = createPlayer("p1", "Joueur 1", true);
+    const player2 = createPlayer("p2", "Joueur 2", true);
+    const player3 = createPlayer("p3", "Joueur 3", true);
+    const player4 = createPlayer("p4", "Joueur 4", true);
+    const player5 = createPlayer("p5", "Joueur 5", true);
+    const player6 = createPlayer("p6", "Joueur 6", false);
+    const player7 = createPlayer("p7", "Joueur 7", false);
+    const player8 = createPlayer("p8", "Joueur 8", false);
 
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [
@@ -96,14 +92,14 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
 
   it("devrait détecter un dépassement avec 4 étrangers (équipe de 8, besoin de 5 qualifiés)", () => {
     const team1 = createTeam("team1", "N1", "A");
-    const player1 = createPlayer("p1", "Joueur 1", true, false, false);
-    const player2 = createPlayer("p2", "Joueur 2", true, false, false);
-    const player3 = createPlayer("p3", "Joueur 3", true, false, false);
-    const player4 = createPlayer("p4", "Joueur 4", true, false, false);
-    const player5 = createPlayer("p5", "Joueur 5", false, false, false);
-    const player6 = createPlayer("p6", "Joueur 6", false, false, false);
-    const player7 = createPlayer("p7", "Joueur 7", false, false, false);
-    const player8 = createPlayer("p8", "Joueur 8", false, false, false);
+    const player1 = createPlayer("p1", "Joueur 1", true);
+    const player2 = createPlayer("p2", "Joueur 2", true);
+    const player3 = createPlayer("p3", "Joueur 3", true);
+    const player4 = createPlayer("p4", "Joueur 4", true);
+    const player5 = createPlayer("p5", "Joueur 5", false);
+    const player6 = createPlayer("p6", "Joueur 6", false);
+    const player7 = createPlayer("p7", "Joueur 7", false);
+    const player8 = createPlayer("p8", "Joueur 8", false);
 
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [
@@ -119,20 +115,20 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
 
-    // 4 qualified players, need 5, so 4th foreign player (player8 at board 8) should be sanctioned
-    expect(violations.length).toBeGreaterThan(0);
-    expect(violations[0].boardNumber).toBe(8);
+    // Team violation (not individual boards)
+    expect(violations.length).toBe(1);
+    expect(violations[0].boardNumber).toBe(null);
     expect(violations[0].message).toContain("au moins 5 joueurs");
   });
 
   it("devrait valider une équipe avec 4 joueurs qualifiés (équipe de 6)", () => {
     const team1 = createTeam("team1", "N2", "A");
-    const player1 = createPlayer("p1", "Joueur 1", true, false, false);
-    const player2 = createPlayer("p2", "Joueur 2", false, true, false);
-    const player3 = createPlayer("p3", "Joueur 3", false, false, true);
-    const player4 = createPlayer("p4", "Joueur 4", true, false, false);
-    const player5 = createPlayer("p5", "Joueur 5", false, false, false);
-    const player6 = createPlayer("p6", "Joueur 6", false, false, false);
+    const player1 = createPlayer("p1", "Joueur 1", true);
+    const player2 = createPlayer("p2", "Joueur 2", true);
+    const player3 = createPlayer("p3", "Joueur 3", true);
+    const player4 = createPlayer("p4", "Joueur 4", true);
+    const player5 = createPlayer("p5", "Joueur 5", false);
+    const player6 = createPlayer("p6", "Joueur 6", false);
 
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [
@@ -151,12 +147,12 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
 
   it("devrait détecter un dépassement avec 3 étrangers (équipe de 6, besoin de 4 qualifiés)", () => {
     const team1 = createTeam("team1", "N3", "A");
-    const player1 = createPlayer("p1", "Joueur 1", true, false, false);
-    const player2 = createPlayer("p2", "Joueur 2", true, false, false);
-    const player3 = createPlayer("p3", "Joueur 3", true, false, false);
-    const player4 = createPlayer("p4", "Joueur 4", false, false, false);
-    const player5 = createPlayer("p5", "Joueur 5", false, false, false);
-    const player6 = createPlayer("p6", "Joueur 6", false, false, false);
+    const player1 = createPlayer("p1", "Joueur 1", true);
+    const player2 = createPlayer("p2", "Joueur 2", true);
+    const player3 = createPlayer("p3", "Joueur 3", true);
+    const player4 = createPlayer("p4", "Joueur 4", false);
+    const player5 = createPlayer("p5", "Joueur 5", false);
+    const player6 = createPlayer("p6", "Joueur 6", false);
 
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [
@@ -170,22 +166,22 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
 
-    // 3 qualified players, need 4, so 3rd foreign player (player6 at board 6) should be sanctioned
-    expect(violations.length).toBeGreaterThan(0);
-    expect(violations[0].boardNumber).toBe(6);
+    // Team violation (not individual boards)
+    expect(violations.length).toBe(1);
+    expect(violations[0].boardNumber).toBe(null);
     expect(violations[0].message).toContain("au moins 4 joueurs");
   });
 
   it("devrait sanctionner tous les échiquiers suivants", () => {
     const team1 = createTeam("team1", "N1", "A");
-    const player1 = createPlayer("p1", "Joueur 1", true, false, false);
-    const player2 = createPlayer("p2", "Joueur 2", true, false, false);
-    const player3 = createPlayer("p3", "Joueur 3", true, false, false);
-    const player4 = createPlayer("p4", "Joueur 4", true, false, false);
-    const player5 = createPlayer("p5", "Joueur 5", false, false, false);
-    const player6 = createPlayer("p6", "Joueur 6", false, false, false);
-    const player7 = createPlayer("p7", "Joueur 7", false, false, false);
-    const player8 = createPlayer("p8", "Joueur 8", false, false, false);
+    const player1 = createPlayer("p1", "Joueur 1", true);
+    const player2 = createPlayer("p2", "Joueur 2", true);
+    const player3 = createPlayer("p3", "Joueur 3", true);
+    const player4 = createPlayer("p4", "Joueur 4", true);
+    const player5 = createPlayer("p5", "Joueur 5", false);
+    const player6 = createPlayer("p6", "Joueur 6", false);
+    const player7 = createPlayer("p7", "Joueur 7", false);
+    const player8 = createPlayer("p8", "Joueur 8", false);
 
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [
@@ -203,19 +199,19 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
 
     // 4th foreign and all following boards should be sanctioned
     expect(violations.length).toBe(1); // Only board 8 (4th foreign)
-    expect(violations[0].boardNumber).toBe(8);
+    expect(violations[0].boardNumber).toBe(null);
   });
 
   it("devrait accepter les résidents UE et long terme comme qualifiés", () => {
     const team1 = createTeam("team1", "N1", "A");
-    const player1 = createPlayer("p1", "Joueur 1", false, true, false);
-    const player2 = createPlayer("p2", "Joueur 2", false, true, false);
-    const player3 = createPlayer("p3", "Joueur 3", false, false, true);
-    const player4 = createPlayer("p4", "Joueur 4", false, false, true);
-    const player5 = createPlayer("p5", "Joueur 5", true, false, false);
-    const player6 = createPlayer("p6", "Joueur 6", false, false, false);
-    const player7 = createPlayer("p7", "Joueur 7", false, false, false);
-    const player8 = createPlayer("p8", "Joueur 8", false, false, false);
+    const player1 = createPlayer("p1", "Joueur 1", true);
+    const player2 = createPlayer("p2", "Joueur 2", true);
+    const player3 = createPlayer("p3", "Joueur 3", true);
+    const player4 = createPlayer("p4", "Joueur 4", true);
+    const player5 = createPlayer("p5", "Joueur 5", true);
+    const player6 = createPlayer("p6", "Joueur 6", false);
+    const player7 = createPlayer("p7", "Joueur 7", false);
+    const player8 = createPlayer("p8", "Joueur 8", false);
 
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [
@@ -236,9 +232,9 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
 
   it("devrait gérer les joueurs null correctement", () => {
     const team1 = createTeam("team1", "N1", "A");
-    const player1 = createPlayer("p1", "Joueur 1", true, false, false);
-    const player2 = createPlayer("p2", "Joueur 2", true, false, false);
-    const player3 = createPlayer("p3", "Joueur 3", false, false, false);
+    const player1 = createPlayer("p1", "Joueur 1", true);
+    const player2 = createPlayer("p2", "Joueur 2", true);
+    const player3 = createPlayer("p3", "Joueur 3", false);
 
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1, null, player2, null, player3]);
@@ -257,10 +253,10 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
 
   it("devrait valider une équipe avec tous les joueurs qualifiés", () => {
     const team1 = createTeam("team1", "N1", "A");
-    const player1 = createPlayer("p1", "Joueur 1", true, false, false);
-    const player2 = createPlayer("p2", "Joueur 2", true, false, false);
-    const player3 = createPlayer("p3", "Joueur 3", true, false, false);
-    const player4 = createPlayer("p4", "Joueur 4", true, false, false);
+    const player1 = createPlayer("p1", "Joueur 1", true);
+    const player2 = createPlayer("p2", "Joueur 2", true);
+    const player3 = createPlayer("p3", "Joueur 3", true);
+    const player4 = createPlayer("p4", "Joueur 4", true);
 
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3, player4]);
@@ -274,7 +270,7 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
     const team1 = createTeam("team1", "N1", "A");
     const tournamentState = createTournamentState([team1]);
 
-    const player1 = createPlayer("p1", "Joueur 1", true, false, false);
+    const player1 = createPlayer("p1", "Joueur 1", true);
     const teamComposition = createTeamComposition("team1", [player1]);
 
     expect(() => {

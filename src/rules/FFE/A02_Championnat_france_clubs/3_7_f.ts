@@ -62,39 +62,12 @@ const rule: Rule<
     const requiredCore = Math.ceil(totalPlayers * 0.5);
 
     if (coreCount < requiredCore) {
-      // Find the boards that are not in the core, and mark them as violations
-      // Following board order, we need to mark boards until we reach 50%
-      let nonCoreCount = 0;
-      for (const [index, player] of teamPlayers.entries()) {
-        if (player === null) {
-          continue;
-        }
-
-        if (!corePlayerIds.has(player.id)) {
-          nonCoreCount++;
-          // Once we exceed the allowed non-core count, mark this and all following boards
-          if (nonCoreCount > (totalPlayers - requiredCore)) {
-            violations.push({
-              ruleId: id,
-              teamId: teamToValidate,
-              boardNumber: index + 1,
-              message: `Le joueur ${player.name} (ID: ${player.id}) ne fait pas partie du noyau de l'équipe et dépasse le quota de 50% de joueurs hors noyau.`,
-            });
-            // Mark all following boards as well
-            for (let i = index + 1; i < teamPlayers.length; i++) {
-              if (teamPlayers[i] !== null) {
-                violations.push({
-                  ruleId: id,
-                  teamId: teamToValidate,
-                  boardNumber: i + 1,
-                  message: `Le joueur ${teamPlayers[i]!.name} (ID: ${teamPlayers[i]!.id}) est sanctionné car un joueur hors noyau précédent a dépassé le quota.`,
-                });
-              }
-            }
-            break;
-          }
-        }
-      }
+      violations.push({
+        ruleId: id,
+        teamId: teamToValidate,
+        boardNumber: null,
+        message: `L'équipe doit avoir au moins 50% de joueurs du noyau (${coreCount} sur ${requiredCore} requis).`,
+      });
     }
 
     return violations;

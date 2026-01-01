@@ -25,35 +25,27 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
     // Determine the max transferred players allowed based on total positions
     const maxTransferred = totalPositions <= 6 ? 2 : 3;
 
-    // Count transferred players and track their positions
+    // Count transferred players
     let transferredCount = 0;
-    let firstViolationIndex = -1;
 
-    for (const [index, player] of teamPlayers.entries()) {
+    for (const player of teamPlayers) {
       if (player === null) {
         continue;
       }
 
       if (player.transferred) {
         transferredCount++;
-        if (transferredCount > maxTransferred && firstViolationIndex === -1) {
-          firstViolationIndex = index;
-        }
       }
     }
 
-    // If we exceeded the limit, sanction from the first violating board onwards
-    if (firstViolationIndex !== -1) {
-      for (let i = firstViolationIndex; i < teamPlayers.length; i++) {
-        if (teamPlayers[i] !== null) {
-          violations.push({
-            ruleId: id,
-            teamId: teamToValidate,
-            boardNumber: i + 1,
-            message: `Le joueur ${teamPlayers[i]!.name} (ID: ${teamPlayers[i]!.id}) est sanctionné car l'équipe a dépassé le quota de ${maxTransferred} joueurs mutés.`,
-          });
-        }
-      }
+    // If we exceeded the limit, it's a team violation
+    if (transferredCount > maxTransferred) {
+      violations.push({
+        ruleId: id,
+        teamId: teamToValidate,
+        boardNumber: null,
+        message: `L'équipe a dépassé le quota de ${maxTransferred} joueurs mutés (${transferredCount} joueurs mutés).`,
+      });
     }
 
     return violations;

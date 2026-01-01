@@ -143,7 +143,7 @@ describe("A02-3.7.i - Nationalité française", () => {
     expect(violations[0]).toMatchObject({
       ruleId: "A02-3.7.i",
       teamId: "team1",
-      boardNumber: 2, // Last board
+      boardNumber: null,
     });
     expect(violations[0].message).toContain("au moins un joueur de nationalité française");
   });
@@ -162,7 +162,7 @@ describe("A02-3.7.i - Nationalité française", () => {
     expect(violations[0]).toMatchObject({
       ruleId: "A02-3.7.i",
       teamId: "team1",
-      boardNumber: 2, // Last board
+      boardNumber: null,
     });
     expect(violations[0].message).toContain("au moins une joueuse de nationalité française");
   });
@@ -195,8 +195,8 @@ describe("A02-3.7.i - Nationalité française", () => {
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(2);
-    expect(violations[0].boardNumber).toBe(4);
-    expect(violations[1].boardNumber).toBe(4);
+    expect(violations[0].boardNumber).toBe(null);
+    expect(violations[1].boardNumber).toBe(null);
   });
 
   it("devrait gérer les joueurs null correctement", () => {

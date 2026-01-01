@@ -19,16 +19,10 @@ export interface PlayerChampionnatFranceClub extends PlayerFFE {
   isFrench?: boolean;
 
   /**
-   * Est-ce que le joueur réside dans l'Union Européenne
-   * (utilisé pour les joueurs non français)
+   * Est-ce que le joueur est qualifié au sens de la règle 3.7.h
+   * (nationalité française, ressortissant UE résidant en France, ou extracommunautaire résidant en France depuis 5 ans)
    */
-  residesInEU?: boolean;
-
-  /**
-   * Est-ce que le joueur est un extracommunautaire résidant en France depuis au moins 5 ans
-   * (utilisé pour les joueurs non français et ne résidant pas dans l'UE)
-   */
-  longTermResident?: boolean;
+  isQualifiedResident?: boolean;
 }
 
 export interface TeamChampionnatFranceClub extends TeamFFE {

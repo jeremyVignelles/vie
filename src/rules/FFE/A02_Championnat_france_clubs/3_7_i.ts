@@ -40,29 +40,21 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
       }
     }
 
-    // Sanction from the last board if missing required French players
-    let lastNonNullIndex = -1;
-    for (let i = teamPlayers.length - 1; i >= 0; i--) {
-      if (teamPlayers[i] !== null) {
-        lastNonNullIndex = i;
-        break;
-      }
-    }
-
-    if (!hasFrenchMale && lastNonNullIndex !== -1) {
+    // Team violations if missing required French players
+    if (!hasFrenchMale) {
       violations.push({
         ruleId: id,
         teamId: teamToValidate,
-        boardNumber: lastNonNullIndex + 1,
+        boardNumber: null,
         message: `L'équipe doit comporter au moins un joueur de nationalité française.`,
       });
     }
 
-    if (!hasFrenchFemale && lastNonNullIndex !== -1) {
+    if (!hasFrenchFemale) {
       violations.push({
         ruleId: id,
         teamId: teamToValidate,
-        boardNumber: lastNonNullIndex + 1,
+        boardNumber: null,
         message: `L'équipe doit comporter au moins une joueuse de nationalité française.`,
       });
     }

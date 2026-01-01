@@ -20,11 +20,8 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
     const violations: Violation[] = [];
 
     // Only applies to N4 and lower divisions
-    const divisionOrder = ["T16", "N1", "N2", "N3", "N4"];
-    const teamDivisionIndex = divisionOrder.indexOf(teamInfo.division);
-    
-    // If not in N4 or if division is higher than N4, don't apply
-    if (teamDivisionIndex === -1 || teamDivisionIndex < 4) {
+    const higherDivisions = ["T16", "N1", "N2", "N3"];
+    if (higherDivisions.includes(teamInfo.division)) {
       return [];
     }
 
@@ -33,8 +30,7 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
     const teamsInHigherDivisions = tournamentState.teams.filter((team) => {
       if (team.id === teamToValidate) return false;
       
-      const otherDivisionIndex = divisionOrder.indexOf(team.division);
-      if (otherDivisionIndex === -1 || otherDivisionIndex >= 4) return false;
+      if (!higherDivisions.includes(team.division)) return false;
       
       // Check if this team shares any club with our team
       return team.clubs.some((club) => teamClubs.has(club));
@@ -46,30 +42,18 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
     }
 
     // Check for players with Elo > 2400
-    let firstViolationIndex = -1;
     for (const [index, player] of teamPlayers.entries()) {
       if (player === null) {
         continue;
       }
 
       if (player.rating > 2400) {
-        if (firstViolationIndex === -1) {
-          firstViolationIndex = index;
-        }
-      }
-    }
-
-    // Sanction from the first violating board onwards
-    if (firstViolationIndex !== -1) {
-      for (let i = firstViolationIndex; i < teamPlayers.length; i++) {
-        if (teamPlayers[i] !== null) {
-          violations.push({
-            ruleId: id,
-            teamId: teamToValidate,
-            boardNumber: i + 1,
-            message: `Le joueur ${teamPlayers[i]!.name} (ID: ${teamPlayers[i]!.id}) a un Elo supérieur à 2400 et ne peut pas jouer en ${teamInfo.division}.`,
-          });
-        }
+        violations.push({
+          ruleId: id,
+          teamId: teamToValidate,
+          boardNumber: index + 1,
+          message: `Le joueur ${player.name} (ID: ${player.id}) a un Elo supérieur à 2400 et ne peut pas jouer en ${teamInfo.division}.`,
+        });
       }
     }
 

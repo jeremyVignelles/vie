@@ -177,11 +177,9 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
 
-    // Board 2 and all following should be sanctioned
-    expect(violations.length).toBe(3);
+    // Only player 2 (board 2) with Elo > 2400 should be sanctioned
+    expect(violations.length).toBe(1);
     expect(violations[0].boardNumber).toBe(2);
-    expect(violations[1].boardNumber).toBe(3);
-    expect(violations[2].boardNumber).toBe(4);
   });
 
   it("devrait considérer les équipes d'entente (clubs multiples)", () => {

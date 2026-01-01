@@ -37,16 +37,16 @@ describe("A02-3.7.a - Règles Top 16", () => {
     name: string,
     rating: number,
     gender: "M" | "F",
-    federation: string,
+    isFrench: boolean,
   ): PlayerChampionnatFranceClub => ({
     id,
     name,
     rating,
     gender,
-    federation,
+    federation: isFrench ? "FRA" : false,
     licenseType: "A",
     club: "club1",
-    isFrench: federation === "FRA",
+    isFrench,
   });
 
   const createTeamComposition = (
@@ -62,7 +62,7 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const team = createTeam("team1", "N1");
     const tournamentState = createTournamentState([team]);
 
-    const player1 = createPlayer("p1", "Joueur 1", 1800, "M", "FRA");
+    const player1 = createPlayer("p1", "Joueur 1", 1800, "M", true);
     const teamComposition = createTeamComposition("team1", [player1]);
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
@@ -74,9 +74,9 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const team = createTeam("team1", "T16");
     const tournamentState = createTournamentState([team]);
 
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", "FRA");
-    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", "FRA");
-    const player3 = createPlayer("p3", "Joueur 3", 2300, "M", "USA");
+    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
+    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", true);
+    const player3 = createPlayer("p3", "Joueur 3", 2300, "M", false);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
@@ -88,8 +88,8 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const team = createTeam("team1", "T16");
     const tournamentState = createTournamentState([team]);
 
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", "USA");
-    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", "FRA");
+    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", false);
+    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", true);
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
@@ -107,8 +107,8 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const team = createTeam("team1", "T16");
     const tournamentState = createTournamentState([team]);
 
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", "FRA");
-    const player2 = createPlayer("p2", "Joueur 2", 2300, "M", "FRA");
+    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
+    const player2 = createPlayer("p2", "Joueur 2", 2300, "M", true);
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
@@ -121,9 +121,9 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const team = createTeam("team1", "T16");
     const tournamentState = createTournamentState([team]);
 
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", "FRA");
-    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", "FRA");
-    const player3 = createPlayer("p3", "Joueur 3", 1900, "M", "USA");
+    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
+    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", true);
+    const player3 = createPlayer("p3", "Joueur 3", 1900, "M", false);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
@@ -141,9 +141,9 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const team = createTeam("team1", "T16");
     const tournamentState = createTournamentState([team]);
 
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", "FRA");
-    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", "FRA");
-    const player3 = createPlayer("p3", "Joueuse 3", 1700, "F", "FRA");
+    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
+    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", true);
+    const player3 = createPlayer("p3", "Joueuse 3", 1700, "F", true);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
@@ -157,8 +157,8 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const team = createTeam("team1", "T16");
     const tournamentState = createTournamentState([team]);
 
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", "FRA");
-    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", "FRA");
+    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
+    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", true);
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
@@ -170,9 +170,9 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const team = createTeam("team1", "T16");
     const tournamentState = createTournamentState([team]);
 
-    const player1 = createPlayer("p1", "Joueur 1", 1900, "M", "USA");
-    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", "USA");
-    const player3 = createPlayer("p3", "Joueur 3", 1700, "M", "GER");
+    const player1 = createPlayer("p1", "Joueur 1", 1900, "M", false);
+    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", false);
+    const player3 = createPlayer("p3", "Joueur 3", 1700, "M", false);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
@@ -185,9 +185,9 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const team = createTeam("team1", "T16");
     const tournamentState = createTournamentState([team]);
 
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", "FRA");
-    const player2 = createPlayer("p2", "Joueuse 2", 2100, "F", "FRA");
-    const player3 = createPlayer("p3", "Joueuse 3", 1900, "F", "FRA");
+    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
+    const player2 = createPlayer("p2", "Joueuse 2", 2100, "F", true);
+    const player3 = createPlayer("p3", "Joueuse 3", 1900, "F", true);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
@@ -200,8 +200,8 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const team = createTeam("team1", "T16");
     const tournamentState = createTournamentState([team]);
 
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", "FRA");
-    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", "FRA");
+    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
+    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", true);
     const teamComposition = createTeamComposition("team1", [player1, null, player2]);
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
@@ -213,7 +213,7 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const team = createTeam("team1", "T16");
     const tournamentState = createTournamentState([team]);
 
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", "FRA");
+    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
     const teamComposition = createTeamComposition("team1", [player1]);
 
     expect(() => {

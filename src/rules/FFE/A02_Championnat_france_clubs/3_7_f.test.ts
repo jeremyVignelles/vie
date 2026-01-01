@@ -152,12 +152,13 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
 
-    // Should have violations starting from the board that exceeds the quota
-    expect(violations.length).toBeGreaterThan(0);
+    // Team violation (not individual boards)
+    expect(violations.length).toBe(1);
     expect(violations[0].ruleId).toBe("A02-3.7.f");
+    expect(violations[0].boardNumber).toBe(null);
   });
 
-  it("devrait sanctionner le bon échiquier et tous ceux qui suivent", () => {
+  it("devrait retourner une violation d'équipe quand le noyau n'est pas respecté", () => {
     const team1 = createTeam("team1", "N3", "A");
     const player1 = createPlayer("p1", "Joueur 1");
     const player2 = createPlayer("p2", "Joueur 2");
@@ -175,11 +176,9 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
 
-    // With 4 players, need at least 2 core (50%)
-    // We have 1 core, so we can have 2 non-core maximum
-    // The 3rd non-core (player4 at board 4) and all following should be sanctioned
-    expect(violations.length).toBeGreaterThan(0);
-    expect(violations.some(v => v.boardNumber === 4)).toBe(true);
+    // Team violation (not individual boards)
+    expect(violations.length).toBe(1);
+    expect(violations[0].boardNumber).toBe(null);
   });
 
   it("devrait compter correctement avec des null players", () => {
@@ -200,6 +199,27 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
+  });
+
+  it("devrait détecter une violation quand moins de 50% du noyau (1 sur 3)", () => {
+    const team1 = createTeam("team1", "N1", "A");
+    const player1 = createPlayer("p1", "Joueur 1");
+    const player2 = createPlayer("p2", "Joueur 2");
+    const player3 = createPlayer("p3", "Joueur 3");
+
+    // Only player 1 played at round 1
+    const history = {
+      team1: [createTeamComposition("team1", [player1], 1)],
+    };
+
+    const tournamentState = createTournamentState([team1], history);
+    // Round 2: 3 players, only 1 from core = 33% (need 50%)
+    const teamComposition = createTeamComposition("team1", [player1, player2, player3], 2);
+
+    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+
+    expect(violations).toHaveLength(1);
+    expect(violations[0].boardNumber).toBe(null);
   });
 
   it("devrait valider si tous les joueurs sont du noyau", () => {

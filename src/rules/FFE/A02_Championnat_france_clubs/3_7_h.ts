@@ -20,50 +20,32 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
 
     const violations: Violation[] = [];
 
-    // Count non-null players
-    const nonNullPlayers = teamPlayers.filter((p) => p !== null);
-    const totalPlayers = nonNullPlayers.length;
+    // Determine the min qualified players required based on theoretical team size (array length)
+    const teamSize = teamPlayers.length;
+    const minQualified = teamSize <= 6 ? 4 : 5;
 
-    // Determine the min qualified players required
-    const minQualified = totalPlayers <= 6 ? 4 : 5;
+    // Count qualified players
+    let qualifiedCount = 0;
 
-    // Count qualified players and track foreign players
-    let foreignCount = 0;
-    let firstViolationIndex = -1;
-
-    for (const [index, player] of teamPlayers.entries()) {
+    for (const player of teamPlayers) {
       if (player === null) {
         continue;
       }
 
-      // Check if player is qualified (french, eu resident, or long-term resident)
-      const isQualified =
-        player.isFrench === true ||
-        player.residesInEU === true ||
-        player.longTermResident === true;
-
-      if (!isQualified) {
-        foreignCount++;
-        // Track when we exceed the allowed foreign count
-        const maxForeign = totalPlayers - minQualified;
-        if (foreignCount > maxForeign && firstViolationIndex === -1) {
-          firstViolationIndex = index;
-        }
+      // Check if player is qualified
+      if (player.isQualifiedResident === true) {
+        qualifiedCount++;
       }
     }
 
-    // If we don't have enough qualified players, sanction from the first violating board onwards
-    if (firstViolationIndex !== -1) {
-      for (let i = firstViolationIndex; i < teamPlayers.length; i++) {
-        if (teamPlayers[i] !== null) {
-          violations.push({
-            ruleId: id,
-            teamId: teamToValidate,
-            boardNumber: i + 1,
-            message: `Le joueur ${teamPlayers[i]!.name} (ID: ${teamPlayers[i]!.id}) est sanctionné car l'équipe n'a pas au moins ${minQualified} joueurs avec nationalité française/UE/résident long terme.`,
-          });
-        }
-      }
+    // If we don't have enough qualified players, it's a team violation
+    if (qualifiedCount < minQualified) {
+      violations.push({
+        ruleId: id,
+        teamId: teamToValidate,
+        boardNumber: null,
+        message: `L'équipe n'a pas au moins ${minQualified} joueurs avec nationalité française/UE/résident long terme (${qualifiedCount} sur ${minQualified} requis).`,
+      });
     }
 
     return violations;

@@ -115,9 +115,9 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
 
-    // 4th transferred player (player5 at board 5) and all following should be sanctioned
-    expect(violations.length).toBeGreaterThan(0);
-    expect(violations[0].boardNumber).toBe(5);
+    // Team violation (not individual boards)
+    expect(violations.length).toBe(1);
+    expect(violations[0].boardNumber).toBe(null);
     expect(violations[0].message).toContain("dépassé le quota de 3 joueurs mutés");
   });
 
@@ -166,13 +166,13 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
 
-    // 3rd transferred player (player4 at board 4) and all following should be sanctioned
-    expect(violations.length).toBeGreaterThan(0);
-    expect(violations[0].boardNumber).toBe(4);
+    // Team violation (not individual boards)
+    expect(violations.length).toBe(1);
+    expect(violations[0].boardNumber).toBe(null);
     expect(violations[0].message).toContain("dépassé le quota de 2 joueurs mutés");
   });
 
-  it("devrait sanctionner tous les échiquiers suivants", () => {
+  it("devrait retourner une seule violation d'équipe", () => {
     const team1 = createTeam("team1", "N1", "A");
     const player1 = createPlayer("p1", "Joueur 1", true);
     const player2 = createPlayer("p2", "Joueur 2", true);
@@ -193,13 +193,10 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
 
     const violations = rule.validate(tournamentState, [teamComposition], "team1");
 
-    // 6 players, so max 2 transferred allowed
-    // 3rd transferred (player3 at board 3) and all following boards should be sanctioned
-    expect(violations.length).toBe(4); // boards 3, 4, 5, 6
-    expect(violations[0].boardNumber).toBe(3);
-    expect(violations[1].boardNumber).toBe(4);
-    expect(violations[2].boardNumber).toBe(5);
-    expect(violations[3].boardNumber).toBe(6);
+    // Team violation (not individual boards)
+    expect(violations.length).toBe(1);
+    expect(violations[0].boardNumber).toBe(null);
+    expect(violations[0].message).toContain("dépassé le quota de 2 joueurs mutés");
   });
 
   it("devrait gérer les joueurs null correctement", () => {

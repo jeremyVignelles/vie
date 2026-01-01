@@ -15,8 +15,7 @@ const rule: Rule<
 > = {
   id,
   description: `
-  Matchs de barrage : les dispositions de l'ensemble de l'article 3.7 restent valables
-  pour les matchs de barrage, mais en plus, les joueurs ou joueuses participant à un tel match
+  Matchs de barrage : [...] les joueurs ou joueuses participant à un tel match
   devront avoir joué au moins une fois dans la nationale concernée ou dans une nationale inférieure
   du Championnat de France des Clubs durant la saison en cours.
   `,
