@@ -14,6 +14,7 @@ import R_3_7_H from "./3_7_h";
 import R_3_7_I from "./3_7_i";
 import R_3_7_J from "./3_7_j";
 import R_3_7_K from "./3_7_k";
+import R_3_8 from "./3_8";
 
 const version = "2025-2026";
 const link = "https://echecs.asso.fr/Actus/2864/A02_2025_26_Championnat_de_France_des_Clubs.pdf";
@@ -23,5 +24,20 @@ export const ChampionnatDeFranceDesClubs = extendRuleset(
   `Règles du Championnat de France des Clubs (= interclubs adultes) (version ${version})`,
   link,
   [],
-  [R_3_6_A, R_3_6_E, R_3_7_A, R_3_7_B, R_3_7_C, R_3_7_D, R_3_7_E, R_3_7_F, R_3_7_G, R_3_7_H, R_3_7_I, R_3_7_J, R_3_7_K],
+  [
+    R_3_6_A,
+    R_3_6_E,
+    R_3_7_A,
+    R_3_7_B,
+    R_3_7_C,
+    R_3_7_D,
+    R_3_7_E,
+    R_3_7_F,
+    R_3_7_G,
+    R_3_7_H,
+    R_3_7_I,
+    R_3_7_J,
+    R_3_7_K,
+    R_3_8,
+  ],
 );
