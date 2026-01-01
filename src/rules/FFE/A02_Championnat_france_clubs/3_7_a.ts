@@ -6,9 +6,8 @@ const id = "A02-3.7.a";
 const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceClub> = {
   id,
   description: `
-  • En Top 16, une liste de 16 joueurs/joueuses
-  doit
-  être transmise à la Direction du Top 16 [...]. Les membres
+  • En Top 16, une liste de 16 joueurs/joueuses [...]
+  doit être transmise à la Direction du Top 16 [...]. Les membres
   de la liste doivent, à l’exception des joueuses françaises, avoir un classement
   Elo de 2000 minimum au moment du dépôt de la liste.
   Tout joueur ou joueuse ne figurant pas sur cette liste ne pourra pas jouer en Top 16.
@@ -31,13 +30,28 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
 
     const violations: Violation[] = [];
 
+    // Identifier la meilleure joueuse française (celle avec le meilleur Elo)
+    const frenchFemales = teamPlayers
+      .map((player, index) => ({ player, index }))
+      .filter(({ player }) => player !== null && player.gender === "F" && player.isFrench)
+      .map(({ player, index }) => ({ player: player!, index }));
+
+    const bestFrenchFemale =
+      frenchFemales.length > 0
+        ? frenchFemales.reduce((best, current) =>
+            current.player.rating > best.player.rating ? current : best,
+          )
+        : null;
+
     for (const [index, player] of teamPlayers.entries()) {
       if (player === null) {
         continue;
       }
 
-      // Check Elo requirement (all players except French females must have >= 2000)
-      if (!(player.gender === "F" && player.isFrench) && player.rating < 2000) {
+      // Seule la meilleure joueuse française est exemptée de la règle des 2000 Elo
+      const isBestFrenchFemale = bestFrenchFemale !== null && index === bestFrenchFemale.index;
+
+      if (!isBestFrenchFemale && player.rating < 2000) {
         violations.push({
           ruleId: id,
           teamId: teamToValidate,

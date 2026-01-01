@@ -29,6 +29,7 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
     clubs: ["club1"],
     hasAtLeast60Minutes: true,
     division,
+    groupId: division + "-1",
     ruleset: mockRuleset,
   });
 
