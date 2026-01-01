@@ -1,9 +1,18 @@
 import { Rule, Violation } from "../../../types";
-import { PlayerChampionnatFranceClub, TeamChampionnatFranceClub } from "./types";
+import {
+  PlayerChampionnatFranceClub,
+  TeamChampionnatFranceClub,
+  TeamCompositionChampionnatFranceClub,
+} from "./types";
 
 const id = "A02-3.7.k";
 
-const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceClub> = {
+const rule: Rule<
+  typeof id,
+  PlayerChampionnatFranceClub,
+  TeamChampionnatFranceClub,
+  TeamCompositionChampionnatFranceClub
+> = {
   id,
   description: `
   Matchs de barrage : les dispositions de l'ensemble de l'article 3.7 restent valables

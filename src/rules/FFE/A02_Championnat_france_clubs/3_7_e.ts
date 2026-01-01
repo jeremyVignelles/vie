@@ -1,9 +1,18 @@
 import { Rule, Violation } from "../../../types";
-import { PlayerChampionnatFranceClub, TeamChampionnatFranceClub } from "./types";
+import {
+  PlayerChampionnatFranceClub,
+  TeamChampionnatFranceClub,
+  TeamCompositionChampionnatFranceClub,
+} from "./types";
 
 const id = "A02-3.7.e";
 
-const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceClub> = {
+const rule: Rule<
+  typeof id,
+  PlayerChampionnatFranceClub,
+  TeamChampionnatFranceClub,
+  TeamCompositionChampionnatFranceClub
+> = {
   id,
   description: `
   Nombre de parties : pour disputer le match n de N1, N2, N3, N4 ou une division inférieure,

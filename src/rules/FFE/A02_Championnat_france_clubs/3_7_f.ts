@@ -1,9 +1,18 @@
 import { Rule, Violation } from "../../../types";
-import { PlayerChampionnatFranceClub, TeamChampionnatFranceClub } from "./types";
+import {
+  PlayerChampionnatFranceClub,
+  TeamChampionnatFranceClub,
+  TeamCompositionChampionnatFranceClub,
+} from "./types";
 
 const id = "A02-3.7.f";
 
-const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceClub> = {
+const rule: Rule<
+  typeof id,
+  PlayerChampionnatFranceClub,
+  TeamChampionnatFranceClub,
+  TeamCompositionChampionnatFranceClub
+> = {
   id,
   description: `
   Noyau de l'équipe : en N1, N2 et N3, chaque équipe doit aligner à chaque ronde
