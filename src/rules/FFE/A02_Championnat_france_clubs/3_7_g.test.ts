@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import rule from "./3_7_g";
+import rule, { makeTransferredRuleValidator } from "./3_7_g";
 import { TournamentState } from "../../../types";
 import {
   PlayerChampionnatFranceClub,
@@ -250,5 +250,67 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
     expect(() => {
       rule.validate(tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
+  });
+
+  describe("makeTransferredRuleValidator avec configurations personnalisées", () => {
+    it("devrait permettre de créer un validateur avec un quota fixe", () => {
+      const customValidator = makeTransferredRuleValidator(() => 1, "CUSTOM-RULE");
+      const team1 = createTeam("team1", "N1", "A");
+      const players = [
+        createPlayer("p1", "Joueur 1", true),
+        createPlayer("p2", "Joueur 2", false),
+        createPlayer("p3", "Joueur 3", false),
+        createPlayer("p4", "Joueur 4", false),
+      ];
+
+      const tournamentState = createTournamentState([team1]);
+      const teamComposition = createTeamComposition("team1", players);
+
+      const violations = customValidator(tournamentState, [teamComposition], "team1");
+
+      expect(violations).toEqual([]);
+    });
+
+    it("devrait détecter une violation avec un quota fixe dépassé", () => {
+      const customValidator = makeTransferredRuleValidator(() => 1, "CUSTOM-RULE");
+      const team1 = createTeam("team1", "N1", "A");
+      const players = [
+        createPlayer("p1", "Joueur 1", true),
+        createPlayer("p2", "Joueur 2", true),
+        createPlayer("p3", "Joueur 3", false),
+        createPlayer("p4", "Joueur 4", false),
+      ];
+
+      const tournamentState = createTournamentState([team1]);
+      const teamComposition = createTeamComposition("team1", players);
+
+      const violations = customValidator(tournamentState, [teamComposition], "team1");
+
+      expect(violations).toHaveLength(1);
+      expect(violations[0].ruleId).toBe("CUSTOM-RULE");
+    });
+
+    it("devrait permettre de filtrer par division", () => {
+      const customValidator = makeTransferredRuleValidator(
+        () => 0,
+        "DIVISION-SPECIFIC",
+        (division) => division === "N1",
+      );
+      const team1N1 = createTeam("team1", "N1", "A");
+      const team2N2 = createTeam("team2", "N2", "A");
+      const players = [createPlayer("p1", "Joueur 1", true), createPlayer("p2", "Joueur 2", false)];
+
+      const tournamentState = createTournamentState([team1N1, team2N2]);
+      const teamComposition1 = createTeamComposition("team1", players);
+      const teamComposition2 = createTeamComposition("team2", players);
+
+      // Should apply to N1
+      const violations1 = customValidator(tournamentState, [teamComposition1], "team1");
+      expect(violations1).toHaveLength(1);
+
+      // Should not apply to N2
+      const violations2 = customValidator(tournamentState, [teamComposition2], "team2");
+      expect(violations2).toEqual([]);
+    });
   });
 });

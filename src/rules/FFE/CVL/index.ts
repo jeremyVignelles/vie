@@ -3,6 +3,8 @@ import { ChampionnatDeFranceDesClubs } from "../A02_Championnat_france_clubs";
 
 import R_1_6 from "./1_6";
 import R_1_7 from "./1_7";
+import R_1_8 from "./1_8";
+import R_1_9 from "./1_9";
 
 const version = "2025-2026";
 const link =
@@ -13,11 +15,8 @@ export const ReglesGenerales = extendRuleset(
   `Règles interclubs CVL (version ${version})`,
   link,
   ["A02-3.7.g", "A02-3.7.h", "A02-3.7.i", "A02-3.7.j", "A02-3.7.k"] as const,
-  [R_1_6, R_1_7] as const,
+  [R_1_6, R_1_7, R_1_8, R_1_9] as const,
 );
 
-// TODO :
-// - 1.8 joueurs mutés
-// - 1.9 nationalité française
 // - 5.1 arbitrage
 // - 5.5 arbitrage R1&2

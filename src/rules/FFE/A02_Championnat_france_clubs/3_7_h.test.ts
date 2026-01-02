@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import rule from "./3_7_h";
+import rule, { makeQualifiedRuleValidator } from "./3_7_h";
 import { TournamentState } from "../../../types";
 import {
   PlayerChampionnatFranceClub,
@@ -279,5 +279,154 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
     expect(() => {
       rule.validate(tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
+  });
+});
+
+describe("makeQualifiedRuleValidator - Validateur personnalisé", () => {
+  const mockRuleset = { name: "Test", rules: [] };
+
+  const createTournamentState = (
+    teams: TeamChampionnatFranceClub[],
+  ): TournamentState<PlayerChampionnatFranceClub, TeamChampionnatFranceClub, any> => ({
+    teams,
+    history: {},
+  });
+
+  const createTeam = (id: string, division: string = "N4"): TeamChampionnatFranceClub => ({
+    id,
+    name: `Équipe ${id}`,
+    clubs: ["club1"],
+    hasAtLeast60Minutes: true,
+    division,
+    groupId: "A",
+    ruleset: mockRuleset,
+  });
+
+  const createPlayer = (
+    id: string,
+    name: string,
+    isQualifiedResident: boolean = true,
+  ): PlayerChampionnatFranceClub => ({
+    id,
+    name,
+    rating: 2400,
+    gender: "M",
+    federation: "FRA",
+    licenseType: "A",
+    club: "club1",
+    isQualifiedResident,
+    isFrench: false,
+  });
+
+  const createTeamComposition = (
+    teamId: string,
+    players: (PlayerChampionnatFranceClub | null)[],
+  ) => ({
+    teamId,
+    players,
+  });
+
+  it("devrait utiliser un nombre fixe de joueurs qualifiés requis (3)", () => {
+    // Custom validator: always require 3 qualified players
+    const customValidator = makeQualifiedRuleValidator(() => 3, "CUSTOM-RULE");
+
+    const team1 = createTeam("team1", "N4");
+    const tournamentState = createTournamentState([team1]);
+
+    const player1 = createPlayer("p1", "Joueur 1", true);
+    const player2 = createPlayer("p2", "Joueur 2", true);
+    const player3 = createPlayer("p3", "Joueur 3", true);
+    const player4 = createPlayer("p4", "Joueur 4", false);
+    const player5 = createPlayer("p5", "Joueur 5", false);
+
+    const teamComposition = createTeamComposition("team1", [
+      player1,
+      player2,
+      player3,
+      player4,
+      player5,
+    ]);
+
+    const violations = customValidator(tournamentState, [teamComposition], "team1");
+
+    expect(violations).toHaveLength(0);
+  });
+
+  it("devrait détecter une violation avec nombre fixe de joueurs qualifiés (3 requis, 2 fournis)", () => {
+    const customValidator = makeQualifiedRuleValidator(() => 3, "CUSTOM-RULE");
+
+    const team1 = createTeam("team1", "N4");
+    const tournamentState = createTournamentState([team1]);
+
+    const player1 = createPlayer("p1", "Joueur 1", true);
+    const player2 = createPlayer("p2", "Joueur 2", true);
+    const player3 = createPlayer("p3", "Joueur 3", false);
+    const player4 = createPlayer("p4", "Joueur 4", false);
+
+    const teamComposition = createTeamComposition("team1", [player1, player2, player3, player4]);
+
+    const violations = customValidator(tournamentState, [teamComposition], "team1");
+
+    expect(violations).toHaveLength(1);
+    expect(violations[0].ruleId).toBe("CUSTOM-RULE");
+    expect(violations[0].message).toContain("2 sur 3 requis");
+  });
+
+  it("devrait appliquer un filtre de division", () => {
+    // Only applies to N4 and R1
+    const customValidator = makeQualifiedRuleValidator(
+      () => 3,
+      "CUSTOM-RULE",
+      (division) => ["N4", "R1"].includes(division),
+    );
+
+    const team1 = createTeam("team1", "N4");
+    const team2 = createTeam("team2", "N1"); // N1 not in filter
+    const tournamentState = createTournamentState([team1, team2]);
+
+    const player1 = createPlayer("p1", "Joueur 1", true);
+    const player2 = createPlayer("p2", "Joueur 2", false);
+    const player3 = createPlayer("p3", "Joueur 3", false);
+    const player4 = createPlayer("p4", "Joueur 4", false);
+
+    const teamComposition1 = createTeamComposition("team1", [player1, player2, player3, player4]);
+    const teamComposition2 = createTeamComposition("team2", [player1, player2, player3, player4]);
+
+    // N4: rule applies, violation
+    const violations1 = customValidator(tournamentState, [teamComposition1], "team1");
+    expect(violations1).toHaveLength(1);
+
+    // N1: rule doesn't apply, no violation
+    const violations2 = customValidator(tournamentState, [teamComposition2], "team2");
+    expect(violations2).toHaveLength(0);
+  });
+
+  it("devrait utiliser la division dans le calcul du nombre minimum", () => {
+    // Require 4 qualified for N4, 3 for other divisions
+    const customValidator = makeQualifiedRuleValidator(
+      (teamSize, division) => (division === "N4" ? 4 : 3),
+      "CUSTOM-RULE",
+    );
+
+    const team1 = createTeam("team1", "N4");
+    const team2 = createTeam("team2", "R1");
+    const tournamentState = createTournamentState([team1, team2]);
+
+    const player1 = createPlayer("p1", "Joueur 1", true);
+    const player2 = createPlayer("p2", "Joueur 2", true);
+    const player3 = createPlayer("p3", "Joueur 3", true);
+    const player4 = createPlayer("p4", "Joueur 4", false);
+
+    const teamComposition1 = createTeamComposition("team1", [player1, player2, player3, player4]);
+    const teamComposition2 = createTeamComposition("team2", [player1, player2, player3, player4]);
+
+    // N4: needs 4, has 3 → violation
+    const violations1 = customValidator(tournamentState, [teamComposition1], "team1");
+    expect(violations1).toHaveLength(1);
+    expect(violations1[0].message).toContain("3 sur 4 requis");
+
+    // R1: needs 3, has 3 → no violation
+    const violations2 = customValidator(tournamentState, [teamComposition2], "team2");
+    expect(violations2).toHaveLength(0);
   });
 });
