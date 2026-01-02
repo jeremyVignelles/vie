@@ -28,9 +28,13 @@ const rule: Rule<
  * Crée un validateur pour la règle du noyau de joueurs.
  *
  * @param divisionToCoreNumber pour chaque division, indique le nombre minimum de joueurs du noyau requis.
+ * @param ruleId l'identifiant de la règle à utiliser dans les violations (par défaut: "A02-3.7.f")
  * @returns le validateur de règle.
  */
-export function makeCoreRuleValidator(divisionToCoreNumber: Record<string, number>) {
+export function makeCoreRuleValidator(
+  divisionToCoreNumber: Record<string, number>,
+  ruleId: string = id,
+) {
   return function validate(
     tournamentState: TournamentState<
       PlayerChampionnatFranceClub,
@@ -84,7 +88,7 @@ export function makeCoreRuleValidator(divisionToCoreNumber: Record<string, numbe
 
     if (coreCount < minimumCore) {
       violations.push({
-        ruleId: id,
+        ruleId,
         teamId: teamToValidate,
         boardNumber: null,
         message: `En ${teamInfo.division}, l'équipe doit avoir au moins ${minimumCore} joueurs du noyau (seuls ${coreCount} ont déjà joué dans l'équipe).`,
