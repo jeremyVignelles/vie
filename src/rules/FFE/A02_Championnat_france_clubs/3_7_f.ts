@@ -1,4 +1,4 @@
-import { Rule, Violation } from "../../../types";
+import { Rule, TournamentState, Violation } from "../../../types";
 import { ArbiterFFE } from "../R01_Regles_generales/types";
 import {
   PlayerChampionnatFranceClub,
@@ -21,7 +21,27 @@ const rule: Rule<
   au moins 50% de personnes (appelé noyau) inscrites sur le PV ayant déjà participé
   au moins une fois pour le compte de cette équipe depuis le début de la saison (sauf pour la ronde 1).
   `,
-  validate(tournamentState, currentTeams, teamToValidate) {
+  validate: makeCoreRuleValidator({ N1: 4, N2: 4, N3: 4 }),
+};
+
+/**
+ * Crée un validateur pour la règle du noyau de joueurs.
+ *
+ * @param divisionToCoreNumber pour chaque division, indique le nombre minimum de joueurs du noyau requis.
+ * @returns le validateur de règle.
+ */
+export function makeCoreRuleValidator(divisionToCoreNumber: Record<string, number>) {
+  return function validate(
+    tournamentState: TournamentState<
+      PlayerChampionnatFranceClub,
+      TeamChampionnatFranceClub,
+      any,
+      ArbiterFFE,
+      TeamCompositionChampionnatFranceClub
+    >,
+    currentTeams: TeamCompositionChampionnatFranceClub[],
+    teamToValidate: string,
+  ) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     const teamInfo = tournamentState.teams.find((team) => team.id === teamToValidate);
     const currentComposition = currentTeams.find((team) => team.teamId === teamToValidate);
@@ -29,8 +49,9 @@ const rule: Rule<
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
     }
 
-    // Only applies to N1, N2, N3
-    if (!["N1", "N2", "N3"].includes(teamInfo.division)) {
+    // Only applies to the mentionned divisions
+    const minimumCore = divisionToCoreNumber[teamInfo.division];
+    if (!minimumCore) {
       return [];
     }
 
@@ -55,25 +76,23 @@ const rule: Rule<
       }
     }
 
-    // Count non-null players and core players in current composition
-    const nonNullPlayers = teamPlayers.filter((p) => p !== null);
-    const corePlayersInComposition = nonNullPlayers.filter((p) => corePlayerIds.has(p!.id));
-
-    const totalPlayers = nonNullPlayers.length;
+    // Count core players in current composition
+    const corePlayersInComposition = teamPlayers.filter(
+      (p) => p !== null && corePlayerIds.has(p.id),
+    );
     const coreCount = corePlayersInComposition.length;
-    const requiredCore = Math.ceil(totalPlayers * 0.5);
 
-    if (coreCount < requiredCore) {
+    if (coreCount < minimumCore) {
       violations.push({
         ruleId: id,
         teamId: teamToValidate,
         boardNumber: null,
-        message: `L'équipe doit avoir au moins 50% de joueurs du noyau (${coreCount} sur ${requiredCore} requis).`,
+        message: `En ${teamInfo.division}, l'équipe doit avoir au moins ${minimumCore} joueurs du noyau (seuls ${coreCount} ont déjà joué dans l'équipe).`,
       });
     }
 
     return violations;
-  },
-};
+  };
+}
 
 export default rule;
