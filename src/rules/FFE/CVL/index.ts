@@ -14,7 +14,7 @@ export const ReglesGenerales = extendRuleset(
   ChampionnatDeFranceDesClubs,
   `Règles interclubs CVL (version ${version})`,
   link,
-  ["A02-3.7.g", "A02-3.7.h", "A02-3.7.i", "A02-3.7.j", "A02-3.7.k"] as const,
+  ["A02-3.7.h", "A02-3.7.k"] as const,
   [R_1_6, R_1_7, R_1_8, R_1_9] as const,
 );
 
