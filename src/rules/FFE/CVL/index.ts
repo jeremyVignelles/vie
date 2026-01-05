@@ -18,6 +18,3 @@ export const ReglesGenerales = extendRuleset(
   ["A02-3.7.h", "A02-3.7.k"] as const,
   [R_1_6, R_1_7, R_1_8, R_1_9, R_5_1] as const,
 );
-
-// - 5.1 arbitrage
-// - 5.5 arbitrage R1&2
