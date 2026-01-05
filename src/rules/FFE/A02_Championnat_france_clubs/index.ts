@@ -1,7 +1,8 @@
 import { extendRuleset } from "../../../tools";
 import { ReglesGenerales } from "../R01_Regles_generales/index";
 
-import R_2_5 from "./2_5";
+import R_2_5_TITRE_ARBITRE from "./2_5_titre_arbitre";
+import R_2_5_ARBITRE_JOUEUR from "./2_5_arbitre_joueur";
 import R_3_6_A from "./3_6_a";
 import R_3_6_E from "./3_6_e";
 import R_3_7_A from "./3_7_a";
@@ -26,7 +27,8 @@ export const ChampionnatDeFranceDesClubs = extendRuleset(
   link,
   [],
   [
-    R_2_5,
+    R_2_5_TITRE_ARBITRE,
+    R_2_5_ARBITRE_JOUEUR,
     R_3_6_A,
     R_3_6_E,
     R_3_7_A,

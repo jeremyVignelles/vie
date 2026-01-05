@@ -6,7 +6,7 @@ import {
   TeamCompositionChampionnatFranceClub,
 } from "./types";
 
-const id = "A02-2.5";
+const id = "A02-2.5-arbitre-joueur";
 
 const rule: Rule<
   typeof id,
@@ -17,10 +17,6 @@ const rule: Rule<
 > = {
   id,
   description: `
-  En Top 16, la direction de Nationale désigne les arbitres fédéraux après avis de la Direction Nationale de l'Arbitrage.
-  En N1, N2, N3 et N4, les matchs sont dirigés par une ou un arbitre fédéral Elite, d'Open ou de Club. La personne
-  responsable de la rencontre est chargée de désigner l'arbitre. En N4, une demande de dérogation est possible par les
-  Ligues.
   L'arbitre en N1 et N2 ne peut pas être joueur/joueuse, même dans une autre division.
   En N3, l'arbitre d'un seul match ne peut jouer que dans ce même match.
   En N4, l'arbitre peut jouer son match de N4 et officier dans un maximum de 2 matches de N4 et de division inférieure.
@@ -38,25 +34,7 @@ const rule: Rule<
 
     // Pas d'arbitre désigné
     if (!arbiter) {
-      return [
-        {
-          ruleId: id,
-          teamId: teamToValidate,
-          boardNumber: null,
-          message: `Aucun arbitre n'est sélectionné pour l'équipe ${teamToValidate}.`,
-        },
-      ];
-    }
-
-    // Vérifier que l'arbitre a un titre fédéral Elite, Open ou Club
-    const validTitles = ["AFC", "AFO1", "AFO2", "AFE1", "AFE2", "AF", "AI"];
-    if (!validTitles.includes(arbiter.arbiterTitle)) {
-      violations.push({
-        ruleId: id,
-        teamId: teamToValidate,
-        boardNumber: null,
-        message: `L'arbitre ${arbiter.name} doit être arbitre fédéral Elite, d'Open ou de Club (titre actuel: ${arbiter.arbiterTitle}).`,
-      });
+      return [];
     }
 
     const arbiterPlaysInTeam = currentTeams.filter((t) =>
