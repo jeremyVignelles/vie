@@ -4,7 +4,7 @@
 
 Une bibliothèque TypeScript pour la vérification des informations d'équipe.
 
-[English version](./README.en.md) | [Documentation technique complète](./PROJECT.md)
+[English version](./README.en.md)
 
 ## Installation
 
@@ -226,9 +226,10 @@ npm run build
 
 ### Scripts disponibles
 
-- `npm run build` - Compiler la bibliothèque (bundle + types)
+- `npm run build` - Compiler la bibliothèque (types TypeScript)
 - `npm test` - Lancer les tests une fois
 - `npm run test:watch` - Lancer les tests en mode watch
+- `npm run test:ui` - Lancer les tests en mode UI
 - `npm run lint` - Lancer oxlint
 - `npm run type-check` - Vérification des types TypeScript
 
@@ -245,7 +246,6 @@ npm run dev
 ## Stack technologique
 
 - **TypeScript** 5.9.x - Dernière version de TypeScript
-- **Rolldown** 1.0.x - Bundler rapide basé sur Rust
 - **Vitest** 4.x - Framework de test ultra-rapide
 - **OXC** (oxlint) 1.x - Linter JavaScript/TypeScript rapide
 
