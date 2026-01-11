@@ -6,7 +6,7 @@ import {
   makePlayerChampionnatFranceClub,
   makeTeamChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "../A02_Championnat_france_clubs/types.test";
+} from "../A02_Championnat_france_clubs/types.fixtures";
 
 describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
   const createPlayers = (count: number) => {

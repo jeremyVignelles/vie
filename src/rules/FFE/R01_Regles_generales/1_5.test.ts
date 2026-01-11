@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import rule from "./1_5";
 import { TournamentState } from "../../../types";
 import { TeamCompositionFFE } from "./types";
-import { makePlayerFFE, makeTeamCompositionFFE } from "./types.test";
+import { makePlayerFFE, makeTeamCompositionFFE } from "./types.fixtures";
 
 describe("R01-1.5 - Interdiction joueurs RUS et BLR", () => {
   it("devrait valider des joueurs de fédérations autorisées", () => {

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import rule from "./1_1";
 import { TournamentState } from "../../../types";
-import { makePlayerFFE, makeTeamFFE, makeTeamCompositionFFE } from "./types.test";
+import { makePlayerFFE, makeTeamFFE, makeTeamCompositionFFE } from "./types.fixtures";
 import { TeamCompositionFFE } from "./types";
 
 describe("R01-1.1 - Licence et club", () => {

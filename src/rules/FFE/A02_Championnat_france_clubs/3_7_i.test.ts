@@ -1,17 +1,14 @@
 import { describe, it, expect } from "vitest";
 import rule from "./3_7_i";
 import { TournamentState } from "../../../types";
-import {
-  TeamCompositionChampionnatFranceClub,
-} from "./types";
+import { TeamCompositionChampionnatFranceClub } from "./types";
 import {
   makePlayerChampionnatFranceClub,
   makeTeamChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "./types.test";
+} from "./types.fixtures";
 
 describe("A02-3.7.i - Nationalité française", () => {
-
   it("devrait valider une équipe avec un joueur français et une joueuse française en T16", () => {
     const team1 = makeTeamChampionnatFranceClub({ id: "team1", division: "T16" });
     const player1 = makePlayerChampionnatFranceClub({ gender: "M" });

@@ -6,7 +6,7 @@ import {
   makePlayerChampionnatFranceClub,
   makeTeamChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "../A02_Championnat_france_clubs/types.test";
+} from "../A02_Championnat_france_clubs/types.fixtures";
 
 describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
   const createPlayers = (count: number, transferredCount: number = 0) => {

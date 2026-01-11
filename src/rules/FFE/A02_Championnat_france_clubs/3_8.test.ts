@@ -1,20 +1,20 @@
 import { describe, it, expect } from "vitest";
 import rule from "./3_8";
 import { TournamentState } from "../../../types";
-import {
-  TeamCompositionChampionnatFranceClub,
-} from "./types";
+import { TeamCompositionChampionnatFranceClub } from "./types";
 import {
   makePlayerChampionnatFranceClub,
   makeTeamChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "./types.test";
+} from "./types.fixtures";
 
 describe("A02-3.8 - Forfaits sportifs", () => {
   describe("Top 16", () => {
     it("devrait sanctionner chaque forfait", () => {
       const team = makeTeamChampionnatFranceClub({ id: "team1", division: "T16" });
-      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history: {} };
+      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+        history: {},
+      };
 
       const player1 = makePlayerChampionnatFranceClub({ rating: 2500, forfeited: true });
       const player2 = makePlayerChampionnatFranceClub({ rating: 2400, forfeited: false });
@@ -36,7 +36,9 @@ describe("A02-3.8 - Forfaits sportifs", () => {
 
     it("devrait sanctionner plusieurs forfaits", () => {
       const team = makeTeamChampionnatFranceClub({ id: "team1", division: "T16" });
-      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history: {} };
+      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+        history: {},
+      };
 
       const players = [
         makePlayerChampionnatFranceClub({ rating: 2500, forfeited: true }),
@@ -59,7 +61,9 @@ describe("A02-3.8 - Forfaits sportifs", () => {
 
     it("ne devrait pas sanctionner sans forfait", () => {
       const team = makeTeamChampionnatFranceClub({ id: "team1", division: "T16" });
-      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history: {} };
+      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+        history: {},
+      };
 
       const players = [
         makePlayerChampionnatFranceClub({ rating: 2500 }),
@@ -77,7 +81,9 @@ describe("A02-3.8 - Forfaits sportifs", () => {
 
     it("devrait sanctionner un joueur null comme forfait", () => {
       const team = makeTeamChampionnatFranceClub({ id: "team1", division: "T16" });
-      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history: {} };
+      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+        history: {},
+      };
 
       const player1 = makePlayerChampionnatFranceClub({ rating: 2500 });
       const teamComposition = makeTeamCompositionChampionnatFranceClub({
@@ -96,7 +102,9 @@ describe("A02-3.8 - Forfaits sportifs", () => {
   describe("N1", () => {
     it("devrait sanctionner chaque forfait", () => {
       const team = makeTeamChampionnatFranceClub({ id: "team1", division: "N1" });
-      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history: {} };
+      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+        history: {},
+      };
 
       const players = [
         makePlayerChampionnatFranceClub({ rating: 2300, forfeited: true }),
@@ -120,7 +128,9 @@ describe("A02-3.8 - Forfaits sportifs", () => {
 
     it("devrait sanctionner plusieurs forfaits", () => {
       const team = makeTeamChampionnatFranceClub({ id: "team1", division: "N1" });
-      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history: {} };
+      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+        history: {},
+      };
 
       const players = [
         makePlayerChampionnatFranceClub({ rating: 2300, forfeited: true }),
@@ -336,7 +346,9 @@ describe("A02-3.8 - Forfaits sportifs", () => {
 
     it("ne devrait pas sanctionner avant le 4e forfait", () => {
       const team = makeTeamChampionnatFranceClub({ id: "team1", division: "N3" });
-      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history: {} };
+      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+        history: {},
+      };
 
       const players = [
         makePlayerChampionnatFranceClub({ rating: 2000, forfeited: true }),
@@ -357,7 +369,9 @@ describe("A02-3.8 - Forfaits sportifs", () => {
   describe("Autres divisions", () => {
     it("ne devrait rien faire pour les divisions N4 ou autres", () => {
       const team = makeTeamChampionnatFranceClub({ id: "team1", division: "N4" });
-      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history: {} };
+      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+        history: {},
+      };
 
       const player1 = makePlayerChampionnatFranceClub({ rating: 1800, forfeited: true });
       const teamComposition = makeTeamCompositionChampionnatFranceClub({

@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import rule from "./1_4";
 import { TournamentState } from "../../../types";
 import { TeamCompositionFFE } from "./types";
-import { makePlayerFFE, makeTeamFFE, makeTeamCompositionFFE } from "./types.test";
+import { makePlayerFFE, makeTeamFFE, makeTeamCompositionFFE } from "./types.fixtures";
 
 describe("R01-1.4 - Licence A pour cadence >= 60 minutes", () => {
   it("devrait valider des joueurs avec licence A en cadence >= 60 minutes", () => {

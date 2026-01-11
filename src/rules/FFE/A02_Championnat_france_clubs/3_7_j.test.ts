@@ -1,14 +1,12 @@
 import { describe, it, expect } from "vitest";
 import rule from "./3_7_j";
 import { TournamentState } from "../../../types";
-import {
-  TeamCompositionChampionnatFranceClub,
-} from "./types";
+import { TeamCompositionChampionnatFranceClub } from "./types";
 import {
   makePlayerChampionnatFranceClub,
   makeTeamChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "./types.test";
+} from "./types.fixtures";
 
 describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
   it("ne devrait pas s'appliquer en T16", () => {
@@ -70,7 +68,12 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
       players: [player1, player2],
     });
 
-    const violations = rule.validate([team1, team2, team3], tournamentState, [teamComposition], "team1");
+    const violations = rule.validate(
+      [team1, team2, team3],
+      tournamentState,
+      [teamComposition],
+      "team1",
+    );
 
     expect(violations).toEqual([]);
   });
@@ -89,7 +92,12 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
       players: [player1, player2],
     });
 
-    const violations = rule.validate([team1, team2, team3], tournamentState, [teamComposition], "team1");
+    const violations = rule.validate(
+      [team1, team2, team3],
+      tournamentState,
+      [teamComposition],
+      "team1",
+    );
 
     expect(violations.length).toBeGreaterThan(0);
     expect(violations[0]).toMatchObject({
@@ -151,14 +159,23 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
       players,
     });
 
-    const violations = rule.validate([team1, team2, team3], tournamentState, [teamComposition], "team1");
+    const violations = rule.validate(
+      [team1, team2, team3],
+      tournamentState,
+      [teamComposition],
+      "team1",
+    );
 
     expect(violations.length).toBe(1);
     expect(violations[0].boardNumber).toBe(2);
   });
 
   it("devrait considérer les équipes d'entente (clubs multiples)", () => {
-    const team1 = makeTeamChampionnatFranceClub({ id: "team1", division: "N4", clubs: ["club1", "club2"] });
+    const team1 = makeTeamChampionnatFranceClub({
+      id: "team1",
+      division: "N4",
+      clubs: ["club1", "club2"],
+    });
     const team2 = makeTeamChampionnatFranceClub({ id: "team2", division: "N1", clubs: ["club1"] });
     const team3 = makeTeamChampionnatFranceClub({ id: "team3", division: "N2", clubs: ["club2"] });
 
@@ -170,7 +187,12 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
       players: [player1],
     });
 
-    const violations = rule.validate([team1, team2, team3], tournamentState, [teamComposition], "team1");
+    const violations = rule.validate(
+      [team1, team2, team3],
+      tournamentState,
+      [teamComposition],
+      "team1",
+    );
 
     expect(violations.length).toBeGreaterThan(0);
   });
@@ -188,7 +210,12 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
       players: [player1],
     });
 
-    const violations = rule.validate([team1, team2, team3], tournamentState, [teamComposition], "team1");
+    const violations = rule.validate(
+      [team1, team2, team3],
+      tournamentState,
+      [teamComposition],
+      "team1",
+    );
 
     expect(violations.length).toBe(1);
     expect(violations[0].boardNumber).toBe(1);
@@ -208,7 +235,12 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
       players: [player1, null, player2, null],
     });
 
-    const violations = rule.validate([team1, team2, team3], tournamentState, [teamComposition], "team1");
+    const violations = rule.validate(
+      [team1, team2, team3],
+      tournamentState,
+      [teamComposition],
+      "team1",
+    );
 
     expect(violations.length).toBe(1);
     expect(violations[0].boardNumber).toBe(3);

@@ -1,14 +1,12 @@
 import { describe, it, expect } from "vitest";
 import rule, { makeCoreRuleValidator } from "./3_7_f";
 import { TournamentState } from "../../../types";
-import {
-  TeamCompositionChampionnatFranceClub,
-} from "./types";
+import { TeamCompositionChampionnatFranceClub } from "./types";
 import {
   makePlayerChampionnatFranceClub,
   makeTeamChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "./types.test";
+} from "./types.fixtures";
 
 describe("A02-3.7.f - Noyau de l'équipe", () => {
   const createPlayers = (count: number) => {
@@ -36,11 +34,13 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
     const players = createPlayers(16);
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players: players.slice(0, 8),
-        roundNumber: 1,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players: players.slice(0, 8),
+          roundNumber: 1,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -60,11 +60,13 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
     const players = createPlayers(16);
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players: players.slice(0, 8),
-        roundNumber: 1,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players: players.slice(0, 8),
+          roundNumber: 1,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -84,11 +86,13 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
     const players = createPlayers(8);
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players,
-        roundNumber: 1,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players,
+          roundNumber: 1,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -109,11 +113,13 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
     const players = createPlayers(8);
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players: [...players.slice(0, 3), null, null, null, null, null],
-        roundNumber: 1,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players: [...players.slice(0, 3), null, null, null, null, null],
+          roundNumber: 1,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -137,11 +143,13 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
     const players = createPlayers(8);
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players,
-        roundNumber: 1,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players,
+          roundNumber: 1,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -165,11 +173,13 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
     const players = createPlayers(8);
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players,
-        roundNumber: 1,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players,
+          roundNumber: 1,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -190,11 +200,13 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
     const players = createPlayers(8);
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players: [...players.slice(0, 3), null, null, null, null, null],
-        roundNumber: 1,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players: [...players.slice(0, 3), null, null, null, null, null],
+          roundNumber: 1,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -216,11 +228,13 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
     const players = createPlayers(8);
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players,
-        roundNumber: 1,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players,
+          roundNumber: 1,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -240,11 +254,13 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
     const players = createPlayers(8);
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players,
-        roundNumber: 1,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players,
+          roundNumber: 1,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -265,11 +281,13 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
     const players = createPlayers(2);
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players: [players[0]],
-        roundNumber: 1,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players: [players[0]],
+          roundNumber: 1,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -305,27 +323,35 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
     const players = createPlayers(8);
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players: [
-          players[0],
-          players[1],
-          players[2],
-          { ...players[3], forfeited: true },
-          players[4],
-          players[5],
-          players[6],
-          players[7],
-        ],
-        roundNumber: 1,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players: [
+            players[0],
+            players[1],
+            players[2],
+            { ...players[3], forfeited: true },
+            players[4],
+            players[5],
+            players[6],
+            players[7],
+          ],
+          roundNumber: 1,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
     const newPlayers = createPlayers(4);
     const teamComposition = makeTeamCompositionChampionnatFranceClub({
       teamId: "team1",
-      players: [players[0], players[1], { ...players[2], forfeited: true }, players[3], ...newPlayers],
+      players: [
+        players[0],
+        players[1],
+        { ...players[2], forfeited: true },
+        players[3],
+        ...newPlayers,
+      ],
       roundNumber: 2,
     });
 
@@ -339,14 +365,16 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
     const players = createPlayers(8);
 
     const history = {
-      team1: [{
-        ...makeTeamCompositionChampionnatFranceClub({
-          teamId: "team1",
-          players,
-          roundNumber: 1,
-        }),
-        forfeited: true,
-      }],
+      team1: [
+        {
+          ...makeTeamCompositionChampionnatFranceClub({
+            teamId: "team1",
+            players,
+            roundNumber: 1,
+          }),
+          forfeited: true,
+        },
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -368,16 +396,20 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
     const players = createPlayers(8);
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players: players.slice(0, 4),
-        roundNumber: 1,
-      })],
-      team2: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team2",
-        players: players.slice(4, 8),
-        roundNumber: 1,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players: players.slice(0, 4),
+          roundNumber: 1,
+        }),
+      ],
+      team2: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team2",
+          players: players.slice(4, 8),
+          roundNumber: 1,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -477,11 +509,13 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       const players = createPlayers(6);
 
       const history = {
-        team1: [makeTeamCompositionChampionnatFranceClub({
-          teamId: "team1",
-          players,
-          roundNumber: 1,
-        })],
+        team1: [
+          makeTeamCompositionChampionnatFranceClub({
+            teamId: "team1",
+            players,
+            roundNumber: 1,
+          }),
+        ],
       };
 
       const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -503,11 +537,13 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       const players = createPlayers(6);
 
       const history = {
-        team1: [makeTeamCompositionChampionnatFranceClub({
-          teamId: "team1",
-          players,
-          roundNumber: 1,
-        })],
+        team1: [
+          makeTeamCompositionChampionnatFranceClub({
+            teamId: "team1",
+            players,
+            roundNumber: 1,
+          }),
+        ],
       };
 
       const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -531,11 +567,13 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       const players = createPlayers(8);
 
       const history = {
-        team1: [makeTeamCompositionChampionnatFranceClub({
-          teamId: "team1",
-          players,
-          roundNumber: 1,
-        })],
+        team1: [
+          makeTeamCompositionChampionnatFranceClub({
+            teamId: "team1",
+            players,
+            roundNumber: 1,
+          }),
+        ],
       };
 
       const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -557,11 +595,13 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       const players = createPlayers(8);
 
       const history = {
-        team1: [makeTeamCompositionChampionnatFranceClub({
-          teamId: "team1",
-          players,
-          roundNumber: 1,
-        })],
+        team1: [
+          makeTeamCompositionChampionnatFranceClub({
+            teamId: "team1",
+            players,
+            roundNumber: 1,
+          }),
+        ],
       };
 
       const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };

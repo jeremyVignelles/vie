@@ -1,17 +1,14 @@
 import { describe, it, expect } from "vitest";
 import rule, { makeTransferredRuleValidator } from "./3_7_g";
 import { TournamentState } from "../../../types";
-import {
-  TeamCompositionChampionnatFranceClub,
-} from "./types";
+import { TeamCompositionChampionnatFranceClub } from "./types";
 import {
   makePlayerChampionnatFranceClub,
   makeTeamChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "./types.test";
+} from "./types.fixtures";
 
 describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
-
   it("devrait valider une équipe avec 3 joueurs mutés ou moins (équipe de plus de 6)", () => {
     const team1 = makeTeamChampionnatFranceClub({ id: "team1" });
     const players = [
@@ -200,7 +197,9 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
         makePlayerChampionnatFranceClub(),
       ];
 
-      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history: {} };
+      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+        history: {},
+      };
       const teamComposition = makeTeamCompositionChampionnatFranceClub({
         teamId: "team1",
         players,
@@ -221,7 +220,9 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
         makePlayerChampionnatFranceClub(),
       ];
 
-      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history: {} };
+      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+        history: {},
+      };
       const teamComposition = makeTeamCompositionChampionnatFranceClub({
         teamId: "team1",
         players,
@@ -246,7 +247,9 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
         makePlayerChampionnatFranceClub(),
       ];
 
-      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history: {} };
+      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+        history: {},
+      };
       const teamComposition1 = makeTeamCompositionChampionnatFranceClub({
         teamId: "team1",
         players,
@@ -256,10 +259,20 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
         players,
       });
 
-      const violations1 = customValidator([team1N1, team2N2], tournamentState, [teamComposition1], "team1");
+      const violations1 = customValidator(
+        [team1N1, team2N2],
+        tournamentState,
+        [teamComposition1],
+        "team1",
+      );
       expect(violations1).toHaveLength(1);
 
-      const violations2 = customValidator([team1N1, team2N2], tournamentState, [teamComposition2], "team2");
+      const violations2 = customValidator(
+        [team1N1, team2N2],
+        tournamentState,
+        [teamComposition2],
+        "team2",
+      );
       expect(violations2).toEqual([]);
     });
   });

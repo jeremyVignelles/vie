@@ -6,8 +6,8 @@ import {
   makePlayerChampionnatFranceClub,
   makeTeamChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "./types.test";
-import { makeArbiterFFE } from "../R01_Regles_generales/types.test";
+} from "./types.fixtures";
+import { makeArbiterFFE } from "../R01_Regles_generales/types.fixtures";
 
 describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
   const validTitles = ["AFC", "AFO1", "AFO2", "AFE1", "AFE2", "AF", "AI"] as const;

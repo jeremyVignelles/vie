@@ -6,7 +6,7 @@ import {
   makePlayerChampionnatFranceClub,
   makeTeamChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "./types.test";
+} from "./types.fixtures";
 
 describe("A02-3.7.e - Nombre de parties", () => {
   it("devrait valider un joueur qui n'a pas dépassé la limite de rondes", () => {

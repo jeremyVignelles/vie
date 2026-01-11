@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import rule from "./R02_3";
 import { TournamentState } from "../../../types";
 import { TeamCompositionFFE } from "./types";
-import { makePlayerFFE, makeTeamFFE, makeTeamCompositionFFE } from "./types.test";
+import { makePlayerFFE, makeTeamFFE, makeTeamCompositionFFE } from "./types.fixtures";
 
 describe("R02-3 - Interdiction de jouer plusieurs parties simultanément", () => {
   it("devrait valider une équipe sans joueurs jouant ailleurs le même jour", () => {

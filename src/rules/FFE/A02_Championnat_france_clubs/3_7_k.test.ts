@@ -1,14 +1,12 @@
 import { describe, it, expect } from "vitest";
 import rule from "./3_7_k";
 import { TournamentState } from "../../../types";
-import {
-  TeamCompositionChampionnatFranceClub,
-} from "./types";
+import { TeamCompositionChampionnatFranceClub } from "./types";
 import {
   makePlayerChampionnatFranceClub,
   makeTeamChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "./types.test";
+} from "./types.fixtures";
 
 describe("A02-3.7.k - Matchs de barrage", () => {
   it("ne devrait pas s'appliquer aux matchs non-playoff", () => {
@@ -32,11 +30,13 @@ describe("A02-3.7.k - Matchs de barrage", () => {
     const player1 = makePlayerChampionnatFranceClub();
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players: [player1],
-        playoff: false,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players: [player1],
+          playoff: false,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -57,11 +57,13 @@ describe("A02-3.7.k - Matchs de barrage", () => {
     const player1 = makePlayerChampionnatFranceClub();
 
     const history = {
-      team2: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team2",
-        players: [player1],
-        playoff: false,
-      })],
+      team2: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team2",
+          players: [player1],
+          playoff: false,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -104,11 +106,13 @@ describe("A02-3.7.k - Matchs de barrage", () => {
     const player1 = makePlayerChampionnatFranceClub();
 
     const history = {
-      team2: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team2",
-        players: [player1],
-        playoff: false,
-      })],
+      team2: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team2",
+          players: [player1],
+          playoff: false,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -129,11 +133,13 @@ describe("A02-3.7.k - Matchs de barrage", () => {
     const player1 = makePlayerChampionnatFranceClub();
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players: [player1],
-        playoff: false,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players: [player1],
+          playoff: false,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -153,11 +159,13 @@ describe("A02-3.7.k - Matchs de barrage", () => {
     const player1 = makePlayerChampionnatFranceClub();
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players: [player1],
-        playoff: false,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players: [player1],
+          playoff: false,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -179,11 +187,13 @@ describe("A02-3.7.k - Matchs de barrage", () => {
     const player3 = makePlayerChampionnatFranceClub();
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players: [player3],
-        playoff: false,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players: [player3],
+          playoff: false,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -205,11 +215,13 @@ describe("A02-3.7.k - Matchs de barrage", () => {
     const player1 = makePlayerChampionnatFranceClub();
 
     const history = {
-      team1: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team1",
-        players: [player1],
-        playoff: false,
-      })],
+      team1: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team1",
+          players: [player1],
+          playoff: false,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -231,11 +243,13 @@ describe("A02-3.7.k - Matchs de barrage", () => {
     const player1 = makePlayerChampionnatFranceClub();
 
     const history = {
-      team3: [makeTeamCompositionChampionnatFranceClub({
-        teamId: "team3",
-        players: [player1],
-        playoff: false,
-      })],
+      team3: [
+        makeTeamCompositionChampionnatFranceClub({
+          teamId: "team3",
+          players: [player1],
+          playoff: false,
+        }),
+      ],
     };
 
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = { history };
@@ -245,7 +259,12 @@ describe("A02-3.7.k - Matchs de barrage", () => {
       playoff: true,
     });
 
-    const violations = rule.validate([team1, team2, team3], tournamentState, [teamComposition], "team1");
+    const violations = rule.validate(
+      [team1, team2, team3],
+      tournamentState,
+      [teamComposition],
+      "team1",
+    );
 
     expect(violations).toEqual([]);
   });
