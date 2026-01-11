@@ -6,10 +6,10 @@ Documentation technique complète pour le projet de bibliothèque TypeScript VIE
 
 ## 🎯 Fonctionnalités
 
-✅ **TypeScript 5.9.3** - Dernière version avec mode strict  
-✅ **Rolldown 1.0.0** - Bundler rapide basé sur Rust  
+✅ **TypeScript 5.9.3** - Dernière version avec mode strict et compilation directe  
 ✅ **Vitest 4.0.16** - Framework de test ultra-rapide  
 ✅ **OXC (oxlint) 1.36.0** - Linter ultra-rapide  
+✅ **Test Fixtures** - Système de helpers pour générer des objets de test  
 ✅ **Dev Container** - Environnement de développement pré-configuré  
 ✅ **GitHub Actions CI/CD** - Tests automatisés et publication NPM  
 ✅ **Copilot Workspace** - Instructions dans `.github/agents/`
@@ -28,8 +28,27 @@ vie/
 │       ├── ci.yml                    # CI/CD (Node 20, 22, 24)
 │       └── publish.yml               # Workflow de publication NPM
 ├── src/
-│   ├── index.ts                      # Point d'entrée principal (squelette)
-│   └── index.test.ts                 # Tests unitaires
+│   ├── index.ts                      # Point d'entrée principal
+│   ├── index.test.ts                 # Tests unitaires
+│   ├── types.ts                      # Types TypeScript de base
+│   ├── types.fixtures.ts             # Helpers pour créer des objets de test
+│   ├── tools.ts                      # Outils utilitaires
+│   ├── tools.test.ts                 # Tests des outils
+│   └── rules/                        # Règles de validation
+│       └── FFE/
+│           ├── R01_Regles_generales/      # Règles générales FFE
+│           │   ├── *.ts                   # Implémentation des règles
+│           │   ├── *.test.ts              # Tests des règles
+│           │   ├── types.ts               # Types spécifiques
+│           │   └── types.fixtures.ts      # Helpers de test spécifiques
+│           ├── A02_Championnat_france_clubs/  # Règles Championnat France
+│           │   ├── *.ts
+│           │   ├── *.test.ts
+│           │   ├── types.ts
+│           │   └── types.fixtures.ts
+│           └── CVL/                       # Règles Interclubs ligue Centre Val de Loire
+│               ├── *.ts
+│               └── *.test.ts
 ├── vie-app/                          # Application web de démonstration
 │   ├── src/
 │   │   └── main.ts                   # Point d'entrée de l'app
@@ -37,12 +56,11 @@ vie/
 │   ├── vite.config.ts                # Configuration Vite
 │   └── package.json                  # Dépendances de l'app
 ├── dist/                             # Sortie de compilation (généré)
-│   ├── index.mjs                     # Bundle ES Module
-│   ├── index.cjs                     # Bundle CommonJS
-│   └── index.d.ts                    # Déclarations TypeScript
+│   ├── index.js                      # Module ES compilé
+│   ├── index.d.ts                    # Déclarations TypeScript
+│   └── rules/                        # Règles compilées
 ├── package.json                      # Dépendances & scripts
 ├── tsconfig.json                     # Configuration TypeScript
-├── rolldown.config.mjs              # Configuration du bundler
 ├── vitest.config.ts                 # Configuration des tests
 ├── .npmignore                       # Filtre de publication NPM
 └── README.md                        # Documentation utilisateur
@@ -82,9 +100,7 @@ npm run lint             # Lancer oxlint
 npm run type-check       # Vérification des types TypeScript
 
 # Compilation
-npm run build            # Compilation complète (bundle + types)
-npm run build:bundle     # Bundling Rolldown uniquement
-npm run build:types      # Déclarations TypeScript uniquement
+npm run build            # Compilation TypeScript complète
 ```
 
 ### Application web
@@ -101,9 +117,8 @@ npm run dev              # Démarre le serveur de dev Vite
 
 | Outil | Version | Usage |
 |-------|---------|-------|
-| TypeScript | 5.9.3 | JavaScript avec typage statique |
-| Rolldown | 1.0.0-beta.58 | Bundler rapide basé sur Rust |
-| Vitest | 4.0.16 | Tests unitaires |
+| TypeScript | 5.9.3 | JavaScript avec typage statique et compilation |
+| Vitest | 4.0.16 | Tests unitaires avec couverture |
 | OXC (oxlint) | 1.36.0 | Linting rapide |
 | Node.js | 24.x | Environnement d'exécution |
 
@@ -129,22 +144,43 @@ npm run dev              # Démarre le serveur de dev Vite
 
 ## 🧪 Tests
 
-Les tests sont écrits avec Vitest avec 100% de couverture :
+Les tests sont écrits avec Vitest et utilisent un système de fixtures pour générer les données de test :
+
+### Fixtures de test
+
+Chaque module dispose de fonctions helpers (`types.fixtures.ts`) pour créer des objets de test :
 
 ```typescript
-import { describe, it, expect } from 'vitest';
-import { placeholder, VERSION } from './index';
+import { makePlayerFFE, makeTeamFFE, makeTeamCompositionFFE } from "./types.fixtures";
+import { TournamentState } from "../../../types";
+import { TeamCompositionFFE } from "./types";
 
-describe('vie library', () => {
-  it('should export placeholder function', () => {
-    expect(placeholder()).toBe('vie library - to be implemented');
-  });
+describe("R01-1.1 - Licence et club", () => {
+  it("devrait valider une équipe avec des joueurs licenciés du même club", () => {
+    const team = makeTeamFFE({ id: "team1", clubs: ["club1"] });
+    const tournamentState: TournamentState<TeamCompositionFFE> = { history: {} };
 
-  it('should export VERSION constant', () => {
-    expect(VERSION).toBe('1.0.0');
+    const player1 = makePlayerFFE({ club: "club1" });
+    const player2 = makePlayerFFE({ club: "club1", licenseType: "B" });
+    const teamComposition = makeTeamCompositionFFE({
+      teamId: "team1",
+      players: [player1, player2],
+    });
+
+    const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
+
+    expect(violations).toEqual([]);
   });
 });
 ```
+
+### Avantages du système de fixtures
+
+- ✅ **IDs uniques automatiques** : Compteur incrémental pour éviter les conflits
+- ✅ **Valeurs par défaut sensées** : Objets valides par défaut
+- ✅ **Surcharge partielle** : Ne spécifier que les propriétés qui varient
+- ✅ **Typage fort** : Assistance complète du TypeScript
+- ✅ **Tests lisibles** : Focus sur ce qui est testé, pas sur la construction des données
 
 ## 📤 Publication sur NPM
 
@@ -170,7 +206,6 @@ Les instructions complètes pour GitHub Copilot Workspace sont disponibles dans 
 ## 🎓 Ressources d'apprentissage
 
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
-- [Rolldown Documentation](https://rolldown.rs/)
 - [Vitest Documentation](https://vitest.dev/)
 - [OXC Project](https://oxc-project.github.io/)
 
@@ -180,4 +215,4 @@ MIT
 
 ---
 
-**Prêt pour l'implémentation** : Ceci est un projet squelette. L'implémentation réelle est prête à être ajoutée dans `src/index.ts`.
+**Bibliothèque de validation** : Ce projet implémente un système complet de validation de règles pour les compétitions d'échecs avec différentes fédérations et tournois.
