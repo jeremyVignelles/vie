@@ -1,66 +1,25 @@
 import { describe, it, expect } from "vitest";
 import rule from "./3_7_a";
 import { TournamentState } from "../../../types";
+import { TeamCompositionChampionnatFranceClub } from "./types";
 import {
-  PlayerChampionnatFranceClub,
-  TeamChampionnatFranceClub,
-  TeamCompositionChampionnatFranceClub,
-} from "./types";
-import { ArbiterFFE } from "../R01_Regles_generales/types";
+  makePlayerChampionnatFranceClub,
+  makeTeamChampionnatFranceClub,
+  makeTeamCompositionChampionnatFranceClub,
+} from "./types.test";
 
 describe("A02-3.7.a - Règles Top 16", () => {
-  const mockRuleset = { name: "Test", rules: [] };
-
-  const createTournamentState = (
-    teams: TeamChampionnatFranceClub[],
-  ): TournamentState<TeamCompositionChampionnatFranceClub
-  > => ({
-    history: {},
-  });
-
-  const createTeam = (id: string, division: string): TeamChampionnatFranceClub => ({
-    id,
-    name: `Équipe ${id}`,
-    clubs: ["club1"],
-    hasAtLeast60Minutes: true,
-    division,
-    groupId: division + "-1",
-    ruleset: mockRuleset,
-  });
-
-  const createPlayer = (
-    id: string,
-    name: string,
-    rating: number,
-    gender: "M" | "F",
-    isFrench: boolean,
-  ): PlayerChampionnatFranceClub => ({
-    id,
-    name,
-    rating,
-    gender,
-    federation: isFrench ? "FRA" : "GER",
-    licenseType: "A",
-    club: "club1",
-    isFrench,
-  });
-
-  const createTeamComposition = (
-    teamId: string,
-    players: (PlayerChampionnatFranceClub | null)[],
-  ): TeamCompositionChampionnatFranceClub => ({
-    teamId,
-    players,
-    date: "2025-01-01",
-    arbiter: null,
-  });
-
   it("devrait ignorer les équipes qui ne sont pas en Top 16", () => {
-    const team = createTeam("team1", "N1");
-    const tournamentState = createTournamentState([team]);
+    const team = makeTeamChampionnatFranceClub({ id: "team1", division: "N1" });
+    const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+      history: {},
+    };
 
-    const player1 = createPlayer("p1", "Joueur 1", 1800, "M", true);
-    const teamComposition = createTeamComposition("team1", [player1]);
+    const player1 = makePlayerChampionnatFranceClub({ rating: 1800 });
+    const teamComposition = makeTeamCompositionChampionnatFranceClub({
+      teamId: "team1",
+      players: [player1],
+    });
 
     const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
@@ -68,13 +27,23 @@ describe("A02-3.7.a - Règles Top 16", () => {
   });
 
   it("devrait valider une composition Top 16 correcte", () => {
-    const team = createTeam("team1", "T16");
-    const tournamentState = createTournamentState([team]);
+    const team = makeTeamChampionnatFranceClub({ id: "team1", division: "T16" });
+    const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+      history: {},
+    };
 
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
-    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", true);
-    const player3 = createPlayer("p3", "Joueur 3", 2300, "M", false);
-    const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
+    const player1 = makePlayerChampionnatFranceClub({ rating: 2500, gender: "M", isFrench: true });
+    const player2 = makePlayerChampionnatFranceClub({ rating: 1800, gender: "F", isFrench: true });
+    const player3 = makePlayerChampionnatFranceClub({
+      rating: 2300,
+      gender: "M",
+      isFrench: false,
+      federation: "GER",
+    });
+    const teamComposition = makeTeamCompositionChampionnatFranceClub({
+      teamId: "team1",
+      players: [player1, player2, player3],
+    });
 
     const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
@@ -82,13 +51,23 @@ describe("A02-3.7.a - Règles Top 16", () => {
   });
 
   it("devrait détecter un joueur avec Elo < 2000 (non joueuse française obligatoire)", () => {
-    const team = createTeam("team1", "T16");
-    const tournamentState = createTournamentState([team]);
+    const team = makeTeamChampionnatFranceClub({ id: "team1", division: "T16" });
+    const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+      history: {},
+    };
 
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
-    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", true);
-    const player3 = createPlayer("p3", "Joueur 3", 1900, "M", false);
-    const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
+    const player1 = makePlayerChampionnatFranceClub({ rating: 2500, gender: "M", isFrench: true });
+    const player2 = makePlayerChampionnatFranceClub({ rating: 1800, gender: "F", isFrench: true });
+    const player3 = makePlayerChampionnatFranceClub({
+      rating: 1900,
+      gender: "M",
+      isFrench: false,
+      federation: "GER",
+    });
+    const teamComposition = makeTeamCompositionChampionnatFranceClub({
+      teamId: "team1",
+      players: [player1, player2, player3],
+    });
 
     const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
@@ -102,12 +81,17 @@ describe("A02-3.7.a - Règles Top 16", () => {
   });
 
   it("devrait accepter la meilleure joueuse française avec Elo < 2000 comme joueuse obligatoire", () => {
-    const team = createTeam("team1", "T16");
-    const tournamentState = createTournamentState([team]);
+    const team = makeTeamChampionnatFranceClub({ id: "team1", division: "T16" });
+    const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+      history: {},
+    };
 
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
-    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", true);
-    const teamComposition = createTeamComposition("team1", [player1, player2]);
+    const player1 = makePlayerChampionnatFranceClub({ rating: 2500, gender: "M", isFrench: true });
+    const player2 = makePlayerChampionnatFranceClub({ rating: 1800, gender: "F", isFrench: true });
+    const teamComposition = makeTeamCompositionChampionnatFranceClub({
+      teamId: "team1",
+      players: [player1, player2],
+    });
 
     const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
@@ -115,13 +99,28 @@ describe("A02-3.7.a - Règles Top 16", () => {
   });
 
   it("devrait sanctionner une deuxième joueuse française avec Elo < 2000", () => {
-    const team = createTeam("team1", "T16");
-    const tournamentState = createTournamentState([team]);
+    const team = makeTeamChampionnatFranceClub({ id: "team1", division: "T16" });
+    const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+      history: {},
+    };
 
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
-    const player2 = createPlayer("p2", "Joueuse 2", 2100, "F", true); // Meilleure joueuse française
-    const player3 = createPlayer("p3", "Joueuse 3", 1800, "F", true); // Deuxième joueuse française avec Elo < 2000
-    const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
+    const player1 = makePlayerChampionnatFranceClub({ rating: 2500, gender: "M", isFrench: true });
+    const player2 = makePlayerChampionnatFranceClub({
+      name: "Joueuse 2",
+      rating: 2100,
+      gender: "F",
+      isFrench: true,
+    });
+    const player3 = makePlayerChampionnatFranceClub({
+      name: "Joueuse 3",
+      rating: 1800,
+      gender: "F",
+      isFrench: true,
+    });
+    const teamComposition = makeTeamCompositionChampionnatFranceClub({
+      teamId: "team1",
+      players: [player1, player2, player3],
+    });
 
     const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
@@ -135,13 +134,33 @@ describe("A02-3.7.a - Règles Top 16", () => {
   });
 
   it("devrait détecter plusieurs violations", () => {
-    const team = createTeam("team1", "T16");
-    const tournamentState = createTournamentState([team]);
+    const team = makeTeamChampionnatFranceClub({ id: "team1", division: "T16" });
+    const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+      history: {},
+    };
 
-    const player1 = createPlayer("p1", "Joueur 1", 1900, "M", false);
-    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", false);
-    const player3 = createPlayer("p3", "Joueur 3", 1700, "M", false);
-    const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
+    const player1 = makePlayerChampionnatFranceClub({
+      rating: 1900,
+      gender: "M",
+      isFrench: false,
+      federation: "GER",
+    });
+    const player2 = makePlayerChampionnatFranceClub({
+      rating: 1800,
+      gender: "F",
+      isFrench: false,
+      federation: "GER",
+    });
+    const player3 = makePlayerChampionnatFranceClub({
+      rating: 1700,
+      gender: "M",
+      isFrench: false,
+      federation: "GER",
+    });
+    const teamComposition = makeTeamCompositionChampionnatFranceClub({
+      teamId: "team1",
+      players: [player1, player2, player3],
+    });
 
     const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
@@ -150,12 +169,17 @@ describe("A02-3.7.a - Règles Top 16", () => {
   });
 
   it("devrait gérer les positions vides (null)", () => {
-    const team = createTeam("team1", "T16");
-    const tournamentState = createTournamentState([team]);
+    const team = makeTeamChampionnatFranceClub({ id: "team1", division: "T16" });
+    const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+      history: {},
+    };
 
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
-    const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", true);
-    const teamComposition = createTeamComposition("team1", [player1, null, player2]);
+    const player1 = makePlayerChampionnatFranceClub({ rating: 2500, gender: "M", isFrench: true });
+    const player2 = makePlayerChampionnatFranceClub({ rating: 1800, gender: "F", isFrench: true });
+    const teamComposition = makeTeamCompositionChampionnatFranceClub({
+      teamId: "team1",
+      players: [player1, null, player2],
+    });
 
     const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
@@ -163,11 +187,16 @@ describe("A02-3.7.a - Règles Top 16", () => {
   });
 
   it("devrait lancer une erreur si l'équipe n'est pas trouvée", () => {
-    const team = createTeam("team1", "T16");
-    const tournamentState = createTournamentState([team]);
+    const team = makeTeamChampionnatFranceClub({ id: "team1", division: "T16" });
+    const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+      history: {},
+    };
 
-    const player1 = createPlayer("p1", "Joueur 1", 2500, "M", true);
-    const teamComposition = createTeamComposition("team1", [player1]);
+    const player1 = makePlayerChampionnatFranceClub({ rating: 2500 });
+    const teamComposition = makeTeamCompositionChampionnatFranceClub({
+      teamId: "team1",
+      players: [player1],
+    });
 
     expect(() => {
       rule.validate([team], tournamentState, [teamComposition], "team999");

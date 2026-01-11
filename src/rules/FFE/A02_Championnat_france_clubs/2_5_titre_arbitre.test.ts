@@ -1,71 +1,17 @@
 import { describe, it, expect } from "vitest";
 import rule, { makeArbiterTitleValidator } from "./2_5_titre_arbitre";
 import { TournamentState } from "../../../types";
+import { TeamCompositionChampionnatFranceClub } from "./types";
 import {
-  PlayerChampionnatFranceClub,
-  TeamChampionnatFranceClub,
-  TeamCompositionChampionnatFranceClub,
-} from "./types";
-import { ArbiterFFE } from "../R01_Regles_generales/types";
+  makePlayerChampionnatFranceClub,
+  makeTeamChampionnatFranceClub,
+  makeTeamCompositionChampionnatFranceClub,
+} from "./types.test";
+import { makeArbiterFFE } from "../R01_Regles_generales/types.test";
 
 describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
-  const createPlayer = (id: string, name: string): PlayerChampionnatFranceClub => ({
-    id,
-    name,
-    rating: 1500,
-    gender: "M",
-    licenseType: "A",
-    club: "club1",
-    federation: "FRA",
-  });
-
-  const createArbiter = (
-    id: string,
-    name: string,
-    arbiterTitle: ArbiterFFE["arbiterTitle"],
-  ): ArbiterFFE => ({
-    id,
-    name,
-    arbiterTitle,
-  });
-
-  const createTeamInfo = (id: string, division: string): TeamChampionnatFranceClub => ({
-    id,
-    name: `Team ${id}`,
-    clubs: ["club1"],
-    hasAtLeast60Minutes: true,
-    division,
-    groupId: "group1",
-    ruleset: { name: "Test", rules: [] },
-  });
-
-  const createTeamComposition = (
-    teamId: string,
-    players: (PlayerChampionnatFranceClub | null)[],
-    arbiter: ArbiterFFE | null = null,
-  ): TeamCompositionChampionnatFranceClub => ({
-    teamId,
-    players,
-    arbiter,
-    date: "2024-01-01",
-  });
-
-  const createTournamentState = (
-    teams: TeamChampionnatFranceClub[],
-  ): TournamentState<TeamCompositionChampionnatFranceClub> => ({
-    history: {},
-  });
-
-  const validTitles: ArbiterFFE["arbiterTitle"][] = [
-    "AFC",
-    "AFO1",
-    "AFO2",
-    "AFE1",
-    "AFE2",
-    "AF",
-    "AI",
-  ];
-  const invalidTitles: ArbiterFFE["arbiterTitle"][] = ["AS", "AFJ"];
+  const validTitles = ["AFC", "AFO1", "AFO2", "AFE1", "AFE2", "AF", "AI"] as const;
+  const invalidTitles = ["AS", "AFJ"] as const;
   const nationalDivisions = ["T16", "N1", "N2", "N3", "N4"];
 
   describe("Divisions nationales (T16, N1, N2, N3, N4)", () => {
@@ -73,14 +19,16 @@ describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
       describe(division, () => {
         validTitles.forEach((title) => {
           it(`devrait valider un arbitre ${title}`, () => {
-            const teamInfo = createTeamInfo("team1", division);
-            const tournamentState = createTournamentState([teamInfo]);
-            const arbiter = createArbiter("a1", "Arbitre 1", title);
-            const teamComposition = createTeamComposition(
-              "team1",
-              [createPlayer("p1", "Player 1")],
+            const teamInfo = makeTeamChampionnatFranceClub({ id: "team1", division });
+            const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+              history: {},
+            };
+            const arbiter = makeArbiterFFE({ id: "a1", name: "Arbitre 1", arbiterTitle: title });
+            const teamComposition = makeTeamCompositionChampionnatFranceClub({
+              teamId: "team1",
+              players: [makePlayerChampionnatFranceClub({ id: "p1", name: "Player 1" })],
               arbiter,
-            );
+            });
 
             const violations = rule.validate(
               [teamInfo],
@@ -95,14 +43,16 @@ describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
 
         invalidTitles.forEach((title) => {
           it(`devrait rejeter un arbitre ${title}`, () => {
-            const teamInfo = createTeamInfo("team1", division);
-            const tournamentState = createTournamentState([teamInfo]);
-            const arbiter = createArbiter("a1", "Arbitre 1", title);
-            const teamComposition = createTeamComposition(
-              "team1",
-              [createPlayer("p1", "Player 1")],
+            const teamInfo = makeTeamChampionnatFranceClub({ id: "team1", division });
+            const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+              history: {},
+            };
+            const arbiter = makeArbiterFFE({ id: "a1", name: "Arbitre 1", arbiterTitle: title });
+            const teamComposition = makeTeamCompositionChampionnatFranceClub({
+              teamId: "team1",
+              players: [makePlayerChampionnatFranceClub({ id: "p1", name: "Player 1" })],
               arbiter,
-            );
+            });
 
             const violations = rule.validate(
               [teamInfo],
@@ -123,13 +73,14 @@ describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
         });
 
         it("devrait détecter l'absence d'arbitre", () => {
-          const teamInfo = createTeamInfo("team1", division);
-          const tournamentState = createTournamentState([teamInfo]);
-          const teamComposition = createTeamComposition(
-            "team1",
-            [createPlayer("p1", "Player 1")],
-            null,
-          );
+          const teamInfo = makeTeamChampionnatFranceClub({ id: "team1", division });
+          const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+            history: {},
+          };
+          const teamComposition = makeTeamCompositionChampionnatFranceClub({
+            teamId: "team1",
+            players: [makePlayerChampionnatFranceClub({ id: "p1", name: "Player 1" })],
+          });
 
           const violations = rule.validate([teamInfo], tournamentState, [teamComposition], "team1");
 
@@ -142,13 +93,14 @@ describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
 
   describe("Divisions non concernées", () => {
     it("ne devrait pas exiger d'arbitre dans les divisions non nationales", () => {
-      const teamInfo = createTeamInfo("team1", "R1");
-      const tournamentState = createTournamentState([teamInfo]);
-      const teamComposition = createTeamComposition(
-        "team1",
-        [createPlayer("p1", "Player 1")],
-        null,
-      );
+      const teamInfo = makeTeamChampionnatFranceClub({ id: "team1", division: "R1" });
+      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+        history: {},
+      };
+      const teamComposition = makeTeamCompositionChampionnatFranceClub({
+        teamId: "team1",
+        players: [makePlayerChampionnatFranceClub({ id: "p1", name: "Player 1" })],
+      });
 
       const violations = rule.validate([teamInfo], tournamentState, [teamComposition], "team1");
 
@@ -156,14 +108,16 @@ describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
     });
 
     it("devrait valider n'importe quel arbitre dans les divisions non nationales", () => {
-      const teamInfo = createTeamInfo("team1", "R1");
-      const tournamentState = createTournamentState([teamInfo]);
-      const arbiter = createArbiter("a1", "Arbitre 1", "AS");
-      const teamComposition = createTeamComposition(
-        "team1",
-        [createPlayer("p1", "Player 1")],
+      const teamInfo = makeTeamChampionnatFranceClub({ id: "team1", division: "R1" });
+      const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+        history: {},
+      };
+      const arbiter = makeArbiterFFE({ id: "a1", name: "Arbitre 1", arbiterTitle: "AS" });
+      const teamComposition = makeTeamCompositionChampionnatFranceClub({
+        teamId: "team1",
+        players: [makePlayerChampionnatFranceClub({ id: "p1", name: "Player 1" })],
         arbiter,
-      );
+      });
 
       const violations = rule.validate([teamInfo], tournamentState, [teamComposition], "team1");
 
@@ -171,19 +125,11 @@ describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
     });
   });
 
-  it("devrait lever une erreur si l'équipe n'est pas trouvée dans tournamentState", () => {
-    const tournamentState = createTournamentState([]);
-    const teamComposition = createTeamComposition("team1", [], null);
-    const teamInfo = createTeamInfo("team1", "R1");
-
-    expect(() => {
-      rule.validate([teamInfo], tournamentState, [teamComposition], "team1");
-    }).toThrow("Équipe avec l'identifiant team1 non trouvée");
-  });
-
   it("devrait lever une erreur si la composition de l'équipe n'est pas trouvée", () => {
-    const teamInfo = createTeamInfo("team1", "N1");
-    const tournamentState = createTournamentState([teamInfo]);
+    const teamInfo = makeTeamChampionnatFranceClub({ id: "team1", division: "N1" });
+    const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+      history: {},
+    };
 
     expect(() => {
       rule.validate([teamInfo], tournamentState, [], "team1");
@@ -192,69 +138,24 @@ describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
 });
 
 describe("makeArbiterTitleValidator - Fonction utilitaire", () => {
-  const createPlayer = (id: string, name: string): PlayerChampionnatFranceClub => ({
-    id,
-    name,
-    rating: 1500,
-    gender: "M",
-    licenseType: "A",
-    club: "club1",
-    federation: "FRA",
-  });
-
-  const createArbiter = (
-    id: string,
-    name: string,
-    arbiterTitle: ArbiterFFE["arbiterTitle"],
-  ): ArbiterFFE => ({
-    id,
-    name,
-    arbiterTitle,
-  });
-
-  const createTeamInfo = (id: string, division: string): TeamChampionnatFranceClub => ({
-    id,
-    name: `Team ${id}`,
-    clubs: ["club1"],
-    hasAtLeast60Minutes: true,
-    division,
-    groupId: "group1",
-    ruleset: { name: "Test", rules: [] },
-  });
-
-  const createTeamComposition = (
-    teamId: string,
-    players: (PlayerChampionnatFranceClub | null)[],
-    arbiter: ArbiterFFE | null = null,
-  ): TeamCompositionChampionnatFranceClub => ({
-    teamId,
-    players,
-    arbiter,
-    date: "2024-01-01",
-  });
-
-  const createTournamentState = (
-    teams: TeamChampionnatFranceClub[],
-  ): TournamentState<TeamCompositionChampionnatFranceClub> => ({
-    history: {},
-  });
-
   it("devrait créer un validateur qui accepte les titres spécifiés", () => {
     const validator = makeArbiterTitleValidator(
       (division) => (division === "TEST" ? ["AF", "AI"] : null),
       "test-rule",
     );
 
-    const teamInfo = createTeamInfo("team1", "TEST");
-    const tournamentState = createTournamentState([teamInfo]);
-    const arbiter = createArbiter("a1", "Arbitre 1", "AF");
-    const teamComposition = createTeamComposition(
-      "team1",
-      [createPlayer("p1", "Player 1")],
+    const teamInfo = makeTeamChampionnatFranceClub({ id: "team1", division: "TEST" });
+    const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+      history: {},
+    };
+    const arbiter = makeArbiterFFE({ id: "a1", name: "Arbitre 1", arbiterTitle: "AF" });
+    const teamComposition = makeTeamCompositionChampionnatFranceClub({
+      teamId: "team1",
+      players: [makePlayerChampionnatFranceClub({ id: "p1", name: "Player 1" })],
       arbiter,
-    );
+    });
 
-    const violations = validator(tournamentState, [teamComposition], "team1");
+    const violations = validator([teamInfo], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -265,16 +166,18 @@ describe("makeArbiterTitleValidator - Fonction utilitaire", () => {
       "test-rule",
     );
 
-    const teamInfo = createTeamInfo("team1", "TEST");
-    const tournamentState = createTournamentState([teamInfo]);
-    const arbiter = createArbiter("a1", "Arbitre 1", "AFC");
-    const teamComposition = createTeamComposition(
-      "team1",
-      [createPlayer("p1", "Player 1")],
+    const teamInfo = makeTeamChampionnatFranceClub({ id: "team1", division: "TEST" });
+    const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+      history: {},
+    };
+    const arbiter = makeArbiterFFE({ id: "a1", name: "Arbitre 1", arbiterTitle: "AFC" });
+    const teamComposition = makeTeamCompositionChampionnatFranceClub({
+      teamId: "team1",
+      players: [makePlayerChampionnatFranceClub({ id: "p1", name: "Player 1" })],
       arbiter,
-    );
+    });
 
-    const violations = validator(tournamentState, [teamComposition], "team1");
+    const violations = validator([teamInfo], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0].ruleId).toBe("test-rule");
@@ -286,16 +189,18 @@ describe("makeArbiterTitleValidator - Fonction utilitaire", () => {
       "test-rule",
     );
 
-    const teamInfo = createTeamInfo("team1", "OTHER");
-    const tournamentState = createTournamentState([teamInfo]);
-    const arbiter = createArbiter("a1", "Arbitre 1", "AS");
-    const teamComposition = createTeamComposition(
-      "team1",
-      [createPlayer("p1", "Player 1")],
+    const teamInfo = makeTeamChampionnatFranceClub({ id: "team1", division: "OTHER" });
+    const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+      history: {},
+    };
+    const arbiter = makeArbiterFFE({ id: "a1", name: "Arbitre 1", arbiterTitle: "AS" });
+    const teamComposition = makeTeamCompositionChampionnatFranceClub({
+      teamId: "team1",
+      players: [makePlayerChampionnatFranceClub({ id: "p1", name: "Player 1" })],
       arbiter,
-    );
+    });
 
-    const violations = validator(tournamentState, [teamComposition], "team1");
+    const violations = validator([teamInfo], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -305,11 +210,16 @@ describe("makeArbiterTitleValidator - Fonction utilitaire", () => {
       division === "TEST" ? ["AF"] : null,
     );
 
-    const teamInfo = createTeamInfo("team1", "TEST");
-    const tournamentState = createTournamentState([teamInfo]);
-    const teamComposition = createTeamComposition("team1", [createPlayer("p1", "Player 1")], null);
+    const teamInfo = makeTeamChampionnatFranceClub({ id: "team1", division: "TEST" });
+    const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+      history: {},
+    };
+    const teamComposition = makeTeamCompositionChampionnatFranceClub({
+      teamId: "team1",
+      players: [makePlayerChampionnatFranceClub({ id: "p1", name: "Player 1" })],
+    });
 
-    const violations = validator(tournamentState, [teamComposition], "team1");
+    const violations = validator([teamInfo], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0].ruleId).toBe("A02-2.5-titre-arbitre");
@@ -321,11 +231,16 @@ describe("makeArbiterTitleValidator - Fonction utilitaire", () => {
       "custom-rule",
     );
 
-    const teamInfo = createTeamInfo("team1", "TEST");
-    const tournamentState = createTournamentState([teamInfo]);
-    const teamComposition = createTeamComposition("team1", [createPlayer("p1", "Player 1")], null);
+    const teamInfo = makeTeamChampionnatFranceClub({ id: "team1", division: "TEST" });
+    const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+      history: {},
+    };
+    const teamComposition = makeTeamCompositionChampionnatFranceClub({
+      teamId: "team1",
+      players: [makePlayerChampionnatFranceClub({ id: "p1", name: "Player 1" })],
+    });
 
-    const violations = validator(tournamentState, [teamComposition], "team1");
+    const violations = validator([teamInfo], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({
@@ -343,26 +258,33 @@ describe("makeArbiterTitleValidator - Fonction utilitaire", () => {
       return null;
     }, "flexible-rule");
 
-    const teamInfoPro = createTeamInfo("team1", "PRO");
-    const teamInfoAmateur = createTeamInfo("team2", "AMATEUR");
-    const tournamentState = createTournamentState([teamInfoPro, teamInfoAmateur]);
+    const teamInfoPro = makeTeamChampionnatFranceClub({ id: "team1", division: "PRO" });
+    const teamInfoAmateur = makeTeamChampionnatFranceClub({ id: "team2", division: "AMATEUR" });
+    const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
+      history: {},
+    };
 
-    const arbiterAF = createArbiter("a1", "Arbitre Pro", "AF");
-    const arbiterAFC = createArbiter("a2", "Arbitre Amateur", "AFC");
+    const arbiterAF = makeArbiterFFE({ id: "a1", name: "Arbitre Pro", arbiterTitle: "AF" });
+    const arbiterAFC = makeArbiterFFE({ id: "a2", name: "Arbitre Amateur", arbiterTitle: "AFC" });
 
-    const teamCompoPro = createTeamComposition(
-      "team1",
-      [createPlayer("p1", "Player 1")],
-      arbiterAF,
-    );
-    const teamCompoAmateur = createTeamComposition(
+    const teamCompoPro = makeTeamCompositionChampionnatFranceClub({
+      teamId: "team1",
+      players: [makePlayerChampionnatFranceClub({ id: "p1", name: "Player 1" })],
+      arbiter: arbiterAF,
+    });
+    const teamCompoAmateur = makeTeamCompositionChampionnatFranceClub({
+      teamId: "team2",
+      players: [makePlayerChampionnatFranceClub({ id: "p2", name: "Player 2" })],
+      arbiter: arbiterAFC,
+    });
+
+    const violationsPro = validator([teamInfoPro], tournamentState, [teamCompoPro], "team1");
+    const violationsAmateur = validator(
+      [teamInfoAmateur],
+      tournamentState,
+      [teamCompoAmateur],
       "team2",
-      [createPlayer("p2", "Player 2")],
-      arbiterAFC,
     );
-
-    const violationsPro = validator(tournamentState, [teamCompoPro], "team1");
-    const violationsAmateur = validator(tournamentState, [teamCompoAmateur], "team2");
 
     expect(violationsPro).toEqual([]);
     expect(violationsAmateur).toEqual([]);

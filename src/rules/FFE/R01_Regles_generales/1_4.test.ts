@@ -1,50 +1,20 @@
 import { describe, it, expect } from "vitest";
 import rule from "./1_4";
 import { TournamentState } from "../../../types";
-import { PlayerFFE, TeamFFE, TeamCompositionFFE, ArbiterFFE } from "./types";
+import { TeamCompositionFFE } from "./types";
+import { makePlayerFFE, makeTeamFFE, makeTeamCompositionFFE } from "./types.test";
 
 describe("R01-1.4 - Licence A pour cadence >= 60 minutes", () => {
-  const mockRuleset = { name: "Test", rules: [] };
-
-  const createTournamentState = (
-    teams: TeamFFE[],
-  ): TournamentState<TeamCompositionFFE> => ({
-    history: {},
-  });
-
-  const createTeam = (id: string, hasAtLeast60Minutes: boolean): TeamFFE => ({
-    id,
-    name: `Équipe ${id}`,
-    clubs: ["club1"],
-    hasAtLeast60Minutes,
-    ruleset: mockRuleset,
-  });
-
-  const createPlayer = (id: string, name: string, licenseType: string): PlayerFFE => ({
-    id,
-    name,
-    licenseType,
-    club: "club1",
-    federation: "FRA",
-  });
-
-  const createTeamComposition = (
-    teamId: string,
-    players: (PlayerFFE | null)[],
-  ): TeamCompositionFFE => ({
-    teamId,
-    players,
-    date: "2025-01-01",
-    arbiter: null,
-  });
-
   it("devrait valider des joueurs avec licence A en cadence >= 60 minutes", () => {
-    const team = createTeam("team1", true);
-    const tournamentState = createTournamentState([team]);
+    const team = makeTeamFFE({ id: "team1", hasAtLeast60Minutes: true });
+    const tournamentState: TournamentState<TeamCompositionFFE> = { history: {} };
 
-    const player1 = createPlayer("p1", "Joueur 1", "A");
-    const player2 = createPlayer("p2", "Joueur 2", "A");
-    const teamComposition = createTeamComposition("team1", [player1, player2]);
+    const player1 = makePlayerFFE({ licenseType: "A" });
+    const player2 = makePlayerFFE({ licenseType: "A" });
+    const teamComposition = makeTeamCompositionFFE({
+      teamId: "team1",
+      players: [player1, player2],
+    });
 
     const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
@@ -52,12 +22,15 @@ describe("R01-1.4 - Licence A pour cadence >= 60 minutes", () => {
   });
 
   it("devrait détecter un joueur avec licence B en cadence >= 60 minutes", () => {
-    const team = createTeam("team1", true);
-    const tournamentState = createTournamentState([team]);
+    const team = makeTeamFFE({ id: "team1", hasAtLeast60Minutes: true });
+    const tournamentState: TournamentState<TeamCompositionFFE> = { history: {} };
 
-    const player1 = createPlayer("p1", "Joueur 1", "A");
-    const player2 = createPlayer("p2", "Joueur 2", "B");
-    const teamComposition = createTeamComposition("team1", [player1, player2]);
+    const player1 = makePlayerFFE({ licenseType: "A" });
+    const player2 = makePlayerFFE({ licenseType: "B" });
+    const teamComposition = makeTeamCompositionFFE({
+      teamId: "team1",
+      players: [player1, player2],
+    });
 
     const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
@@ -71,12 +44,15 @@ describe("R01-1.4 - Licence A pour cadence >= 60 minutes", () => {
   });
 
   it("devrait détecter un joueur sans licence en cadence >= 60 minutes", () => {
-    const team = createTeam("team1", true);
-    const tournamentState = createTournamentState([team]);
+    const team = makeTeamFFE({ id: "team1", hasAtLeast60Minutes: true });
+    const tournamentState: TournamentState<TeamCompositionFFE> = { history: {} };
 
-    const player1 = createPlayer("p1", "Joueur 1", "A");
-    const player2 = createPlayer("p2", "Joueur 2", "N");
-    const teamComposition = createTeamComposition("team1", [player1, player2]);
+    const player1 = makePlayerFFE({ licenseType: "A" });
+    const player2 = makePlayerFFE({ licenseType: "N" });
+    const teamComposition = makeTeamCompositionFFE({
+      teamId: "team1",
+      players: [player1, player2],
+    });
 
     const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
@@ -85,12 +61,15 @@ describe("R01-1.4 - Licence A pour cadence >= 60 minutes", () => {
   });
 
   it("ne devrait pas vérifier la licence en cadence < 60 minutes", () => {
-    const team = createTeam("team1", false);
-    const tournamentState = createTournamentState([team]);
+    const team = makeTeamFFE({ id: "team1", hasAtLeast60Minutes: false });
+    const tournamentState: TournamentState<TeamCompositionFFE> = { history: {} };
 
-    const player1 = createPlayer("p1", "Joueur 1", "B");
-    const player2 = createPlayer("p2", "Joueur 2", "N");
-    const teamComposition = createTeamComposition("team1", [player1, player2]);
+    const player1 = makePlayerFFE({ licenseType: "B" });
+    const player2 = makePlayerFFE({ licenseType: "N" });
+    const teamComposition = makeTeamCompositionFFE({
+      teamId: "team1",
+      players: [player1, player2],
+    });
 
     const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
@@ -98,13 +77,16 @@ describe("R01-1.4 - Licence A pour cadence >= 60 minutes", () => {
   });
 
   it("devrait détecter plusieurs joueurs sans licence A", () => {
-    const team = createTeam("team1", true);
-    const tournamentState = createTournamentState([team]);
+    const team = makeTeamFFE({ id: "team1", hasAtLeast60Minutes: true });
+    const tournamentState: TournamentState<TeamCompositionFFE> = { history: {} };
 
-    const player1 = createPlayer("p1", "Joueur 1", "B");
-    const player2 = createPlayer("p2", "Joueur 2", "N");
-    const player3 = createPlayer("p3", "Joueur 3", "A");
-    const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
+    const player1 = makePlayerFFE({ licenseType: "B" });
+    const player2 = makePlayerFFE({ licenseType: "N" });
+    const player3 = makePlayerFFE({ licenseType: "A" });
+    const teamComposition = makeTeamCompositionFFE({
+      teamId: "team1",
+      players: [player1, player2, player3],
+    });
 
     const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
@@ -112,11 +94,14 @@ describe("R01-1.4 - Licence A pour cadence >= 60 minutes", () => {
   });
 
   it("devrait ignorer les positions sans joueur (null)", () => {
-    const team = createTeam("team1", true);
-    const tournamentState = createTournamentState([team]);
+    const team = makeTeamFFE({ id: "team1", hasAtLeast60Minutes: true });
+    const tournamentState: TournamentState<TeamCompositionFFE> = { history: {} };
 
-    const player1 = createPlayer("p1", "Joueur 1", "A");
-    const teamComposition = createTeamComposition("team1", [player1, null, null]);
+    const player1 = makePlayerFFE({ licenseType: "A" });
+    const teamComposition = makeTeamCompositionFFE({
+      teamId: "team1",
+      players: [player1, null, null],
+    });
 
     const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
@@ -124,11 +109,14 @@ describe("R01-1.4 - Licence A pour cadence >= 60 minutes", () => {
   });
 
   it("devrait lancer une erreur si l'équipe n'est pas trouvée", () => {
-    const team = createTeam("team1", true);
-    const tournamentState = createTournamentState([team]);
+    const team = makeTeamFFE({ id: "team1", hasAtLeast60Minutes: true });
+    const tournamentState: TournamentState<TeamCompositionFFE> = { history: {} };
 
-    const player1 = createPlayer("p1", "Joueur 1", "A");
-    const teamComposition = createTeamComposition("team1", [player1]);
+    const player1 = makePlayerFFE({ licenseType: "A" });
+    const teamComposition = makeTeamCompositionFFE({
+      teamId: "team1",
+      players: [player1],
+    });
 
     expect(() => {
       rule.validate([team], tournamentState, [teamComposition], "team999");
