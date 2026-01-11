@@ -6,7 +6,7 @@ import {
   makePlayerChampionnatFranceClub,
   makeTeamChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "./types.test";
+} from "./types.fixtures";
 
 describe("A02-3.7.d - Participation dans un même groupe", () => {
   it("devrait valider un joueur qui n'a jamais joué dans une autre équipe du même groupe", () => {

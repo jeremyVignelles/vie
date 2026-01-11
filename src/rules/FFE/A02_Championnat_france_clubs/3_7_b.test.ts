@@ -6,7 +6,7 @@ import {
   makePlayerChampionnatFranceClub,
   makeTeamChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "./types.test";
+} from "./types.fixtures";
 
 describe("A02-3.7.b - Force des équipes", () => {
   it("devrait valider une équipe plus faible qu'une équipe précédente", () => {

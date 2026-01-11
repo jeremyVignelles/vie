@@ -6,8 +6,8 @@ import {
   makePlayerChampionnatFranceClub,
   makeTeamChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "./types.test";
-import { makeArbiterFFE } from "../R01_Regles_generales/types.test";
+} from "./types.fixtures";
+import { makeArbiterFFE } from "../R01_Regles_generales/types.fixtures";
 
 describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
   it("devrait valider quand il n'y a pas d'arbitre désigné", () => {

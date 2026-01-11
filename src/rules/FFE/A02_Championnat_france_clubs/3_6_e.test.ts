@@ -6,7 +6,7 @@ import {
   makePlayerChampionnatFranceClub,
   makeTeamChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "./types.test";
+} from "./types.fixtures";
 
 describe("A02-3.6.e - Ordre des joueurs par Elo", () => {
   it("devrait valider une composition avec joueurs en ordre décroissant", () => {

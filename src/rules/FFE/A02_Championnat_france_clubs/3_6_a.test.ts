@@ -5,7 +5,7 @@ import { TeamCompositionChampionnatFranceClub } from "./types";
 import {
   makePlayerChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "./types.test";
+} from "./types.fixtures";
 
 describe("A02-3.6.a - Pas de trous dans la composition", () => {
   it("devrait valider une composition sans trous", () => {

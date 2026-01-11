@@ -6,7 +6,7 @@ import {
   makePlayerChampionnatFranceClub,
   makeTeamChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "./types.test";
+} from "./types.fixtures";
 
 describe("A02-3.7.a - Règles Top 16", () => {
   it("devrait ignorer les équipes qui ne sont pas en Top 16", () => {

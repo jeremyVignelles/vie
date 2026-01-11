@@ -6,7 +6,7 @@ import {
   makePlayerChampionnatFranceClub,
   makeTeamChampionnatFranceClub,
   makeTeamCompositionChampionnatFranceClub,
-} from "./types.test";
+} from "./types.fixtures";
 
 describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
   it("devrait valider un joueur qui n'a jamais joué dans une équipe plus forte", () => {
@@ -199,7 +199,12 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
       players: [player1],
     });
 
-    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
+    const violations = rule.validate(
+      [team1, team2, team3],
+      tournamentState,
+      [teamComposition],
+      "team2",
+    );
 
     expect(violations).toEqual([]);
   });
