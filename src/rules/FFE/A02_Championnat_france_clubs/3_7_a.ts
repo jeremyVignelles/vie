@@ -17,9 +17,9 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
   meilleur classement Elo est considérée comme la joueuse obligatoire.
   Les autres, si elles ont un Elo inférieur à 2000, seront sanctionnées
   d'un forfait administratif.`,
-  validate(tournamentState, currentTeams, teamToValidate) {
+  validate(teams, _tournamentState, currentTeams, teamToValidate) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
-    const teamInfo = tournamentState.teams.find((team) => team.id === teamToValidate);
+    const teamInfo = teams.find((team) => team.id === teamToValidate);
     if (!teamPlayers || !teamInfo) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
     }

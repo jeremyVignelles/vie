@@ -13,7 +13,7 @@ interface PlayerWithB extends Player {
 const sampleRuleA: Rule<"sample-rule-A", PlayerWithA> = {
   id: "sample-rule-A",
   description: "A sample rule for testing A",
-  validate(_tournamentState, _currentTeams, _teamToValidate) {
+  validate(_teams, _tournamentState, _currentTeams, _teamToValidate) {
     return [];
   },
 };
@@ -21,7 +21,7 @@ const sampleRuleA: Rule<"sample-rule-A", PlayerWithA> = {
 const sampleRuleB: Rule<"sample-rule-B", PlayerWithB> = {
   id: "sample-rule-B",
   description: "A sample rule for testing B",
-  validate(_tournamentState, _currentTeams, _teamToValidate) {
+  validate(_teams, _tournamentState, _currentTeams, _teamToValidate) {
     return [];
   },
 };

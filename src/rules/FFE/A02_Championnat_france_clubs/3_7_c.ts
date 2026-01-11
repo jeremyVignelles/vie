@@ -1,9 +1,8 @@
 import { Rule, Violation } from "../../../types";
-import { PlayerChampionnatFranceClub, TeamChampionnatFranceClub } from "./types";
 
 const id = "A02-3.7.c";
 
-const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceClub> = {
+const rule: Rule<typeof id> = {
   id,
   description: `
   Participation dans plusieurs équipes : lorsqu'un club a plusieurs équipes engagées
@@ -11,14 +10,14 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
   dans une équipe s'il ou elle a déjà joué trois fois dans une équipe plus forte telle
   que définie à l'article 3.7.b.
   `,
-  validate(tournamentState, currentTeams, teamToValidate) {
+  validate(teams, tournamentState, currentTeams, teamToValidate) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
-    const teamIndex = tournamentState.teams.findIndex((team) => team.id === teamToValidate);
+    const teamIndex = teams.findIndex((team) => team.id === teamToValidate);
     if (!teamPlayers || teamIndex === -1) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
     }
 
-    const strongerTeams = tournamentState.teams.slice(0, teamIndex);
+    const strongerTeams = teams.slice(0, teamIndex);
 
     const violations: Violation[] = [];
 

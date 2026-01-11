@@ -14,7 +14,7 @@ interface TeamWithPaymentStatus extends TeamInfo {
 const sampleRuleMaxRating: Rule<"max-rating", PlayerWithRating> = {
   id: "max-rating",
   description: "The player's rating must not exceed 2000",
-  validate(_tournamentState, currentTeams, teamToValidate) {
+  validate(_teams, _tournamentState, currentTeams, teamToValidate) {
     const violations = [];
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     if (!teamPlayers) {
@@ -39,7 +39,7 @@ const sampleRuleMaxRating: Rule<"max-rating", PlayerWithRating> = {
 const sampleRuleTeamPayment: Rule<"team-payment", Player, TeamWithPaymentStatus> = {
   id: "team-payment",
   description: "The team must have paid the registration fee",
-  validate(_tournamentState, _currentTeams, teamToValidate) {
+  validate(_teams, _tournamentState, _currentTeams, teamToValidate) {
     const violations = [];
     // This is a placeholder implementation
     // In a real scenario, we would check the payment status of the team
@@ -61,20 +61,21 @@ const sampleRuleTeamPayment: Rule<"team-payment", Player, TeamWithPaymentStatus>
 describe("validateTeams", () => {
   it("should validate the team players against the rules", () => {
     const ruleset = makeRuleset("Max Rating Ruleset", undefined, [sampleRuleMaxRating]);
+    const teams = [
+      {
+        id: "team-1",
+        name: "Team 1",
+        ruleset,
+      },
+    ];
     const tournamentState = {
-      teams: [
-        {
-          id: "team-1",
-          name: "Team 1",
-          ruleset,
-        },
-      ],
       history: {},
     };
 
-    const validationOK = validateTeams(tournamentState, [
+    const validationOK = validateTeams(teams, tournamentState, [
       {
         teamId: "team-1",
+        arbiter: null,
         players: [
           { id: "player-1", name: "Alice", rating: 1800 },
           { id: "player-2", name: "Bob", rating: 1900 },
@@ -84,9 +85,10 @@ describe("validateTeams", () => {
       },
     ]);
 
-    const validationViolation = validateTeams(tournamentState, [
+    const validationViolation = validateTeams(teams, tournamentState, [
       {
         teamId: "team-1",
+        arbiter: null,
         players: [
           { id: "player-1", name: "Alice", rating: 2000 },
           { id: "player-2", name: "Bob", rating: 1900 },
@@ -108,21 +110,22 @@ describe("validateTeams", () => {
 
   it("should validate the team status against the rules", () => {
     const ruleset = makeRuleset("Team Payment Ruleset", undefined, [sampleRuleTeamPayment]);
+    const teams = [
+      {
+        id: "team-2",
+        name: "Team 2",
+        ruleset,
+        hasPaid: false,
+      },
+    ];
     const tournamentState = {
-      teams: [
-        {
-          id: "team-2",
-          name: "Team 2",
-          ruleset,
-          hasPaid: false,
-        },
-      ],
       history: {},
     };
 
-    const validation = validateTeams(tournamentState, [
+    const validation = validateTeams(teams, tournamentState, [
       {
         teamId: "team-2",
+        arbiter: null,
         players: [
           { id: "player-5", name: "Eve" },
           { id: "player-6", name: "Frank" },

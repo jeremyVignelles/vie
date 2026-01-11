@@ -10,7 +10,7 @@ const rule: Rule<typeof id, PlayerFFE> = {
   ne sont pas autorisés à participer aux compétitions par équipes
   ou individuelles homologuées par la FFE.`,
 
-  validate(_tournamentState, currentTeams, teamToValidate) {
+  validate(_teams, _tournamentState, currentTeams, teamToValidate) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     if (!teamPlayers) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);

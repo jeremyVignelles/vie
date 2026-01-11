@@ -1,18 +1,13 @@
-import { Rule, Violation } from "../../../types";
-import { ArbiterFFE } from "../R01_Regles_generales/types";
-import {
-  PlayerChampionnatFranceClub,
-  TeamChampionnatFranceClub,
-  TeamCompositionChampionnatFranceClub,
-} from "./types";
+import { Arbiter, Player, Rule, Violation } from "../../../types";
+import { TeamChampionnatFranceClub, TeamCompositionChampionnatFranceClub } from "./types";
 
 const id = "A02-3.7.k";
 
 const rule: Rule<
   typeof id,
-  PlayerChampionnatFranceClub,
+  Player,
   TeamChampionnatFranceClub,
-  ArbiterFFE,
+  Arbiter,
   TeamCompositionChampionnatFranceClub
 > = {
   id,
@@ -21,9 +16,9 @@ const rule: Rule<
   devront avoir joué au moins une fois dans la nationale concernée ou dans une nationale inférieure
   du Championnat de France des Clubs durant la saison en cours.
   `,
-  validate(tournamentState, currentTeams, teamToValidate) {
+  validate(teams, tournamentState, currentTeams, teamToValidate) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
-    const teamInfo = tournamentState.teams.find((team) => team.id === teamToValidate);
+    const teamInfo = teams.find((team) => team.id === teamToValidate);
     const currentComposition = currentTeams.find((team) => team.teamId === teamToValidate);
     if (!teamPlayers || !teamInfo || !currentComposition) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
@@ -50,7 +45,7 @@ const rule: Rule<
 
     // Check all history for all teams
     for (const [teamId, compositions] of Object.entries(tournamentState.history)) {
-      const team = tournamentState.teams.find((t) => t.id === teamId);
+      const team = teams.find((t) => t.id === teamId);
       if (!team) continue;
 
       const otherDivisionIndex = divisionOrder.indexOf(team.division);

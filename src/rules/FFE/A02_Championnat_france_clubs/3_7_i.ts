@@ -9,9 +9,9 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
   Nationalité française : en Top 16, N1, et N2, chaque équipe doit inscrire sur la feuille
   de match au moins un joueur français et au moins une joueuse française.
   `,
-  validate(tournamentState, currentTeams, teamToValidate) {
+  validate(teams, _tournamentState, currentTeams, teamToValidate) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
-    const teamInfo = tournamentState.teams.find((team) => team.id === teamToValidate);
+    const teamInfo = teams.find((team) => team.id === teamToValidate);
     if (!teamPlayers || !teamInfo) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
     }

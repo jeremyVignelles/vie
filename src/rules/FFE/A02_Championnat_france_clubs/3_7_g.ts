@@ -1,9 +1,15 @@
-import { Rule, TournamentState, Violation } from "../../../types";
-import { PlayerChampionnatFranceClub, TeamChampionnatFranceClub } from "./types";
+import { Arbiter, Player, Rule, TournamentState, Violation } from "../../../types";
+import { TeamChampionnatFranceClub, TeamCompositionChampionnatFranceClub } from "./types";
 
 const id = "A02-3.7.g";
 
-const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceClub> = {
+const rule: Rule<
+  typeof id,
+  Player,
+  TeamChampionnatFranceClub,
+  Arbiter,
+  TeamCompositionChampionnatFranceClub
+> = {
   id,
   description: `
   Joueuses et joueurs mutés : pour chaque match, une équipe ne peut aligner plus de 3 personnes
@@ -27,12 +33,13 @@ export function makeTransferredRuleValidator(
   divisionFilter?: (division: string) => boolean,
 ) {
   return function validate(
-    tournamentState: TournamentState<PlayerChampionnatFranceClub, TeamChampionnatFranceClub, any>,
-    currentTeams: any[],
+    teams: TeamChampionnatFranceClub[],
+    _tournamentState: TournamentState,
+    currentTeams: TeamCompositionChampionnatFranceClub[],
     teamToValidate: string,
   ) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
-    const teamInfo = tournamentState.teams.find((team) => team.id === teamToValidate);
+    const teamInfo = teams.find((team) => team.id === teamToValidate);
     if (!teamPlayers || !teamInfo) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
     }

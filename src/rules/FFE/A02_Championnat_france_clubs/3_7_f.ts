@@ -1,20 +1,9 @@
-import { Rule, TournamentState, Violation } from "../../../types";
-import { ArbiterFFE } from "../R01_Regles_generales/types";
-import {
-  PlayerChampionnatFranceClub,
-  TeamChampionnatFranceClub,
-  TeamCompositionChampionnatFranceClub,
-} from "./types";
+import { Player, Rule, TournamentState, Violation } from "../../../types";
+import { TeamChampionnatFranceClub, TeamCompositionChampionnatFranceClub } from "./types";
 
 const id = "A02-3.7.f";
 
-const rule: Rule<
-  typeof id,
-  PlayerChampionnatFranceClub,
-  TeamChampionnatFranceClub,
-  ArbiterFFE,
-  TeamCompositionChampionnatFranceClub
-> = {
+const rule: Rule<typeof id, Player, TeamChampionnatFranceClub> = {
   id,
   description: `
   Noyau de l'équipe : en N1, N2 et N3, chaque équipe doit aligner à chaque ronde
@@ -36,18 +25,13 @@ export function makeCoreRuleValidator(
   ruleId: string = id,
 ) {
   return function validate(
-    tournamentState: TournamentState<
-      PlayerChampionnatFranceClub,
-      TeamChampionnatFranceClub,
-      any,
-      ArbiterFFE,
-      TeamCompositionChampionnatFranceClub
-    >,
+    teams: TeamChampionnatFranceClub[],
+    tournamentState: TournamentState<TeamCompositionChampionnatFranceClub>,
     currentTeams: TeamCompositionChampionnatFranceClub[],
     teamToValidate: string,
   ) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
-    const teamInfo = tournamentState.teams.find((team) => team.id === teamToValidate);
+    const teamInfo = teams.find((team) => team.id === teamToValidate);
     const currentComposition = currentTeams.find((team) => team.teamId === teamToValidate);
     if (!teamPlayers || !teamInfo || !currentComposition) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);

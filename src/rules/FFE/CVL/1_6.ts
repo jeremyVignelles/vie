@@ -1,28 +1,23 @@
-import { Rule, Violation } from "../../../types";
-import {
-  PlayerChampionnatFranceClub,
-  TeamChampionnatFranceClub,
-} from "../A02_Championnat_france_clubs/types";
+import { Player, Rule, Violation } from "../../../types";
+import { TeamChampionnatFranceClub } from "../A02_Championnat_france_clubs/types";
 
 const id = "CVL-1.6";
 
-const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceClub> = {
+const rule: Rule<typeof id, Player, TeamChampionnatFranceClub> = {
   id,
   description: `
   En Ligue CVL, dans les divisions de Régionale 1 et 2, un joueur ne peut pas jouer dans
   plusieurs équipes d’une même division, que ces équipes soient dans le même groupe ou non.
   La Nationale IV reste régie par le règlement fédéral (A02)
   `,
-  validate(tournamentState, currentTeams, teamToValidate) {
+  validate(teams, tournamentState, currentTeams, teamToValidate) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
-    const teamInfo = tournamentState.teams.find((team) => team.id === teamToValidate);
+    const teamInfo = teams.find((team) => team.id === teamToValidate);
     if (!teamPlayers || !teamInfo) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
     }
 
-    const teamsInSameDivision = tournamentState.teams.filter(
-      (team) => team.division === teamInfo.division,
-    );
+    const teamsInSameDivision = teams.filter((team) => team.division === teamInfo.division);
     const violations: Violation[] = [];
 
     for (const [index, player] of teamPlayers.entries()) {

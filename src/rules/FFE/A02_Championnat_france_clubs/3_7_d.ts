@@ -1,23 +1,23 @@
-import { Rule, Violation } from "../../../types";
-import { PlayerChampionnatFranceClub, TeamChampionnatFranceClub } from "./types";
+import { Player, Rule, Violation } from "../../../types";
+import { TeamChampionnatFranceClub } from "./types";
 
 const id = "A02-3.7.d";
 
-const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceClub> = {
+const rule: Rule<typeof id, Player, TeamChampionnatFranceClub> = {
   id,
   description: `
   Participation dans un même groupe : Lorsqu'un club a plusieurs équipes engagées
   dans un même groupe, la participation d’un joueur ou d'une joueuse à plusieurs
   équipes de ce même groupe est interdite, y compris d'éventuels barrages.
   `,
-  validate(tournamentState, currentTeams, teamToValidate) {
+  validate(teams, tournamentState, currentTeams, teamToValidate) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
-    const teamInfo = tournamentState.teams.find((team) => team.id === teamToValidate);
+    const teamInfo = teams.find((team) => team.id === teamToValidate);
     if (!teamPlayers || !teamInfo) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
     }
 
-    const teamsInSameGroup = tournamentState.teams.filter(
+    const teamsInSameGroup = teams.filter(
       (team) => team.division === teamInfo.division && team.groupId === teamInfo.groupId,
     );
     const violations: Violation[] = [];
