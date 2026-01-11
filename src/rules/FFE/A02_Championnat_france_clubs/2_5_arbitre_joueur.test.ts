@@ -46,32 +46,23 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
     date: "2024-01-01",
   });
 
-  const createTournamentState = (
-    teams: TeamChampionnatFranceClub[],
-  ): TournamentState<
-    PlayerChampionnatFranceClub,
-    TeamChampionnatFranceClub,
-    any,
-    ArbiterFFE,
-    TeamCompositionChampionnatFranceClub
-  > => ({
-    teams,
+  const createTournamentState = (): TournamentState<TeamCompositionChampionnatFranceClub> => ({
     history: {},
   });
 
   it("devrait valider quand il n'y a pas d'arbitre désigné", () => {
     const teamInfo = createTeamInfo("team1", "N1");
-    const tournamentState = createTournamentState([teamInfo]);
+    const tournamentState = createTournamentState();
     const teamComposition = createTeamComposition("team1", [createPlayer("p1", "Player 1")], null);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([teamInfo], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
 
   it("devrait valider quand l'arbitre ne joue pas", () => {
     const teamInfo = createTeamInfo("team1", "N1");
-    const tournamentState = createTournamentState([teamInfo]);
+    const tournamentState = createTournamentState();
     const arbiter = createArbiter("a1", "Arbitre 1");
     const teamComposition = createTeamComposition(
       "team1",
@@ -79,7 +70,7 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
       arbiter,
     );
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([teamInfo], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -87,12 +78,12 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
   describe("Règle N1", () => {
     it("devrait détecter un arbitre qui joue en N1", () => {
       const teamInfo = createTeamInfo("team1", "N1");
-      const tournamentState = createTournamentState([teamInfo]);
+      const tournamentState = createTournamentState();
       const arbiter = createArbiter("a1", "Arbitre 1");
       const player = { ...createPlayer("a1", "Arbitre 1"), id: "a1" };
       const teamComposition = createTeamComposition("team1", [player], arbiter);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([teamInfo], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0]).toMatchObject({
@@ -107,7 +98,7 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
     it("devrait détecter un arbitre qui joue dans une autre division en N1", () => {
       const team1Info = createTeamInfo("team1", "N1");
       const team2Info = createTeamInfo("team2", "N2");
-      const tournamentState = createTournamentState([team1Info, team2Info]);
+      const tournamentState = createTournamentState();
       const arbiter = createArbiter("a1", "Arbitre 1");
       const player = { ...createPlayer("a1", "Arbitre 1"), id: "a1" };
 
@@ -119,6 +110,7 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
       const team2Composition = createTeamComposition("team2", [player], null);
 
       const violations = rule.validate(
+        [team1Info, team2Info],
         tournamentState,
         [team1Composition, team2Composition],
         "team1",
@@ -133,12 +125,12 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
   describe("Règle N2", () => {
     it("devrait détecter un arbitre qui joue en N2", () => {
       const teamInfo = createTeamInfo("team1", "N2");
-      const tournamentState = createTournamentState([teamInfo]);
+      const tournamentState = createTournamentState();
       const arbiter = createArbiter("a1", "Arbitre 1");
       const player = { ...createPlayer("a1", "Arbitre 1"), id: "a1" };
       const teamComposition = createTeamComposition("team1", [player], arbiter);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([teamInfo], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0].message).toContain("En N2");
@@ -149,12 +141,12 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
   describe("Règle N3", () => {
     it("devrait valider quand l'arbitre joue dans le match qu'il arbitre", () => {
       const teamInfo = createTeamInfo("team1", "N3");
-      const tournamentState = createTournamentState([teamInfo]);
+      const tournamentState = createTournamentState();
       const arbiter = createArbiter("a1", "Arbitre 1");
       const player = { ...createPlayer("a1", "Arbitre 1"), id: "a1" };
       const teamComposition = createTeamComposition("team1", [player], arbiter);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([teamInfo], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -162,7 +154,7 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
     it("devrait détecter un arbitre qui joue dans un autre match en N3", () => {
       const team1Info = createTeamInfo("team1", "N3");
       const team2Info = createTeamInfo("team2", "N3");
-      const tournamentState = createTournamentState([team1Info, team2Info]);
+      const tournamentState = createTournamentState();
       const arbiter = createArbiter("a1", "Arbitre 1");
       const player = { ...createPlayer("a1", "Arbitre 1"), id: "a1" };
 
@@ -174,6 +166,7 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
       const team2Composition = createTeamComposition("team2", [player], null);
 
       const violations = rule.validate(
+        [team1Info, team2Info],
         tournamentState,
         [team1Composition, team2Composition],
         "team1",
@@ -189,7 +182,7 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
     it("devrait valider quand l'arbitre joue en N4 et arbitre max 2 matches", () => {
       const team1Info = createTeamInfo("team1", "N4");
       const team2Info = createTeamInfo("team2", "N4");
-      const tournamentState = createTournamentState([team1Info, team2Info]);
+      const tournamentState = createTournamentState();
       const arbiter = createArbiter("a1", "Arbitre 1");
       const player = { ...createPlayer("a1", "Arbitre 1"), id: "a1" };
 
@@ -201,6 +194,7 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
       );
 
       const violations = rule.validate(
+        [team1Info, team2Info],
         tournamentState,
         [team1Composition, team2Composition],
         "team1",
@@ -213,7 +207,7 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
       const team1Info = createTeamInfo("team1", "N4");
       const team2Info = createTeamInfo("team2", "N4");
       const team3Info = createTeamInfo("team3", "N4");
-      const tournamentState = createTournamentState([team1Info, team2Info, team3Info]);
+      const tournamentState = createTournamentState();
       const arbiter = createArbiter("a1", "Arbitre 1");
       const player = { ...createPlayer("a1", "Arbitre 1"), id: "a1" };
 
@@ -230,6 +224,7 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
       );
 
       const violations = rule.validate(
+        [team1Info, team2Info, team3Info],
         tournamentState,
         [team1Composition, team2Composition, team3Composition],
         "team1",
@@ -243,7 +238,7 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
     it("devrait détecter un arbitre qui joue dans une division supérieure à N4", () => {
       const team1Info = createTeamInfo("team1", "N3");
       const team2Info = createTeamInfo("team2", "N4");
-      const tournamentState = createTournamentState([team1Info, team2Info]);
+      const tournamentState = createTournamentState();
       const arbiter = createArbiter("a1", "Arbitre 1");
       const player = { ...createPlayer("a1", "Arbitre 1"), id: "a1" };
 
@@ -256,6 +251,7 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
       const team2Composition = createTeamComposition("team2", [player], null);
 
       const violations = rule.validate(
+        [team1Info, team2Info],
         tournamentState,
         [team1Composition, team2Composition],
         "team1",
@@ -268,26 +264,26 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
   });
 
   it("devrait lever une erreur si l'équipe n'est pas trouvée dans tournamentState", () => {
-    const tournamentState = createTournamentState([]);
+    const tournamentState = createTournamentState();
     const teamComposition = createTeamComposition("team1", [], null);
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team1");
+      rule.validate([], tournamentState, [teamComposition], "team1");
     }).toThrow("Équipe avec l'identifiant team1 non trouvée");
   });
 
   it("devrait lever une erreur si la composition de l'équipe n'est pas trouvée", () => {
     const teamInfo = createTeamInfo("team1", "N1");
-    const tournamentState = createTournamentState([teamInfo]);
+    const tournamentState = createTournamentState();
 
     expect(() => {
-      rule.validate(tournamentState, [], "team1");
+      rule.validate([teamInfo], tournamentState, [], "team1");
     }).toThrow("Équipe avec l'identifiant team1 non trouvée");
   });
 
   it("devrait détecter une division introuvable pour l'équipe dans laquelle l'arbitre joue", () => {
     const team1Info = createTeamInfo("team1", "N1");
-    const tournamentState = createTournamentState([team1Info]);
+    const tournamentState = createTournamentState();
     const arbiter = createArbiter("a1", "Arbitre 1");
     const player = { ...createPlayer("a1", "Arbitre 1"), id: "a1" };
 
@@ -299,6 +295,7 @@ describe("A02-2.5-arbitre-joueur - Règles arbitre/joueur", () => {
     const team2Composition = createTeamComposition("team2", [player], null);
 
     const violations = rule.validate(
+      [team1Info],
       tournamentState,
       [team1Composition, team2Composition],
       "team1",

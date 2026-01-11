@@ -14,14 +14,8 @@ describe("A02-3.7.i - Nationalité française", () => {
   const createTournamentState = (
     teams: TeamChampionnatFranceClub[],
     history: Record<string, TeamCompositionChampionnatFranceClub[]> = {},
-  ): TournamentState<
-    PlayerChampionnatFranceClub,
-    TeamChampionnatFranceClub,
-    any,
-    ArbiterFFE,
-    TeamCompositionChampionnatFranceClub
+  ): TournamentState<TeamCompositionChampionnatFranceClub
   > => ({
-    teams,
     history,
   });
 
@@ -75,7 +69,7 @@ describe("A02-3.7.i - Nationalité française", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -88,7 +82,7 @@ describe("A02-3.7.i - Nationalité française", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -101,7 +95,7 @@ describe("A02-3.7.i - Nationalité française", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -114,7 +108,7 @@ describe("A02-3.7.i - Nationalité française", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -127,7 +121,7 @@ describe("A02-3.7.i - Nationalité française", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -140,7 +134,7 @@ describe("A02-3.7.i - Nationalité française", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({
@@ -159,7 +153,7 @@ describe("A02-3.7.i - Nationalité française", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({
@@ -178,7 +172,7 @@ describe("A02-3.7.i - Nationalité française", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(2);
     expect(violations[0].message).toContain("joueur de nationalité française");
@@ -195,7 +189,7 @@ describe("A02-3.7.i - Nationalité française", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3, player4]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(2);
     expect(violations[0].boardNumber).toBe(null);
@@ -210,7 +204,7 @@ describe("A02-3.7.i - Nationalité française", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1, null, player2, null]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -225,7 +219,7 @@ describe("A02-3.7.i - Nationalité française", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3, player4]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -238,7 +232,7 @@ describe("A02-3.7.i - Nationalité française", () => {
     const teamComposition = createTeamComposition("team1", [player1]);
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team999");
+      rule.validate([team1], tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
   });
 });

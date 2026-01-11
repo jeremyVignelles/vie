@@ -14,14 +14,8 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
   const createTournamentState = (
     teams: TeamChampionnatFranceClub[],
     history: Record<string, TeamCompositionChampionnatFranceClub[]> = {},
-  ): TournamentState<
-    PlayerChampionnatFranceClub,
-    TeamChampionnatFranceClub,
-    any,
-    ArbiterFFE,
-    TeamCompositionChampionnatFranceClub
+  ): TournamentState<TeamCompositionChampionnatFranceClub
   > => ({
-    teams,
     history,
   });
 
@@ -67,7 +61,7 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
     const player1 = createPlayer("p1", "Joueur 1");
     const teamComposition = createTeamComposition("team2", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toEqual([]);
   });
@@ -87,7 +81,7 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
 
     const teamComposition = createTeamComposition("team2", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toEqual([]);
   });
@@ -108,7 +102,7 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
 
     const teamComposition = createTeamComposition("team2", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({
@@ -137,7 +131,7 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
 
     const teamComposition = createTeamComposition("team2", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({
@@ -166,7 +160,7 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
 
     const teamComposition = createTeamComposition("team3", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team3");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team3");
 
     expect(violations).toHaveLength(1);
     expect(violations[0].message).toContain("a déjà joué 3 fois");
@@ -189,7 +183,7 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
 
     const teamComposition = createTeamComposition("team2", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toEqual([]);
   });
@@ -212,7 +206,7 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
 
     const teamComposition = createTeamComposition("team2", [player1, player2, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toHaveLength(2);
     expect(violations[0].boardNumber).toBe(1);
@@ -235,7 +229,7 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
 
     const teamComposition = createTeamComposition("team2", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toHaveLength(1);
     expect(violations[0].message).toContain("a déjà joué 3 fois");
@@ -257,7 +251,7 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
 
     const teamComposition = createTeamComposition("team2", [null, player1, null]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toHaveLength(1);
     expect(violations[0].boardNumber).toBe(2);
@@ -270,7 +264,7 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
     const player1 = createPlayer("p1", "Joueur 1");
     const teamComposition = createTeamComposition("team1", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -283,7 +277,7 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
     const player1 = createPlayer("p1", "Joueur 1");
     const teamComposition = createTeamComposition("team2", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toEqual([]);
   });
@@ -305,7 +299,7 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
 
     const teamComposition = createTeamComposition("team2", [player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toEqual([]);
   });
@@ -318,7 +312,7 @@ describe("A02-3.7.c - Participation dans plusieurs équipes", () => {
     const teamComposition = createTeamComposition("team1", [player1]);
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team999");
+      rule.validate([team1], tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
   });
 });

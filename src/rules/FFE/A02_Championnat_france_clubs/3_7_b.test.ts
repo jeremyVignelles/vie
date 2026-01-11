@@ -14,14 +14,8 @@ describe("A02-3.7.b - Force des équipes", () => {
   const createTournamentState = (
     teams: TeamChampionnatFranceClub[],
     history: Record<string, TeamCompositionChampionnatFranceClub[]> = {},
-  ): TournamentState<
-    PlayerChampionnatFranceClub,
-    TeamChampionnatFranceClub,
-    any,
-    ArbiterFFE,
-    TeamCompositionChampionnatFranceClub
+  ): TournamentState<TeamCompositionChampionnatFranceClub
   > => ({
-    teams,
     history,
   });
 
@@ -193,7 +187,7 @@ describe("A02-3.7.b - Force des équipes", () => {
 
     const team2Composition = createTeamComposition("team2", [player2a, player2b]);
 
-    const violations = rule.validate(tournamentState, [team2Composition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [team2Composition], "team2");
 
     expect(violations).toEqual([]);
   });
@@ -215,7 +209,7 @@ describe("A02-3.7.b - Force des équipes", () => {
 
     const team2Composition = createTeamComposition("team2", [player2a, player2b]);
 
-    const violations = rule.validate(tournamentState, [team2Composition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [team2Composition], "team2");
 
     expect(violations).toEqual([]);
   });
@@ -230,7 +224,7 @@ describe("A02-3.7.b - Force des équipes", () => {
 
     const team2Composition = createTeamComposition("team2", [player2a, player2b]);
 
-    const violations = rule.validate(tournamentState, [team2Composition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [team2Composition], "team2");
 
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({
@@ -251,7 +245,7 @@ describe("A02-3.7.b - Force des équipes", () => {
 
     const team1Composition = createTeamComposition("team1", [player1a, player1b]);
 
-    const violations = rule.validate(tournamentState, [team1Composition], "team1");
+    const violations = rule.validate([team1], tournamentState, [team1Composition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -313,7 +307,7 @@ describe("A02-3.7.b - Force des équipes", () => {
     const teamComposition = createTeamComposition("team1", [player1]);
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team999");
+      rule.validate([team1], tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
   });
 });

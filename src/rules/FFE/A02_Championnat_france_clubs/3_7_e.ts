@@ -1,18 +1,13 @@
-import { Rule, Violation } from "../../../types";
-import { ArbiterFFE } from "../R01_Regles_generales/types";
-import {
-  PlayerChampionnatFranceClub,
-  TeamChampionnatFranceClub,
-  TeamCompositionChampionnatFranceClub,
-} from "./types";
+import { Arbiter, Player, Rule, Violation } from "../../../types";
+import { TeamChampionnatFranceClub, TeamCompositionChampionnatFranceClub } from "./types";
 
 const id = "A02-3.7.e";
 
 const rule: Rule<
   typeof id,
-  PlayerChampionnatFranceClub,
+  Player,
   TeamChampionnatFranceClub,
-  ArbiterFFE,
+  Arbiter,
   TeamCompositionChampionnatFranceClub
 > = {
   id,
@@ -22,9 +17,9 @@ const rule: Rule<
   Précision : en Top 16, tout joueur/joueuse dépassant le total de 11 rondes jouées dans la
   saison dans le championnat de France des clubs, est sanctionné.
   `,
-  validate(tournamentState, currentTeams, teamToValidate) {
+  validate(teams, tournamentState, currentTeams, teamToValidate) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
-    const teamInfo = tournamentState.teams.find((team) => team.id === teamToValidate);
+    const teamInfo = teams.find((team) => team.id === teamToValidate);
     const currentComposition = currentTeams.find((team) => team.teamId === teamToValidate);
     if (!teamPlayers || !teamInfo || !currentComposition) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);

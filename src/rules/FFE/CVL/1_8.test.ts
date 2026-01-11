@@ -14,14 +14,8 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
   const createTournamentState = (
     teams: TeamChampionnatFranceClub[],
     history: Record<string, TeamCompositionChampionnatFranceClub[]> = {},
-  ): TournamentState<
-    PlayerChampionnatFranceClub,
-    TeamChampionnatFranceClub,
-    any,
-    ArbiterFFE,
-    TeamCompositionChampionnatFranceClub
+  ): TournamentState<TeamCompositionChampionnatFranceClub
   > => ({
-    teams,
     history,
   });
 
@@ -84,7 +78,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
       const tournamentState = createTournamentState([team1]);
       const teamComposition = createTeamComposition("team1", players);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -96,7 +90,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
       const tournamentState = createTournamentState([team1]);
       const teamComposition = createTeamComposition("team1", players);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -108,7 +102,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
       const tournamentState = createTournamentState([team1]);
       const teamComposition = createTeamComposition("team1", players);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0].ruleId).toBe("CVL-1.8");
@@ -124,7 +118,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
       const tournamentState = createTournamentState([team1]);
       const teamComposition = createTeamComposition("team1", players);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -138,7 +132,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
       const tournamentState = createTournamentState([team1]);
       const teamComposition = createTeamComposition("team1", players);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -150,7 +144,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
       const tournamentState = createTournamentState([team1]);
       const teamComposition = createTeamComposition("team1", players);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0].ruleId).toBe("CVL-1.8");
@@ -166,7 +160,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
       const tournamentState = createTournamentState([team1]);
       const teamComposition = createTeamComposition("team1", players);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -180,7 +174,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
       const tournamentState = createTournamentState([team1]);
       const teamComposition = createTeamComposition("team1", players);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -192,7 +186,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
       const tournamentState = createTournamentState([team1]);
       const teamComposition = createTeamComposition("team1", players);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0].ruleId).toBe("CVL-1.8");
@@ -209,7 +203,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
       const tournamentState = createTournamentState([team1]);
       const teamComposition = createTeamComposition("team1", players);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -221,7 +215,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
       const tournamentState = createTournamentState([team1]);
       const teamComposition = createTeamComposition("team1", players);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -233,7 +227,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
       const tournamentState = createTournamentState([team1]);
       const teamComposition = createTeamComposition("team1", players);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -255,7 +249,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
       null,
     ]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -268,7 +262,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
     const teamComposition = createTeamComposition("team1", [player1]);
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team999");
+      rule.validate([team1], tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
   });
 });

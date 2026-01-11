@@ -11,7 +11,7 @@ const version = "2025-2026";
 const link =
   "https://echecscentre-valdeloire.fr/wp-content/uploads/2025/09/Saison-2025-2026-Ligue-CVL-Reglement-des-interclubs-v1.0-Valide-Codir-CVL-2025-09-13-CTF-2025-09-10j-Google-Docs.pdf";
 
-export const ReglesGenerales = extendRuleset(
+export const InterclubsCVL = extendRuleset(
   ChampionnatDeFranceDesClubs,
   `Règles interclubs CVL (version ${version})`,
   link,

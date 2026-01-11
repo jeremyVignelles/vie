@@ -3,8 +3,7 @@ import rule from "./3_6_a";
 import { TournamentState, TeamComposition } from "../../../types";
 
 describe("A02-3.6.a - Pas de trous dans la composition", () => {
-  const createTournamentState = (): TournamentState<any, any, any, any> => ({
-    teams: [],
+  const createTournamentState = (): TournamentState => ({
     history: {},
   });
 
@@ -27,7 +26,7 @@ describe("A02-3.6.a - Pas de trous dans la composition", () => {
     const player3 = createPlayer("p3", "Joueur 3");
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -39,7 +38,7 @@ describe("A02-3.6.a - Pas de trous dans la composition", () => {
     const player2 = createPlayer("p2", "Joueur 2");
     const teamComposition = createTeamComposition("team1", [player1, player2, null, null]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -51,7 +50,7 @@ describe("A02-3.6.a - Pas de trous dans la composition", () => {
     const player2 = createPlayer("p2", "Joueur 2");
     const teamComposition = createTeamComposition("team1", [player1, null, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({
@@ -70,7 +69,7 @@ describe("A02-3.6.a - Pas de trous dans la composition", () => {
     const player3 = createPlayer("p3", "Joueur 3");
     const teamComposition = createTeamComposition("team1", [player1, null, player2, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0].boardNumber).toBe(3);
@@ -83,7 +82,7 @@ describe("A02-3.6.a - Pas de trous dans la composition", () => {
     const player2 = createPlayer("p2", "Joueur 2");
     const teamComposition = createTeamComposition("team1", [player1, player2, null, null, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0].boardNumber).toBe(5);
@@ -94,7 +93,7 @@ describe("A02-3.6.a - Pas de trous dans la composition", () => {
 
     const teamComposition = createTeamComposition("team1", [null, null, null]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -104,7 +103,7 @@ describe("A02-3.6.a - Pas de trous dans la composition", () => {
 
     const teamComposition = createTeamComposition("team1", [null, null, null]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -124,7 +123,7 @@ describe("A02-3.6.a - Pas de trous dans la composition", () => {
       player4,
     ]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0].boardNumber).toBe(5);
@@ -137,7 +136,7 @@ describe("A02-3.6.a - Pas de trous dans la composition", () => {
     const teamComposition = createTeamComposition("team1", [player1]);
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team999");
+      rule.validate([], tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
   });
 });

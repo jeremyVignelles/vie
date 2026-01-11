@@ -1,20 +1,10 @@
-import { Rule, TournamentState, Violation } from "../../../types";
+import { Player, Rule, TeamInfo, TournamentState, Violation } from "../../../types";
 import { ArbiterFFE } from "../R01_Regles_generales/types";
-import {
-  PlayerChampionnatFranceClub,
-  TeamChampionnatFranceClub,
-  TeamCompositionChampionnatFranceClub,
-} from "./types";
+import { TeamChampionnatFranceClub, TeamCompositionChampionnatFranceClub } from "./types";
 
 const id = "A02-2.5-titre-arbitre";
 
-const rule: Rule<
-  typeof id,
-  PlayerChampionnatFranceClub,
-  TeamChampionnatFranceClub,
-  ArbiterFFE,
-  TeamCompositionChampionnatFranceClub
-> = {
+const rule: Rule<typeof id, Player, TeamInfo, ArbiterFFE> = {
   id,
   description: `
   En Top 16, la direction de Nationale désigne les arbitres fédéraux après avis de la Direction Nationale de l'Arbitrage.
@@ -37,16 +27,12 @@ export function makeArbiterTitleValidator(
   ruleId: string = id,
 ) {
   return function validate(
-    tournamentState: TournamentState<
-      PlayerChampionnatFranceClub,
-      TeamChampionnatFranceClub,
-      any,
-      ArbiterFFE
-    >,
-    currentTeams: any[],
+    teams: TeamChampionnatFranceClub[],
+    _tournamentState: TournamentState,
+    currentTeams: TeamCompositionChampionnatFranceClub[],
     teamToValidate: string,
   ): Violation[] {
-    const teamInfo = tournamentState.teams.find((team) => team.id === teamToValidate);
+    const teamInfo = teams.find((team) => team.id === teamToValidate);
     const currentComposition = currentTeams.find((team) => team.teamId === teamToValidate);
 
     if (!teamInfo || !currentComposition) {

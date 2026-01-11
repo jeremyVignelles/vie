@@ -14,14 +14,8 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
   const createTournamentState = (
     teams: TeamChampionnatFranceClub[],
     history: Record<string, TeamCompositionChampionnatFranceClub[]> = {},
-  ): TournamentState<
-    PlayerChampionnatFranceClub,
-    TeamChampionnatFranceClub,
-    any,
-    ArbiterFFE,
-    TeamCompositionChampionnatFranceClub
+  ): TournamentState<TeamCompositionChampionnatFranceClub
   > => ({
-    teams,
     history,
   });
 
@@ -88,7 +82,7 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
       player8,
     ]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -116,7 +110,7 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
       player8,
     ]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     // Team violation (not individual boards)
     expect(violations.length).toBe(1);
@@ -143,7 +137,7 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
       player6,
     ]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -167,7 +161,7 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
       player6,
     ]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     // Team violation (not individual boards)
     expect(violations.length).toBe(1);
@@ -198,7 +192,7 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
       player8,
     ]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     // 4th foreign and all following boards should be sanctioned
     expect(violations.length).toBe(1); // Only board 8 (4th foreign)
@@ -228,7 +222,7 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
       player8,
     ]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -242,7 +236,7 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1, null, player2, null, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     // 3 non-null players, need max 3 qualified if > 6, but we have 3 so need 5 if > 6
     // Actually 3 <= 6, so need 4... but we only have 3 players total
@@ -264,7 +258,7 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3, player4]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -277,7 +271,7 @@ describe("A02-3.7.h - Nationalité étrangère", () => {
     const teamComposition = createTeamComposition("team1", [player1]);
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team999");
+      rule.validate([team1], tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
   });
 });
@@ -287,8 +281,7 @@ describe("makeQualifiedRuleValidator - Validateur personnalisé", () => {
 
   const createTournamentState = (
     teams: TeamChampionnatFranceClub[],
-  ): TournamentState<PlayerChampionnatFranceClub, TeamChampionnatFranceClub, any> => ({
-    teams,
+  ): TournamentState<any> => ({
     history: {},
   });
 

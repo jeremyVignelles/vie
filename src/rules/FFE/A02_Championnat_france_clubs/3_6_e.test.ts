@@ -4,8 +4,7 @@ import { TournamentState } from "../../../types";
 import { PlayerChampionnatFranceClub, TeamCompositionChampionnatFranceClub } from "./types";
 
 describe("A02-3.6.e - Ordre des joueurs par Elo", () => {
-  const createTournamentState = (): TournamentState<any, any, any, any> => ({
-    teams: [],
+  const createTournamentState = (): TournamentState<TeamCompositionChampionnatFranceClub> => ({
     history: {},
   });
 
@@ -37,7 +36,7 @@ describe("A02-3.6.e - Ordre des joueurs par Elo", () => {
     const player3 = createPlayer("p3", "Joueur 3", 2200);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -50,7 +49,7 @@ describe("A02-3.6.e - Ordre des joueurs par Elo", () => {
     const player3 = createPlayer("p3", "Joueur 3", 2300);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -63,7 +62,7 @@ describe("A02-3.6.e - Ordre des joueurs par Elo", () => {
     const player3 = createPlayer("p3", "Joueur 3", 2000);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -76,7 +75,7 @@ describe("A02-3.6.e - Ordre des joueurs par Elo", () => {
     const player3 = createPlayer("p3", "Joueur 3", 2300);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({
@@ -96,7 +95,7 @@ describe("A02-3.6.e - Ordre des joueurs par Elo", () => {
     const player2 = createPlayer("p2", "Joueur 2", 2450);
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({
@@ -117,7 +116,7 @@ describe("A02-3.6.e - Ordre des joueurs par Elo", () => {
     const player3 = createPlayer("p3", "Joueur 3", 2500);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(2);
     expect(violations[0].boardNumber).toBe(2);
@@ -131,7 +130,7 @@ describe("A02-3.6.e - Ordre des joueurs par Elo", () => {
     const player2 = createPlayer("p2", "Joueur 2", 2200);
     const teamComposition = createTeamComposition("team1", [player1, null, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -143,7 +142,7 @@ describe("A02-3.6.e - Ordre des joueurs par Elo", () => {
     const player2 = createPlayer("p2", "Joueur 2", 2450);
     const teamComposition = createTeamComposition("team1", [player1, null, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0].boardNumber).toBe(3);
@@ -156,7 +155,7 @@ describe("A02-3.6.e - Ordre des joueurs par Elo", () => {
     const teamComposition = createTeamComposition("team1", [player1]);
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team999");
+      rule.validate([], tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
   });
 });

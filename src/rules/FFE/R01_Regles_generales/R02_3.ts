@@ -1,9 +1,9 @@
-import { Rule } from "../../../types";
-import { ArbiterFFE, PlayerFFE, TeamCompositionFFE, TeamFFE } from "./types";
+import { Arbiter, Player, Rule, TeamInfo } from "../../../types";
+import { TeamCompositionFFE } from "./types";
 
 const id = "R02-3";
 
-const rule: Rule<typeof id, PlayerFFE, TeamFFE, ArbiterFFE, TeamCompositionFFE> = {
+const rule: Rule<typeof id, Player, TeamInfo, Arbiter, TeamCompositionFFE> = {
   id,
   description: `Il est interdit de jouer plusieurs parties à la fois
     en compétition par équipes (interclubs, coupes). Si une personne est
@@ -11,7 +11,7 @@ const rule: Rule<typeof id, PlayerFFE, TeamFFE, ArbiterFFE, TeamCompositionFFE> 
     le joueur ou la joueuse ne pourra débuter une
     deuxième partie qu'après avoir achevé la précédente.`,
 
-  validate(tournamentState, currentTeams, teamToValidate) {
+  validate(_teams, tournamentState, currentTeams, teamToValidate) {
     const teamComposition = currentTeams.find((team) => team.teamId === teamToValidate);
     if (!teamComposition) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);

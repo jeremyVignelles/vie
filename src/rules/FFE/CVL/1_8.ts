@@ -1,6 +1,5 @@
-import { Arbiter, Rule } from "../../../types";
+import { Arbiter, Player, Rule } from "../../../types";
 import {
-  PlayerChampionnatFranceClub,
   TeamChampionnatFranceClub,
   TeamCompositionChampionnatFranceClub,
 } from "../A02_Championnat_france_clubs/types";
@@ -13,7 +12,7 @@ const id = "CVL-1.8";
  */
 const rule: Rule<
   typeof id,
-  PlayerChampionnatFranceClub,
+  Player,
   TeamChampionnatFranceClub,
   Arbiter,
   TeamCompositionChampionnatFranceClub

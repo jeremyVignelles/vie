@@ -12,14 +12,7 @@ describe("CVL-1.9 - Nationalité étrangère (CVL)", () => {
 
   const createTournamentState = (
     teams: TeamChampionnatFranceClub[],
-  ): TournamentState<
-    PlayerChampionnatFranceClub,
-    TeamChampionnatFranceClub,
-    any,
-    any,
-    TeamCompositionChampionnatFranceClub
-  > => ({
-    teams,
+  ): TournamentState<TeamCompositionChampionnatFranceClub> => ({
     history: {},
   });
 
@@ -81,7 +74,7 @@ describe("CVL-1.9 - Nationalité étrangère (CVL)", () => {
         player6,
       ]);
 
-      const violations = R_1_9.validate(tournamentState, [teamComposition], "team1");
+      const violations = R_1_9.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(0);
     });
@@ -106,7 +99,7 @@ describe("CVL-1.9 - Nationalité étrangère (CVL)", () => {
         player6,
       ]);
 
-      const violations = R_1_9.validate(tournamentState, [teamComposition], "team1");
+      const violations = R_1_9.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0].ruleId).toBe("CVL-1.9");
@@ -134,7 +127,7 @@ describe("CVL-1.9 - Nationalité étrangère (CVL)", () => {
         player6,
       ]);
 
-      const violations = R_1_9.validate(tournamentState, [teamComposition], "team1");
+      const violations = R_1_9.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(0);
     });
@@ -152,7 +145,7 @@ describe("CVL-1.9 - Nationalité étrangère (CVL)", () => {
 
       const teamComposition = createTeamComposition("team1", [player1, player2, player3, player4]);
 
-      const violations = R_1_9.validate(tournamentState, [teamComposition], "team1");
+      const violations = R_1_9.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(0);
     });
@@ -168,7 +161,7 @@ describe("CVL-1.9 - Nationalité étrangère (CVL)", () => {
 
       const teamComposition = createTeamComposition("team1", [player1, player2, player3, player4]);
 
-      const violations = R_1_9.validate(tournamentState, [teamComposition], "team1");
+      const violations = R_1_9.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0].ruleId).toBe("CVL-1.9");
@@ -189,7 +182,7 @@ describe("CVL-1.9 - Nationalité étrangère (CVL)", () => {
 
       const teamComposition = createTeamComposition("team1", [player1, player2, player3, player4]);
 
-      const violations = R_1_9.validate(tournamentState, [teamComposition], "team1");
+      const violations = R_1_9.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(0);
     });
@@ -205,7 +198,7 @@ describe("CVL-1.9 - Nationalité étrangère (CVL)", () => {
 
       const teamComposition = createTeamComposition("team1", [player1, player2, player3, player4]);
 
-      const violations = R_1_9.validate(tournamentState, [teamComposition], "team1");
+      const violations = R_1_9.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0].ruleId).toBe("CVL-1.9");
@@ -226,7 +219,7 @@ describe("CVL-1.9 - Nationalité étrangère (CVL)", () => {
 
       const teamComposition = createTeamComposition("team1", [player1, player2, player3, player4]);
 
-      const violations = R_1_9.validate(tournamentState, [teamComposition], "team1");
+      const violations = R_1_9.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(0);
     });
@@ -242,7 +235,7 @@ describe("CVL-1.9 - Nationalité étrangère (CVL)", () => {
 
       const teamComposition = createTeamComposition("team1", [player1, player2, player3, player4]);
 
-      const violations = R_1_9.validate(tournamentState, [teamComposition], "team1");
+      const violations = R_1_9.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(0);
     });
@@ -258,7 +251,7 @@ describe("CVL-1.9 - Nationalité étrangère (CVL)", () => {
 
       const teamComposition = createTeamComposition("team1", [player1, player2, player3, player4]);
 
-      const violations = R_1_9.validate(tournamentState, [teamComposition], "team1");
+      const violations = R_1_9.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(0);
     });
@@ -283,7 +276,7 @@ describe("CVL-1.9 - Nationalité étrangère (CVL)", () => {
         null,
       ]);
 
-      const violations = R_1_9.validate(tournamentState, [teamComposition], "team1");
+      const violations = R_1_9.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(0);
     });
@@ -299,7 +292,7 @@ describe("CVL-1.9 - Nationalité étrangère (CVL)", () => {
 
       const teamComposition = createTeamComposition("team1", [player1, player2, player3, player4]);
 
-      const violations = R_1_9.validate(tournamentState, [teamComposition], "team1");
+      const violations = R_1_9.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(0);
     });
@@ -312,7 +305,7 @@ describe("CVL-1.9 - Nationalité étrangère (CVL)", () => {
       const teamComposition = createTeamComposition("team1", [player1]);
 
       expect(() => {
-        R_1_9.validate(tournamentState, [teamComposition], "team999");
+        R_1_9.validate([team1], tournamentState, [teamComposition], "team999");
       }).toThrow("Équipe avec l'identifiant team999 non trouvée");
     });
   });

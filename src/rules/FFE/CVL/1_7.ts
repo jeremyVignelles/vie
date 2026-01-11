@@ -1,20 +1,10 @@
-import { Arbiter, Rule } from "../../../types";
-import {
-  PlayerChampionnatFranceClub,
-  TeamChampionnatFranceClub,
-  TeamCompositionChampionnatFranceClub,
-} from "../A02_Championnat_france_clubs/types";
+import { Player, Rule } from "../../../types";
+import { TeamChampionnatFranceClub } from "../A02_Championnat_france_clubs/types";
 import { makeCoreRuleValidator } from "../A02_Championnat_france_clubs/3_7_f";
 
 const id = "CVL-1.7";
 
-const rule: Rule<
-  typeof id,
-  PlayerChampionnatFranceClub,
-  TeamChampionnatFranceClub,
-  Arbiter,
-  TeamCompositionChampionnatFranceClub
-> = {
+const rule: Rule<typeof id, Player, TeamChampionnatFranceClub> = {
   id,
   description: `
   Chaque équipe doit aligner au moins 3 joueurs (Nat. IV) ou 1 joueur (Régionales 1 & 2 – CVL)

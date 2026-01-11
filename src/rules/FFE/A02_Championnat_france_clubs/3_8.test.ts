@@ -13,14 +13,8 @@ describe("A02-3.8 - Forfaits sportifs", () => {
   const createTournamentState = (
     teams: TeamChampionnatFranceClub[],
     history: Record<string, TeamCompositionChampionnatFranceClub[]> = {},
-  ): TournamentState<
-    PlayerChampionnatFranceClub,
-    TeamChampionnatFranceClub,
-    any,
-    Arbiter,
-    TeamCompositionChampionnatFranceClub
+  ): TournamentState<TeamCompositionChampionnatFranceClub
   > => ({
-    teams,
     history,
   });
 
@@ -70,7 +64,7 @@ describe("A02-3.8 - Forfaits sportifs", () => {
       const player2 = createPlayer("p2", "Joueur 2", 2400, false);
       const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0]).toMatchObject({
@@ -90,7 +84,7 @@ describe("A02-3.8 - Forfaits sportifs", () => {
       const player3 = createPlayer("p3", "Joueur 3", 2300, false);
       const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(2);
       expect(violations[0].boardNumber).toBe(1);
@@ -107,7 +101,7 @@ describe("A02-3.8 - Forfaits sportifs", () => {
       const player2 = createPlayer("p2", "Joueur 2", 2400, false);
       const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(0);
     });
@@ -119,7 +113,7 @@ describe("A02-3.8 - Forfaits sportifs", () => {
       const player1 = createPlayer("p1", "Joueur 1", 2500, false);
       const teamComposition = createTeamComposition("team1", [player1, null]);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0].boardNumber).toBe(2);
@@ -136,7 +130,7 @@ describe("A02-3.8 - Forfaits sportifs", () => {
       const player2 = createPlayer("p2", "Joueur 2", 2200, false);
       const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0]).toMatchObject({
@@ -155,7 +149,7 @@ describe("A02-3.8 - Forfaits sportifs", () => {
       const player2 = createPlayer("p2", "Joueur 2", 2200, true);
       const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(2);
       expect(violations[0].boardNumber).toBe(1);
@@ -190,7 +184,7 @@ describe("A02-3.8 - Forfaits sportifs", () => {
       const player2 = createPlayer("p2", "Joueur 2", 2000, false);
       const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(0);
     });
@@ -219,7 +213,7 @@ describe("A02-3.8 - Forfaits sportifs", () => {
       const player2 = createPlayer("p2", "Joueur 2", 2000, false);
       const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0]).toMatchObject({
@@ -256,7 +250,7 @@ describe("A02-3.8 - Forfaits sportifs", () => {
       const player2 = createPlayer("p2", "Joueur 2", 2000, true);
       const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(2);
       expect(violations[0].boardNumber).toBe(1);
@@ -282,7 +276,7 @@ describe("A02-3.8 - Forfaits sportifs", () => {
       const player2 = createPlayer("p2", "Joueur 2", 2000, false);
       const teamComposition = createTeamComposition("team1", [null, player2]);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0].boardNumber).toBe(1);
@@ -311,7 +305,7 @@ describe("A02-3.8 - Forfaits sportifs", () => {
       const player1 = createPlayer("p1", "Joueur 1", 2000, true);
       const teamComposition = createTeamComposition("team1", [player1]);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0].boardNumber).toBe(1);
@@ -329,7 +323,7 @@ describe("A02-3.8 - Forfaits sportifs", () => {
       const player3 = createPlayer("p3", "Joueur 3", 1800, true);
       const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(0);
     });
@@ -343,7 +337,7 @@ describe("A02-3.8 - Forfaits sportifs", () => {
       const player1 = createPlayer("p1", "Joueur 1", 1800, true);
       const teamComposition = createTeamComposition("team1", [player1]);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(0);
     });

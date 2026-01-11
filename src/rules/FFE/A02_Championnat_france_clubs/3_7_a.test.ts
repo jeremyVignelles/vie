@@ -13,14 +13,8 @@ describe("A02-3.7.a - Règles Top 16", () => {
 
   const createTournamentState = (
     teams: TeamChampionnatFranceClub[],
-  ): TournamentState<
-    PlayerChampionnatFranceClub,
-    TeamChampionnatFranceClub,
-    any,
-    ArbiterFFE,
-    TeamCompositionChampionnatFranceClub
+  ): TournamentState<TeamCompositionChampionnatFranceClub
   > => ({
-    teams,
     history: {},
   });
 
@@ -68,7 +62,7 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const player1 = createPlayer("p1", "Joueur 1", 1800, "M", true);
     const teamComposition = createTeamComposition("team1", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -82,7 +76,7 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const player3 = createPlayer("p3", "Joueur 3", 2300, "M", false);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -96,7 +90,7 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const player3 = createPlayer("p3", "Joueur 3", 1900, "M", false);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({
@@ -115,7 +109,7 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", true);
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -129,7 +123,7 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const player3 = createPlayer("p3", "Joueuse 3", 1800, "F", true); // Deuxième joueuse française avec Elo < 2000
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({
@@ -149,7 +143,7 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const player3 = createPlayer("p3", "Joueur 3", 1700, "M", false);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
     // 3 violations pour les Elo < 2000
     expect(violations).toHaveLength(3);
@@ -163,7 +157,7 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const player2 = createPlayer("p2", "Joueuse 2", 1800, "F", true);
     const teamComposition = createTeamComposition("team1", [player1, null, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -176,7 +170,7 @@ describe("A02-3.7.a - Règles Top 16", () => {
     const teamComposition = createTeamComposition("team1", [player1]);
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team999");
+      rule.validate([team], tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
   });
 });

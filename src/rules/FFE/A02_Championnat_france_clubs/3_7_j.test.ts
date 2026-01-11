@@ -14,14 +14,8 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
   const createTournamentState = (
     teams: TeamChampionnatFranceClub[],
     history: Record<string, TeamCompositionChampionnatFranceClub[]> = {},
-  ): TournamentState<
-    PlayerChampionnatFranceClub,
-    TeamChampionnatFranceClub,
-    any,
-    ArbiterFFE,
-    TeamCompositionChampionnatFranceClub
+  ): TournamentState<TeamCompositionChampionnatFranceClub
   > => ({
-    teams,
     history,
   });
 
@@ -71,7 +65,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -83,7 +77,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -95,7 +89,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -111,7 +105,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const tournamentState = createTournamentState([team1, team2, team3]);
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1, team2, team3], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -127,7 +121,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const tournamentState = createTournamentState([team1, team2, team3]);
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1, team2, team3], tournamentState, [teamComposition], "team1");
 
     expect(violations.length).toBeGreaterThan(0);
     expect(violations[0]).toMatchObject({
@@ -147,7 +141,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const tournamentState = createTournamentState([team1, team2]);
     const teamComposition = createTeamComposition("team1", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -160,7 +154,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -178,7 +172,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const tournamentState = createTournamentState([team1, team2, team3]);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3, player4]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1, team2, team3], tournamentState, [teamComposition], "team1");
 
     // Only player 2 (board 2) with Elo > 2400 should be sanctioned
     expect(violations.length).toBe(1);
@@ -195,7 +189,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const tournamentState = createTournamentState([team1, team2, team3]);
     const teamComposition = createTeamComposition("team1", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1, team2, team3], tournamentState, [teamComposition], "team1");
 
     expect(violations.length).toBeGreaterThan(0);
   });
@@ -210,7 +204,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const tournamentState = createTournamentState([team1, team2, team3]);
     const teamComposition = createTeamComposition("team1", [player1]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1, team2, team3], tournamentState, [teamComposition], "team1");
 
     // Now counts all teams in higher divisions, so violations should be reported
     expect(violations.length).toBe(1);
@@ -228,7 +222,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const tournamentState = createTournamentState([team1, team2, team3]);
     const teamComposition = createTeamComposition("team1", [player1, null, player2, null]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1, team2, team3], tournamentState, [teamComposition], "team1");
 
     expect(violations.length).toBe(1);
     expect(violations[0].boardNumber).toBe(3);
@@ -242,7 +236,7 @@ describe("A02-3.7.j - Elo en N4 et division inferieure", () => {
     const teamComposition = createTeamComposition("team1", [player1]);
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team999");
+      rule.validate([team1], tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
   });
 });

@@ -1,17 +1,10 @@
 import { describe, it, expect } from "vitest";
 import rule from "./1_5";
 import { TournamentState } from "../../../types";
-import { ArbiterFFE, PlayerFFE, TeamCompositionFFE } from "./types";
+import { PlayerFFE, TeamCompositionFFE } from "./types";
 
 describe("R01-1.5 - Interdiction joueurs RUS et BLR", () => {
-  const createTournamentState = (): TournamentState<
-    PlayerFFE,
-    any,
-    any,
-    ArbiterFFE,
-    TeamCompositionFFE
-  > => ({
-    teams: [],
+  const createTournamentState = (): TournamentState<TeamCompositionFFE> => ({
     history: {},
   });
 
@@ -41,7 +34,7 @@ describe("R01-1.5 - Interdiction joueurs RUS et BLR", () => {
     const player3 = createPlayer("p3", "Joueur 3", "GER");
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -53,7 +46,7 @@ describe("R01-1.5 - Interdiction joueurs RUS et BLR", () => {
     const player2 = createPlayer("p2", "Joueur 2", "RUS");
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({
@@ -71,7 +64,7 @@ describe("R01-1.5 - Interdiction joueurs RUS et BLR", () => {
     const player2 = createPlayer("p2", "Joueur 2", "BLR");
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({
@@ -90,7 +83,7 @@ describe("R01-1.5 - Interdiction joueurs RUS et BLR", () => {
     const player3 = createPlayer("p3", "Joueur 3", "FRA");
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(2);
     expect(violations[0].boardNumber).toBe(1);
@@ -103,7 +96,7 @@ describe("R01-1.5 - Interdiction joueurs RUS et BLR", () => {
     const player1 = createPlayer("p1", "Joueur 1", "FRA");
     const teamComposition = createTeamComposition("team1", [player1, null, null]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -115,7 +108,7 @@ describe("R01-1.5 - Interdiction joueurs RUS et BLR", () => {
     const teamComposition = createTeamComposition("team1", [player1]);
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team999");
+      rule.validate([], tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
   });
 });

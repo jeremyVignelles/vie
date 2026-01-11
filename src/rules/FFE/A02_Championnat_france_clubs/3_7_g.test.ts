@@ -14,14 +14,8 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
   const createTournamentState = (
     teams: TeamChampionnatFranceClub[],
     history: Record<string, TeamCompositionChampionnatFranceClub[]> = {},
-  ): TournamentState<
-    PlayerChampionnatFranceClub,
-    TeamChampionnatFranceClub,
-    any,
-    ArbiterFFE,
-    TeamCompositionChampionnatFranceClub
+  ): TournamentState<TeamCompositionChampionnatFranceClub
   > => ({
-    teams,
     history,
   });
 
@@ -88,7 +82,7 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
       player8,
     ]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -116,7 +110,7 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
       player8,
     ]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     // Team violation (not individual boards)
     expect(violations.length).toBe(1);
@@ -143,7 +137,7 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
       player6,
     ]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -167,7 +161,7 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
       player6,
     ]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     // Team violation (not individual boards)
     expect(violations.length).toBe(1);
@@ -194,7 +188,7 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
       player6,
     ]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     // Team violation (not individual boards)
     expect(violations.length).toBe(1);
@@ -219,7 +213,7 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
       player4,
     ]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     // 6 positions total, so max 2 transferred allowed, which we have exactly
     expect(violations).toEqual([]);
@@ -235,7 +229,7 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
     const tournamentState = createTournamentState([team1]);
     const teamComposition = createTeamComposition("team1", [player1, player2, player3, player4]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -248,7 +242,7 @@ describe("A02-3.7.g - Joueuses et joueurs mutés", () => {
     const teamComposition = createTeamComposition("team1", [player1]);
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team999");
+      rule.validate([team1], tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
   });
 

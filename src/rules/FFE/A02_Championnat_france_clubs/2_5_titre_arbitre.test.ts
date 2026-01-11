@@ -52,14 +52,7 @@ describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
 
   const createTournamentState = (
     teams: TeamChampionnatFranceClub[],
-  ): TournamentState<
-    PlayerChampionnatFranceClub,
-    TeamChampionnatFranceClub,
-    any,
-    ArbiterFFE,
-    TeamCompositionChampionnatFranceClub
-  > => ({
-    teams,
+  ): TournamentState<TeamCompositionChampionnatFranceClub> => ({
     history: {},
   });
 
@@ -89,7 +82,12 @@ describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
               arbiter,
             );
 
-            const violations = rule.validate(tournamentState, [teamComposition], "team1");
+            const violations = rule.validate(
+              [teamInfo],
+              tournamentState,
+              [teamComposition],
+              "team1",
+            );
 
             expect(violations).toEqual([]);
           });
@@ -106,7 +104,12 @@ describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
               arbiter,
             );
 
-            const violations = rule.validate(tournamentState, [teamComposition], "team1");
+            const violations = rule.validate(
+              [teamInfo],
+              tournamentState,
+              [teamComposition],
+              "team1",
+            );
 
             expect(violations).toHaveLength(1);
             expect(violations[0]).toMatchObject({
@@ -128,7 +131,7 @@ describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
             null,
           );
 
-          const violations = rule.validate(tournamentState, [teamComposition], "team1");
+          const violations = rule.validate([teamInfo], tournamentState, [teamComposition], "team1");
 
           expect(violations).toHaveLength(1);
           expect(violations[0].message).toContain("Aucun arbitre n'est sélectionné");
@@ -147,7 +150,7 @@ describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
         null,
       );
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([teamInfo], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -162,7 +165,7 @@ describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
         arbiter,
       );
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([teamInfo], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -171,9 +174,10 @@ describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
   it("devrait lever une erreur si l'équipe n'est pas trouvée dans tournamentState", () => {
     const tournamentState = createTournamentState([]);
     const teamComposition = createTeamComposition("team1", [], null);
+    const teamInfo = createTeamInfo("team1", "R1");
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team1");
+      rule.validate([teamInfo], tournamentState, [teamComposition], "team1");
     }).toThrow("Équipe avec l'identifiant team1 non trouvée");
   });
 
@@ -182,7 +186,7 @@ describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
     const tournamentState = createTournamentState([teamInfo]);
 
     expect(() => {
-      rule.validate(tournamentState, [], "team1");
+      rule.validate([teamInfo], tournamentState, [], "team1");
     }).toThrow("Équipe avec l'identifiant team1 non trouvée");
   });
 });
@@ -231,14 +235,7 @@ describe("makeArbiterTitleValidator - Fonction utilitaire", () => {
 
   const createTournamentState = (
     teams: TeamChampionnatFranceClub[],
-  ): TournamentState<
-    PlayerChampionnatFranceClub,
-    TeamChampionnatFranceClub,
-    any,
-    ArbiterFFE,
-    TeamCompositionChampionnatFranceClub
-  > => ({
-    teams,
+  ): TournamentState<TeamCompositionChampionnatFranceClub> => ({
     history: {},
   });
 

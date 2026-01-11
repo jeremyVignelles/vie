@@ -12,16 +12,8 @@ describe("CVL-1.6 - Interdiction de jouer dans plusieurs équipes de même divis
   const mockRuleset = { name: "Test", rules: [] };
 
   const createTournamentState = (
-    teams: TeamChampionnatFranceClub[],
     history: Record<string, TeamCompositionChampionnatFranceClub[]> = {},
-  ): TournamentState<
-    PlayerChampionnatFranceClub,
-    TeamChampionnatFranceClub,
-    any,
-    ArbiterFFE,
-    TeamCompositionChampionnatFranceClub
-  > => ({
-    teams,
+  ): TournamentState<TeamCompositionChampionnatFranceClub> => ({
     history,
   });
 
@@ -82,11 +74,11 @@ describe("CVL-1.6 - Interdiction de jouer dans plusieurs équipes de même divis
       team1: [createTeamComposition("team1", [players[0], players[1]], 1)],
     };
 
-    const tournamentState = createTournamentState([team1, team2], history);
+    const tournamentState = createTournamentState(history);
     // Team2 uses different players (3-4)
     const teamComposition = createTeamComposition("team2", [players[2], players[3]], 2);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toEqual([]);
   });
@@ -101,11 +93,11 @@ describe("CVL-1.6 - Interdiction de jouer dans plusieurs équipes de même divis
       team1: [createTeamComposition("team1", [players[0], players[1]], 1)],
     };
 
-    const tournamentState = createTournamentState([team1, team2], history);
+    const tournamentState = createTournamentState(history);
     // Team2 tries to use player 1 in round 2
     const teamComposition = createTeamComposition("team2", [players[0], players[2], players[3]], 2);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toHaveLength(1);
     expect(violations[0].ruleId).toBe("CVL-1.6");
@@ -126,7 +118,7 @@ describe("CVL-1.6 - Interdiction de jouer dans plusieurs équipes de même divis
       team1: [createTeamComposition("team1", players.slice(0, 4), 1)],
     };
 
-    const tournamentState = createTournamentState([team1, team2], history);
+    const tournamentState = createTournamentState(history);
     // Team2 tries to use players 1 and 2
     const teamComposition = createTeamComposition(
       "team2",
@@ -134,7 +126,7 @@ describe("CVL-1.6 - Interdiction de jouer dans plusieurs équipes de même divis
       2,
     );
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toHaveLength(2);
     expect(violations[0].boardNumber).toBe(1);
@@ -151,11 +143,11 @@ describe("CVL-1.6 - Interdiction de jouer dans plusieurs équipes de même divis
       team1: [createTeamComposition("team1", [players[0], players[1]], 1)],
     };
 
-    const tournamentState = createTournamentState([team1, team2], history);
+    const tournamentState = createTournamentState(history);
     // Team2 (R2) uses player 1 - this should be allowed (different division)
     const teamComposition = createTeamComposition("team2", [players[0], players[2], players[3]], 2);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toEqual([]);
   });
@@ -172,11 +164,11 @@ describe("CVL-1.6 - Interdiction de jouer dans plusieurs équipes de même divis
       ],
     };
 
-    const tournamentState = createTournamentState([team1], history);
+    const tournamentState = createTournamentState(history);
     // Player 1 plays again for team1 in round 3
     const teamComposition = createTeamComposition("team1", [players[0], players[3]], 3);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -190,11 +182,11 @@ describe("CVL-1.6 - Interdiction de jouer dans plusieurs équipes de même divis
       team1: [createTeamComposition("team1", [players[0], null], 1)],
     };
 
-    const tournamentState = createTournamentState([team1, team2], history);
+    const tournamentState = createTournamentState(history);
     // Team2 with null players
     const teamComposition = createTeamComposition("team2", [null, players[1], null], 2);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toEqual([]);
   });
@@ -212,11 +204,11 @@ describe("CVL-1.6 - Interdiction de jouer dans plusieurs équipes de même divis
       ],
     };
 
-    const tournamentState = createTournamentState([team1, team2], history);
+    const tournamentState = createTournamentState(history);
     // Team2 tries to use player 1 in round 3
     const teamComposition = createTeamComposition("team2", [players[0], players[3]], 3);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toHaveLength(1);
     expect(violations[0].boardNumber).toBe(1);
@@ -234,11 +226,16 @@ describe("CVL-1.6 - Interdiction de jouer dans plusieurs équipes de même divis
       team2: [createTeamComposition("team2", [players[1], players[4]], 1)],
     };
 
-    const tournamentState = createTournamentState([team1, team2, team3], history);
+    const tournamentState = createTournamentState(history);
     // Team3 tries to use players 1 and 2
     const teamComposition = createTeamComposition("team3", [players[0], players[1], players[5]], 2);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team3");
+    const violations = rule.validate(
+      [team1, team2, team3],
+      tournamentState,
+      [teamComposition],
+      "team3",
+    );
 
     expect(violations).toHaveLength(2);
     expect(violations[0].boardNumber).toBe(1);
@@ -255,11 +252,11 @@ describe("CVL-1.6 - Interdiction de jouer dans plusieurs équipes de même divis
       team1: [createTeamComposition("team1", [{ ...players[0], forfeited: true }, players[1]], 1)],
     };
 
-    const tournamentState = createTournamentState([team1, team2], history);
+    const tournamentState = createTournamentState(history);
     // Team2 tries to use player 1
     const teamComposition = createTeamComposition("team2", [players[0]], 2);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team2");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition], "team2");
 
     expect(violations).toHaveLength(1);
     expect(violations[0].message).toContain("a déjà joué dans une autre équipe");
@@ -267,13 +264,13 @@ describe("CVL-1.6 - Interdiction de jouer dans plusieurs équipes de même divis
 
   it("devrait lancer une erreur si l'équipe n'est pas trouvée", () => {
     const team1 = createTeam("team1", "R1", "A");
-    const tournamentState = createTournamentState([team1]);
+    const tournamentState = createTournamentState();
 
     const player1 = createPlayer("p1", "Joueur 1");
     const teamComposition = createTeamComposition("team1", [player1], 2);
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team999");
+      rule.validate([team1], tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
   });
 });

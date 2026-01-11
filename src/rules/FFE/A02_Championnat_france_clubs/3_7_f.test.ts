@@ -6,22 +6,13 @@ import {
   TeamChampionnatFranceClub,
   TeamCompositionChampionnatFranceClub,
 } from "./types";
-import { ArbiterFFE } from "../R01_Regles_generales/types";
 
 describe("A02-3.7.f - Noyau de l'équipe", () => {
   const mockRuleset = { name: "Test", rules: [] };
 
   const createTournamentState = (
-    teams: TeamChampionnatFranceClub[],
     history: Record<string, TeamCompositionChampionnatFranceClub[]> = {},
-  ): TournamentState<
-    PlayerChampionnatFranceClub,
-    TeamChampionnatFranceClub,
-    any,
-    ArbiterFFE,
-    TeamCompositionChampionnatFranceClub
-  > => ({
-    teams,
+  ): TournamentState<TeamCompositionChampionnatFranceClub> => ({
     history,
   });
 
@@ -77,10 +68,10 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
     const player1 = createPlayer("p1", "Joueur 1");
     const player2 = createPlayer("p2", "Joueur 2");
 
-    const tournamentState = createTournamentState([team1], {});
+    const tournamentState = createTournamentState({});
     const teamComposition = createTeamComposition("team1", [player1, player2], 1);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -93,11 +84,11 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       team1: [createTeamComposition("team1", players.slice(0, 8), 1)],
     };
 
-    const tournamentState = createTournamentState([team1], history);
+    const tournamentState = createTournamentState(history);
     // All new players in round 2
     const teamComposition = createTeamComposition("team1", players.slice(8, 16), 2);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -110,11 +101,11 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       team1: [createTeamComposition("team1", players.slice(0, 8), 1)],
     };
 
-    const tournamentState = createTournamentState([team1], history);
+    const tournamentState = createTournamentState(history);
     // All new players in round 2
     const teamComposition = createTeamComposition("team1", players.slice(8, 16), 2);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -128,7 +119,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       team1: [createTeamComposition("team1", players, 1)],
     };
 
-    const tournamentState = createTournamentState([team1], history);
+    const tournamentState = createTournamentState(history);
     // Round 2: 4 core players, 4 new players (team of 8)
     const newPlayers = createPlayers(4, 9);
     const teamComposition = createTeamComposition(
@@ -137,7 +128,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       2,
     );
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -153,11 +144,11 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       ],
     };
 
-    const tournamentState = createTournamentState([team1], history);
+    const tournamentState = createTournamentState(history);
     // Round 2: 3 core players, 5 new players (need 4 core)
     const teamComposition = createTeamComposition("team1", players, 2);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations.length).toBe(1);
     expect(violations[0].ruleId).toBe("A02-3.7.f");
@@ -175,12 +166,12 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       team1: [createTeamComposition("team1", players, 1)],
     };
 
-    const tournamentState = createTournamentState([team1], history);
+    const tournamentState = createTournamentState(history);
     // 1 core (p1), 7 non-core = need at least 4 core (team of 8)
     const newPlayers = createPlayers(7, 9);
     const teamComposition = createTeamComposition("team1", [players[0], ...newPlayers], 2);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations.length).toBe(1);
     expect(violations[0].boardNumber).toBe(null);
@@ -197,7 +188,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       team1: [createTeamComposition("team1", players, 1)],
     };
 
-    const tournamentState = createTournamentState([team1], history);
+    const tournamentState = createTournamentState(history);
     // 4 core players (p1-p4), 4 non-core, nulls are ignored (8 positions)
     const newPlayers = createPlayers(3, 9);
     const teamComposition = createTeamComposition(
@@ -206,7 +197,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       2,
     );
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -222,11 +213,11 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       ],
     };
 
-    const tournamentState = createTournamentState([team1], history);
+    const tournamentState = createTournamentState(history);
     // Round 2: 8 players, only 3 from core (need 4)
     const teamComposition = createTeamComposition("team1", players, 2);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0].boardNumber).toBe(null);
@@ -241,10 +232,10 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       team1: [createTeamComposition("team1", players, 1)],
     };
 
-    const tournamentState = createTournamentState([team1], history);
+    const tournamentState = createTournamentState(history);
     const teamComposition = createTeamComposition("team1", players, 2);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -257,7 +248,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       team1: [createTeamComposition("team1", players, 1)],
     };
 
-    const tournamentState = createTournamentState([team1], history);
+    const tournamentState = createTournamentState(history);
     // 5 core players, 3 new players (team of 8)
     const newPlayers = createPlayers(3, 9);
     const teamComposition = createTeamComposition(
@@ -266,7 +257,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       2,
     );
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -280,23 +271,23 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       team1: [createTeamComposition("team1", [player1], 1)],
     };
 
-    const tournamentState = createTournamentState([team1], history);
+    const tournamentState = createTournamentState(history);
     const teamComposition = createTeamComposition("team1", [player1, player2], undefined);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
 
   it("devrait lancer une erreur si l'équipe n'est pas trouvée", () => {
     const team1 = createTeam("team1", "N1", "A");
-    const tournamentState = createTournamentState([team1]);
+    const tournamentState = createTournamentState();
 
     const player1 = createPlayer("p1", "Joueur 1");
     const teamComposition = createTeamComposition("team1", [player1], 2);
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team999");
+      rule.validate([team1], tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
   });
 
@@ -324,7 +315,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       ],
     };
 
-    const tournamentState = createTournamentState([team1], history);
+    const tournamentState = createTournamentState(history);
     // Round 2: 4 core players including the one that was forfeited
     const newPlayers = createPlayers(4, 9);
     const teamComposition = createTeamComposition(
@@ -333,7 +324,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       2,
     );
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -352,7 +343,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       ],
     };
 
-    const tournamentState = createTournamentState([team1], history);
+    const tournamentState = createTournamentState(history);
     // Round 2: 4 core players from forfeited round
     const newPlayers = createPlayers(4, 9);
     const teamComposition = createTeamComposition(
@@ -361,7 +352,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       2,
     );
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -377,7 +368,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       team2: [createTeamComposition("team2", players.slice(4, 8), 1)],
     };
 
-    const tournamentState = createTournamentState([team1, team2], history);
+    const tournamentState = createTournamentState(history);
     // Team1 tries to use these players in round 2
     const teamComposition = [
       createTeamComposition("team1", [players[0], players[4], players[5], players[6]], 2),
@@ -386,8 +377,8 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
 
     // Validateur, seule la R1 a une règle de noyau à 2 joueurs
     const validator = makeCoreRuleValidator({ R1: 2 });
-    const violationsTeam1 = validator(tournamentState, teamComposition, "team1");
-    const violationsTeam2 = validator(tournamentState, teamComposition, "team2");
+    const violationsTeam1 = validator([team1, team2], tournamentState, teamComposition, "team1");
+    const violationsTeam2 = validator([team1, team2], tournamentState, teamComposition, "team2");
 
     expect(violationsTeam1).toHaveLength(1);
     expect(violationsTeam1[0].message).toContain("au moins 2 joueurs du noyau");
@@ -409,7 +400,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       ],
     };
 
-    const tournamentState = createTournamentState([team1], history);
+    const tournamentState = createTournamentState(history);
     // Round 3: players 1,2 (from round 1), 9,10 (from round 2), and 4 new players
     // Core = 1,2,3,4,5,6,7,8,9,10 (10 players total)
     // Using 1,2,9,10 = 4 core players
@@ -419,7 +410,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       3,
     );
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -437,7 +428,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       ],
     };
 
-    const tournamentState = createTournamentState([team1], history);
+    const tournamentState = createTournamentState(history);
     // Round 3: only 3 players from history (1,2,9), rest are new
     // Core = 1-16, using only 3 of them
     const newPlayers = createPlayers(5, 17);
@@ -447,7 +438,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
       3,
     );
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0].message).toContain("au moins 4 joueurs du noyau");
@@ -464,7 +455,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
         team1: [createTeamComposition("team1", players, 1)],
       };
 
-      const tournamentState = createTournamentState([team1], history);
+      const tournamentState = createTournamentState(history);
       // 2 core players, 4 new
       const newPlayers = createPlayers(4, 7);
       const teamComposition = createTeamComposition(
@@ -473,7 +464,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
         2,
       );
 
-      const violations = customValidator(tournamentState, [teamComposition], "team1");
+      const violations = customValidator([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -487,12 +478,12 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
         team1: [createTeamComposition("team1", players, 1)],
       };
 
-      const tournamentState = createTournamentState([team1], history);
+      const tournamentState = createTournamentState(history);
       // Only 1 core player, 5 new (need 2)
       const newPlayers = createPlayers(5, 7);
       const teamComposition = createTeamComposition("team1", [players[0], ...newPlayers], 2);
 
-      const violations = customValidator(tournamentState, [teamComposition], "team1");
+      const violations = customValidator([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0].message).toContain("au moins 2 joueurs du noyau");
@@ -508,7 +499,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
         team1: [createTeamComposition("team1", players, 1)],
       };
 
-      const tournamentState = createTournamentState([team1], history);
+      const tournamentState = createTournamentState(history);
       // 6 core players, 2 new
       const newPlayers = createPlayers(2, 9);
       const teamComposition = createTeamComposition(
@@ -517,7 +508,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
         2,
       );
 
-      const violations = customValidator(tournamentState, [teamComposition], "team1");
+      const violations = customValidator([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -531,7 +522,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
         team1: [createTeamComposition("team1", players, 1)],
       };
 
-      const tournamentState = createTournamentState([team1], history);
+      const tournamentState = createTournamentState(history);
       // Only 5 core players, 3 new (need 6)
       const newPlayers = createPlayers(3, 9);
       const teamComposition = createTeamComposition(
@@ -540,7 +531,7 @@ describe("A02-3.7.f - Noyau de l'équipe", () => {
         2,
       );
 
-      const violations = customValidator(tournamentState, [teamComposition], "team1");
+      const violations = customValidator([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0].message).toContain("au moins 6 joueurs du noyau");

@@ -8,8 +8,7 @@ describe("R01-1.4 - Licence A pour cadence >= 60 minutes", () => {
 
   const createTournamentState = (
     teams: TeamFFE[],
-  ): TournamentState<PlayerFFE, TeamFFE, any, ArbiterFFE, TeamCompositionFFE> => ({
-    teams,
+  ): TournamentState<TeamCompositionFFE> => ({
     history: {},
   });
 
@@ -47,7 +46,7 @@ describe("R01-1.4 - Licence A pour cadence >= 60 minutes", () => {
     const player2 = createPlayer("p2", "Joueur 2", "A");
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -60,7 +59,7 @@ describe("R01-1.4 - Licence A pour cadence >= 60 minutes", () => {
     const player2 = createPlayer("p2", "Joueur 2", "B");
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({
@@ -79,7 +78,7 @@ describe("R01-1.4 - Licence A pour cadence >= 60 minutes", () => {
     const player2 = createPlayer("p2", "Joueur 2", "N");
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0].message).toContain("n'a pas une licence de type A");
@@ -93,7 +92,7 @@ describe("R01-1.4 - Licence A pour cadence >= 60 minutes", () => {
     const player2 = createPlayer("p2", "Joueur 2", "N");
     const teamComposition = createTeamComposition("team1", [player1, player2]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -107,7 +106,7 @@ describe("R01-1.4 - Licence A pour cadence >= 60 minutes", () => {
     const player3 = createPlayer("p3", "Joueur 3", "A");
     const teamComposition = createTeamComposition("team1", [player1, player2, player3]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
     expect(violations).toHaveLength(2);
   });
@@ -119,7 +118,7 @@ describe("R01-1.4 - Licence A pour cadence >= 60 minutes", () => {
     const player1 = createPlayer("p1", "Joueur 1", "A");
     const teamComposition = createTeamComposition("team1", [player1, null, null]);
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -132,7 +131,7 @@ describe("R01-1.4 - Licence A pour cadence >= 60 minutes", () => {
     const teamComposition = createTeamComposition("team1", [player1]);
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team999");
+      rule.validate([team], tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
   });
 });

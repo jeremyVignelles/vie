@@ -8,7 +8,7 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub> = {
   description: `Elo : l'Elo à prendre en compte est le dernier Elo publié.
     Si deux membres d’une équipe ont une différence de classement Elo de plus de 100 points,
     le mieux classé doit être placé devant le moins bien classé.`,
-  validate(_tournamentState, currentTeams, teamToValidate) {
+  validate(_teams, _tournamentState, currentTeams, teamToValidate) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     if (!teamPlayers) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);

@@ -34,16 +34,8 @@ export interface Arbiter {
 }
 
 export interface TournamentState<
-  TPlayer extends Player,
-  TTeam extends TeamInfo<TRules>,
-  TRules extends Rule<string, TPlayer, TTeam, TArbiter>[],
-  TArbiter extends Arbiter = Arbiter,
-  TTeamComposition extends TeamComposition<TPlayer, TArbiter> = TeamComposition<TPlayer, TArbiter>,
+  TTeamComposition extends TeamComposition<Player, Arbiter> = TeamComposition<Player, Arbiter>,
 > {
-  /**
-   * Les équipes participant au tournoi, dans l'ordre de numérotation si cela est important
-   */
-  teams: TTeam[];
   /**
    * L'historique des compositions, pour chaque ronde, indexé par l'identifiant de l'équipe
    */
@@ -60,13 +52,8 @@ export interface Rule<
   id: TRuleId;
   description: string;
   validate(
-    tournamentState: TournamentState<
-      TPlayer,
-      TTeamInfo,
-      Rule<string, TPlayer, TTeamInfo, TArbiter, TTeamComposition>[],
-      TArbiter,
-      TTeamComposition
-    >,
+    teams: TTeamInfo[],
+    tournamentState: TournamentState<TTeamComposition>,
     currentTeams: TTeamComposition[],
     teamToValidate: string,
   ): Violation[];
@@ -83,18 +70,18 @@ export interface Ruleset<TRules extends Rule<string>[]> {
   rules: TRules;
 }
 
-export interface TeamInfo<
-  TRules extends Rule<string>[] = Rule<string, Player, TeamInfo<any>, Arbiter>[],
-> {
+export interface TeamInfo {
   /** Identifiant unique de l'équipe */
   id: string;
 
   /** Nom de l'équipe */
   name: string;
-
-  /** Les règles qui vont s'appliquer à l'équipe */
-  ruleset: Ruleset<TRules>;
 }
+
+export type TeamInfoWithRuleset<TRuleset extends Ruleset<any>> = TeamInfoOf<TRuleset> & {
+  /** Les règles qui vont s'appliquer à l'équipe */
+  ruleset: TRuleset;
+};
 
 export interface TeamComposition<
   TPlayer extends Player = Player,
@@ -115,3 +102,59 @@ export interface TeamComposition<
    */
   arbiter: TArbiter | null;
 }
+
+/**
+ * Type utilitaire générique pour extraire une position spécifique des paramètres de type de Rule
+ */
+type ExtractFromRule<
+  TRule extends Rule<string>,
+  TPosition extends "player" | "teamInfo" | "arbiter" | "teamComposition",
+> = TPosition extends "player"
+  ? TRule extends Rule<string, infer P>
+    ? P
+    : never
+  : TPosition extends "teamInfo"
+    ? TRule extends Rule<string, any, infer TI>
+      ? TI
+      : never
+    : TPosition extends "arbiter"
+      ? TRule extends Rule<string, any, any, infer A>
+        ? A
+        : never
+      : TPosition extends "teamComposition"
+        ? TRule extends Rule<string, any, any, any, infer TC>
+          ? TC
+          : never
+        : never;
+
+type RulesOrRuleset = Rule<string>[] | Ruleset<any>;
+
+/**
+ * Parcourt récursivement un Ruleset ou tableau de règles et extrait l'union des types à la position spécifiée
+ */
+export type ExtractFromRules<
+  TRules extends RulesOrRuleset,
+  TPosition extends "player" | "teamInfo" | "arbiter" | "teamComposition",
+> =
+  TRules extends Ruleset<infer R>
+    ? ExtractFromRules<R, TPosition>
+    : TRules extends [infer First extends Rule<string>, ...infer Rest]
+      ? Rest extends Rule<string>[]
+        ? ExtractFromRule<First, TPosition> & ExtractFromRules<Rest, TPosition>
+        : ExtractFromRule<First, TPosition>
+      : ExtractFromRule<Rule<string>, TPosition>;
+
+export type PlayersOf<TRules extends RulesOrRuleset> = ExtractFromRules<TRules, "player">;
+
+export type TeamInfoOf<TRules extends RulesOrRuleset> = ExtractFromRules<TRules, "teamInfo">;
+
+export type ArbiterOf<TRules extends RulesOrRuleset> = ExtractFromRules<TRules, "arbiter">;
+
+export type TeamCompositionOf<TRules extends RulesOrRuleset> = ExtractFromRules<
+  TRules,
+  "teamComposition"
+>;
+
+export type TournamentStateOf<TRules extends RulesOrRuleset> = TournamentState<
+  TeamCompositionOf<TRules>
+>;

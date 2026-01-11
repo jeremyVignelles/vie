@@ -1,9 +1,9 @@
 import { Rule, Violation } from "../../../types";
-import { PlayerChampionnatFranceClub, TeamChampionnatFranceClub } from "./types";
+import { PlayerChampionnatFranceClub } from "./types";
 
 const id = "A02-3.7.b";
 
-const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceClub> = {
+const rule: Rule<typeof id, PlayerChampionnatFranceClub> = {
   id,
   description: `
   Force des équipes : la Commission Technique Fédérale (la Ligue pour la N4)
@@ -14,14 +14,14 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
   En cas de forfait sportif individuel, la valeur du Elo à retenir à l’échiquier
   vacant est zéro.
   `,
-  validate(tournamentState, currentTeams, teamToValidate) {
+  validate(teams, tournamentState, currentTeams, teamToValidate) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
-    const teamIndex = tournamentState.teams.findIndex((team) => team.id === teamToValidate);
+    const teamIndex = teams.findIndex((team) => team.id === teamToValidate);
     if (!teamPlayers || teamIndex === -1) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
     }
 
-    const strongerTeams = tournamentState.teams.slice(0, teamIndex);
+    const strongerTeams = teams.slice(0, teamIndex);
 
     const violations: Violation[] = [];
 

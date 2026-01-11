@@ -8,9 +8,9 @@ const rule: Rule<typeof id, PlayerFFE, TeamFFE> = {
   description: `Pour toute compétition se jouant à une cadence supérieure ou égale à 60 min
   (ou équivalent en cadence Fischer),les joueurs et joueuses doivent être titulaires d'une
   licence A valable pour la saison en cours.`,
-  validate(tournamentState, currentTeams, teamToValidate) {
+  validate(teams, _tournamentState, currentTeams, teamToValidate) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
-    const teamInfo = tournamentState.teams.find((team) => team.id === teamToValidate);
+    const teamInfo = teams.find((team) => team.id === teamToValidate);
     if (!teamPlayers || !teamInfo) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
     }

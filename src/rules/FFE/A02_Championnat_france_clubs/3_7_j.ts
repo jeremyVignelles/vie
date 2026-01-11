@@ -10,9 +10,9 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
   à 2400 ne sont pas autorisés à jouer en Nationale 4 ou en division inférieure, sauf si moins
   de deux équipes du club participent aux divisions supérieures pendant la saison en cours.
   `,
-  validate(tournamentState, currentTeams, teamToValidate) {
+  validate(teams, _tournamentState, currentTeams, teamToValidate) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
-    const teamInfo = tournamentState.teams.find((team) => team.id === teamToValidate);
+    const teamInfo = teams.find((team) => team.id === teamToValidate);
     if (!teamPlayers || !teamInfo) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
     }
@@ -26,9 +26,9 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
     }
 
     // Count teams in higher divisions
-    const teamsInHigherDivisions = tournamentState.teams.filter((team) => {
+    const teamsInHigherDivisions = teams.filter((team) => {
       if (team.id === teamToValidate) return false;
-      
+
       return higherDivisions.includes(team.division);
     });
 

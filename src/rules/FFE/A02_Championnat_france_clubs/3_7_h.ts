@@ -28,12 +28,13 @@ export function makeQualifiedRuleValidator(
   divisionFilter?: (division: string) => boolean,
 ) {
   return function validate(
-    tournamentState: TournamentState<PlayerChampionnatFranceClub, TeamChampionnatFranceClub, any>,
+    teams: TeamChampionnatFranceClub[],
+    _tournamentState: TournamentState,
     currentTeams: any[],
     teamToValidate: string,
   ) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
-    const teamInfo = tournamentState.teams.find((team) => team.id === teamToValidate);
+    const teamInfo = teams.find((team) => team.id === teamToValidate);
     if (!teamPlayers || !teamInfo) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
     }

@@ -14,14 +14,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
   const createTournamentState = (
     teams: TeamChampionnatFranceClub[],
     history: Record<string, TeamCompositionChampionnatFranceClub[]> = {},
-  ): TournamentState<
-    PlayerChampionnatFranceClub,
-    TeamChampionnatFranceClub,
-    any,
-    ArbiterFFE,
-    TeamCompositionChampionnatFranceClub
-  > => ({
-    teams,
+  ): TournamentState<TeamCompositionChampionnatFranceClub> => ({
     history,
   });
 
@@ -80,7 +73,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
       const tournamentState = createTournamentState([team1], {});
       const teamComposition = createTeamComposition("team1", players, 1);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -102,7 +95,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
         2,
       );
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -124,7 +117,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
         2,
       );
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0].ruleId).toBe("CVL-1.7");
@@ -150,7 +143,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
         2,
       );
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -164,7 +157,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
       const tournamentState = createTournamentState([team1], {});
       const teamComposition = createTeamComposition("team1", players, 1);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -182,7 +175,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
       const newPlayers = createPlayers(3, 5);
       const teamComposition = createTeamComposition("team1", [players[0], ...newPlayers], 2);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -200,7 +193,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
       const newPlayers = createPlayers(4, 5);
       const teamComposition = createTeamComposition("team1", newPlayers, 2);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0].ruleId).toBe("CVL-1.7");
@@ -221,7 +214,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
       // All core players
       const teamComposition = createTeamComposition("team1", players, 2);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -235,7 +228,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
       const tournamentState = createTournamentState([team1], {});
       const teamComposition = createTeamComposition("team1", players, 1);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -253,7 +246,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
       const newPlayers = createPlayers(3, 5);
       const teamComposition = createTeamComposition("team1", [players[0], ...newPlayers], 2);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -271,7 +264,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
       const newPlayers = createPlayers(4, 5);
       const teamComposition = createTeamComposition("team1", newPlayers, 2);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
       expect(violations[0].ruleId).toBe("CVL-1.7");
@@ -294,7 +287,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
       const newPlayers = createPlayers(8, 9);
       const teamComposition = createTeamComposition("team1", newPlayers, 2);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -312,7 +305,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
       const newPlayers = createPlayers(8, 9);
       const teamComposition = createTeamComposition("team1", newPlayers, 2);
 
-      const violations = rule.validate(tournamentState, [teamComposition], "team1");
+      const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toEqual([]);
     });
@@ -335,7 +328,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
       2,
     );
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -357,7 +350,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
       2,
     );
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -385,7 +378,7 @@ describe("CVL-1.7 - Noyau de l'équipe (Nat. IV et Régionales)", () => {
       3,
     );
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });

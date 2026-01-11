@@ -9,8 +9,7 @@ describe("R02-3 - Interdiction de jouer plusieurs parties simultanément", () =>
   const createTournamentState = (
     teams: TeamFFE[],
     history: Record<string, TeamCompositionFFE[]> = {},
-  ): TournamentState<PlayerFFE, TeamFFE, any, ArbiterFFE, TeamCompositionFFE> => ({
-    teams,
+  ): TournamentState<TeamCompositionFFE> => ({
     history,
   });
 
@@ -49,7 +48,7 @@ describe("R02-3 - Interdiction de jouer plusieurs parties simultanément", () =>
     const player2 = createPlayer("p2", "Joueur 2");
     const teamComposition = createTeamComposition("team1", [player1, player2], "2025-01-01");
 
-    const violations = rule.validate(tournamentState, [teamComposition], "team1");
+    const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
     expect(violations).toEqual([]);
   });
@@ -94,7 +93,7 @@ describe("R02-3 - Interdiction de jouer plusieurs parties simultanément", () =>
 
     const teamComposition1 = createTeamComposition("team1", [player1, player2], "2025-01-01");
 
-    const violations = rule.validate(tournamentState, [teamComposition1], "team1");
+    const violations = rule.validate([team1, team2], tournamentState, [teamComposition1], "team1");
 
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({
@@ -180,7 +179,7 @@ describe("R02-3 - Interdiction de jouer plusieurs parties simultanément", () =>
     const teamComposition = createTeamComposition("team1", [player1], "2025-01-01");
 
     expect(() => {
-      rule.validate(tournamentState, [teamComposition], "team999");
+      rule.validate([team1], tournamentState, [teamComposition], "team999");
     }).toThrow("Équipe avec l'identifiant team999 non trouvée");
   });
 });
