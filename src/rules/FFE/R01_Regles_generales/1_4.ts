@@ -1,14 +1,18 @@
-import { Rule } from "../../../types";
-import { PlayerFFE, TeamFFE } from "./types";
+import { makeRule } from "../../../types";
+import { PlayerFFESchema, TeamFFESchema } from "./types";
 
 const id = "R01-1.4";
 
-const rule: Rule<typeof id, PlayerFFE, TeamFFE> = {
+export default makeRule(
   id,
-  description: `Pour toute compétition se jouant à une cadence supérieure ou égale à 60 min
+  `Pour toute compétition se jouant à une cadence supérieure ou égale à 60 min
   (ou équivalent en cadence Fischer),les joueurs et joueuses doivent être titulaires d'une
   licence A valable pour la saison en cours.`,
-  validate(teams, _tournamentState, currentTeams, teamToValidate) {
+  {
+    player: PlayerFFESchema,
+    teamInfo: TeamFFESchema,
+  },
+  (teams, _tournamentState, currentTeams, teamToValidate) => {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     const teamInfo = teams.find((team) => team.id === teamToValidate);
     if (!teamPlayers || !teamInfo) {
@@ -33,6 +37,4 @@ const rule: Rule<typeof id, PlayerFFE, TeamFFE> = {
 
     return violations;
   },
-};
-
-export default rule;
+);

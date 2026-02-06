@@ -1,17 +1,21 @@
-import { Rule, Violation } from "../../../types";
-import { PlayerChampionnatFranceClub, TeamChampionnatFranceClub } from "./types";
+import { makeRule, Violation } from "../../..";
+import { PlayerChampionnatFranceClubSchema, TeamChampionnatFranceClubSchema } from "./types";
 
 const id = "A02-3.8";
 
-const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceClub> = {
+export default makeRule(
   id,
-  description: `
+  `
   En Top 16, chaque forfait individuel sera sanctionné d'une amende de 300 €.
   En N1, chaque forfait individuel sera sanctionné d'une amende de 200 €.
   En N2 et N3, chaque forfait individuel, à partir du 4e dans la même équipe et dans la même saison, sera sanctionné
   d'une amende de 100 €.
   `,
-  validate(teams, tournamentState, currentTeams, teamToValidate) {
+  {
+    player: PlayerChampionnatFranceClubSchema,
+    teamInfo: TeamChampionnatFranceClubSchema,
+  },
+  (teams, tournamentState, currentTeams, teamToValidate) => {
     const teamInfo = teams.find((team) => team.id === teamToValidate);
     const currentComposition = currentTeams.find((team) => team.teamId === teamToValidate);
 
@@ -69,6 +73,4 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
 
     return violations;
   },
-};
-
-export default rule;
+);

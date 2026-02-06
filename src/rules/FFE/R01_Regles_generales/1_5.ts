@@ -1,16 +1,18 @@
-import { Rule } from "../../../types";
-import { PlayerFFE } from "./types";
+import { makeRule } from "../../../types";
+import { PlayerFFESchema } from "./types";
 
 const id = "R01-1.5";
 
-const rule: Rule<typeof id, PlayerFFE> = {
+export default makeRule(
   id,
-  description: `À partir du 30 mars 2022, les joueurs et joueuses
+  `À partir du 30 mars 2022, les joueurs et joueuses
   évoluant auprès de la FIDE avec le code RUS ou BLR (Russie et Biélorussie),
   ne sont pas autorisés à participer aux compétitions par équipes
   ou individuelles homologuées par la FFE.`,
-
-  validate(_teams, _tournamentState, currentTeams, teamToValidate) {
+  {
+    player: PlayerFFESchema,
+  },
+  (_teams, _tournamentState, currentTeams, teamToValidate) => {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     if (!teamPlayers) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
@@ -30,6 +32,4 @@ const rule: Rule<typeof id, PlayerFFE> = {
 
     return violations;
   },
-};
-
-export default rule;
+);

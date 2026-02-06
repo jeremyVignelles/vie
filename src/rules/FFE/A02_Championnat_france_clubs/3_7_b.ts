@@ -1,11 +1,11 @@
-import { Rule, Violation } from "../../../types";
-import { PlayerChampionnatFranceClub } from "./types";
+import { makeRule, Violation } from "../../../types";
+import { PlayerChampionnatFranceClub, PlayerChampionnatFranceClubSchema } from "./types";
 
 const id = "A02-3.7.b";
 
-const rule: Rule<typeof id, PlayerChampionnatFranceClub> = {
+export default makeRule(
   id,
-  description: `
+  `
   Force des équipes : la Commission Technique Fédérale (la Ligue pour la N4)
   compose les groupes en numérotant les équipes appartenant à un même Club par
   ordre de force décroissante. Les Clubs sont tenus de respecter cet ordre.
@@ -14,7 +14,10 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub> = {
   En cas de forfait sportif individuel, la valeur du Elo à retenir à l’échiquier
   vacant est zéro.
   `,
-  validate(teams, tournamentState, currentTeams, teamToValidate) {
+  {
+    player: PlayerChampionnatFranceClubSchema,
+  },
+  (teams, tournamentState, currentTeams, teamToValidate) => {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     const teamIndex = teams.findIndex((team) => team.id === teamToValidate);
     if (!teamPlayers || teamIndex === -1) {
@@ -62,9 +65,7 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub> = {
 
     return violations;
   },
-};
-
-export default rule;
+);
 
 /**
  * Retourne 1 si le joueur gagne théoriquement contre l'adversaire,

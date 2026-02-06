@@ -1,27 +1,21 @@
-import { Arbiter, Player, Rule } from "../../../types";
-import {
-  TeamChampionnatFranceClub,
-  TeamCompositionChampionnatFranceClub,
-} from "../A02_Championnat_france_clubs/types";
+import { makeRule } from "../../../types";
 import { makeTransferredRuleValidator } from "../A02_Championnat_france_clubs/3_7_g";
+import { TeamChampionnatFranceClubSchema } from "../A02_Championnat_france_clubs/types";
 
 const id = "CVL-1.8";
 
 /**
  * Pour chaque match, une équipe ne peut aligner plus de 2 (Nat. IV) ou 1 (Régionales 1 & 2 - CVL) joueurs mutés.
  */
-const rule: Rule<
-  typeof id,
-  Player,
-  TeamChampionnatFranceClub,
-  Arbiter,
-  TeamCompositionChampionnatFranceClub
-> = {
+export default makeRule(
   id,
-  description: `
+  `
   Pour chaque match, une équipe ne peut aligner plus de 2 (Nat. IV) ou 1 (Régionales 1 & 2 - CVL) joueurs mutés.
   `,
-  validate: makeTransferredRuleValidator(
+  {
+    teamInfo: TeamChampionnatFranceClubSchema,
+  },
+  makeTransferredRuleValidator(
     (_totalPositions, division) => {
       // N4: max 2 joueurs mutés
       // R1 et R2: max 1 joueur muté
@@ -37,6 +31,4 @@ const rule: Rule<
     id,
     (division) => division === "N4" || division === "R1" || division === "R2",
   ),
-};
-
-export default rule;
+);

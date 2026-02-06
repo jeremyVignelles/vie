@@ -1,23 +1,24 @@
-import { Arbiter, Player, Rule, Violation } from "../../../types";
-import { TeamChampionnatFranceClub, TeamCompositionChampionnatFranceClub } from "./types";
+import { makeRule, Violation } from "../../../types";
+import {
+  TeamChampionnatFranceClubSchema,
+  TeamCompositionChampionnatFranceClubSchema,
+} from "./types";
 
 const id = "A02-3.7.e";
 
-const rule: Rule<
-  typeof id,
-  Player,
-  TeamChampionnatFranceClub,
-  Arbiter,
-  TeamCompositionChampionnatFranceClub
-> = {
+export default makeRule(
   id,
-  description: `
+  `
   Nombre de parties : pour disputer le match n de N1, N2, N3, N4 ou une division inférieure,
   un joueur/joueuse doit avoir joué moins de n matchs dans le championnat.
   Précision : en Top 16, tout joueur/joueuse dépassant le total de 11 rondes jouées dans la
   saison dans le championnat de France des clubs, est sanctionné.
   `,
-  validate(teams, tournamentState, currentTeams, teamToValidate) {
+  {
+    teamInfo: TeamChampionnatFranceClubSchema,
+    teamComposition: TeamCompositionChampionnatFranceClubSchema(),
+  },
+  (teams, tournamentState, currentTeams, teamToValidate) => {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     const teamInfo = teams.find((team) => team.id === teamToValidate);
     const currentComposition = currentTeams.find((team) => team.teamId === teamToValidate);
@@ -71,6 +72,4 @@ const rule: Rule<
 
     return violations;
   },
-};
-
-export default rule;
+);

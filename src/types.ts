@@ -122,12 +122,59 @@ export interface Rule<
 > {
   id: TRuleId;
   description: string;
+  schemas: {
+    player: z.ZodType<TPlayer>;
+    teamInfo: z.ZodType<TTeamInfo>;
+    arbiter: z.ZodType<TArbiter>;
+    teamComposition: z.ZodType<TTeamComposition>;
+  };
   validate(
     teams: TTeamInfo[],
     tournamentState: TournamentState<TTeamComposition>,
     currentTeams: TTeamComposition[],
     teamToValidate: string,
   ): Violation[];
+}
+
+export function makeRule<
+  TRuleId extends string,
+  TPlayer extends Player = Player,
+  TTeamInfo extends TeamInfo = TeamInfo,
+  TArbiter extends Arbiter = Arbiter,
+  TTeamComposition extends TeamComposition<TPlayer, TArbiter> = TeamComposition<TPlayer, TArbiter>,
+>(
+  id: TRuleId,
+  description: string,
+  schemas: {
+    player?: z.ZodType<TPlayer>;
+    teamInfo?: z.ZodType<TTeamInfo>;
+    arbiter?: z.ZodType<TArbiter>;
+    teamComposition?: z.ZodType<TTeamComposition>;
+  },
+  validate: (
+    teams: TTeamInfo[],
+    tournamentState: TournamentState<TTeamComposition>,
+    currentTeams: TTeamComposition[],
+    teamToValidate: string,
+  ) => Violation[],
+): Rule<TRuleId, TPlayer, TTeamInfo, TArbiter, TTeamComposition> {
+  var playerSchema = schemas.player ?? (PlayerSchema as z.ZodType<TPlayer>);
+  var teamInfoSchema = schemas.teamInfo ?? (TeamInfoSchema as z.ZodType<TTeamInfo>);
+  var arbiterSchema = schemas.arbiter ?? (ArbiterSchema as z.ZodType<TArbiter>);
+  var teamCompositionSchema =
+    schemas.teamComposition ??
+    (TeamCompositionSchema(playerSchema, arbiterSchema) as z.ZodType<TTeamComposition>);
+  return {
+    id,
+    description,
+    schemas: {
+      player: playerSchema,
+      teamInfo: teamInfoSchema,
+      arbiter: arbiterSchema,
+      teamComposition: teamCompositionSchema,
+    },
+    validate,
+  };
 }
 
 export interface Ruleset<TRules extends Rule<string>[]> {

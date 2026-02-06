@@ -1,17 +1,24 @@
-import { Player, Rule, TournamentState, Violation } from "../../../types";
-import { TeamChampionnatFranceClub, TeamCompositionChampionnatFranceClub } from "./types";
+import { makeRule, TournamentState, Violation } from "../../../types";
+import {
+  TeamChampionnatFranceClub,
+  TeamChampionnatFranceClubSchema,
+  TeamCompositionChampionnatFranceClub,
+} from "./types";
 
 const id = "A02-3.7.f";
 
-const rule: Rule<typeof id, Player, TeamChampionnatFranceClub> = {
+export default makeRule(
   id,
-  description: `
+  `
   Noyau de l'équipe : en N1, N2 et N3, chaque équipe doit aligner à chaque ronde
   au moins 50% de personnes (appelé noyau) inscrites sur le PV ayant déjà participé
   au moins une fois pour le compte de cette équipe depuis le début de la saison (sauf pour la ronde 1).
   `,
-  validate: makeCoreRuleValidator({ N1: 4, N2: 4, N3: 4 }),
-};
+  {
+    teamInfo: TeamChampionnatFranceClubSchema,
+  },
+  makeCoreRuleValidator({ N1: 4, N2: 4, N3: 4 }),
+);
 
 /**
  * Crée un validateur pour la règle du noyau de joueurs.
@@ -82,5 +89,3 @@ export function makeCoreRuleValidator(
     return violations;
   };
 }
-
-export default rule;

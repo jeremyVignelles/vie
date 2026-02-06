@@ -1,16 +1,17 @@
-import { Rule, Violation } from "../../../types";
+import { makeRule, Violation } from "../../../types";
 
 const id = "A02-3.7.c";
 
-const rule: Rule<typeof id> = {
+export default makeRule(
   id,
-  description: `
+  `
   Participation dans plusieurs équipes : lorsqu'un club a plusieurs équipes engagées
   dans le championnat de France des clubs, un joueur ou une joueuse ne peut participer
   dans une équipe s'il ou elle a déjà joué trois fois dans une équipe plus forte telle
   que définie à l'article 3.7.b.
   `,
-  validate(teams, tournamentState, currentTeams, teamToValidate) {
+  {},
+  (teams, tournamentState, currentTeams, teamToValidate) => {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     const teamIndex = teams.findIndex((team) => team.id === teamToValidate);
     if (!teamPlayers || teamIndex === -1) {
@@ -52,6 +53,4 @@ const rule: Rule<typeof id> = {
 
     return violations;
   },
-};
-
-export default rule;
+);
