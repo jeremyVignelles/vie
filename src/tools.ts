@@ -1,8 +1,8 @@
-import { Player, Rule, Ruleset, TeamInfo } from "./types";
+import { Rule, Ruleset } from "./types";
 /**
  * Extract the Rule ID from a Rule
  */
-export type RuleIdFromRule<T> = T extends Rule<infer TId, Player, TeamInfo> ? TId : never;
+export type RuleIdFromRule<T> = T extends Rule<infer TId> ? TId : never;
 
 /**
  * Filtre un tableau de règles en excluant celles dont l'ID est dans TExclude

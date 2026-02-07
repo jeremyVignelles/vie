@@ -1,14 +1,18 @@
 import {
   validateTeams,
-  type TeamInfoWithRuleset,
-  type TournamentStateOf,
-  type TeamCompositionOf,
+  makeCombinedSchemaForRulesets,
+  TeamInfoWithRuleset,
+  TournamentStateOf,
+  TeamCompositionOf,
 } from "vie";
 import { ChampionnatDeFranceDesClubs } from "vie/rules/FFE/A02_Championnat_france_clubs/index";
 import { InterclubsCVL } from "vie/rules/FFE/CVL/index";
 
 // TODO: temporary content
-type rulesets = typeof ChampionnatDeFranceDesClubs | typeof InterclubsCVL;
+const schemas = [ChampionnatDeFranceDesClubs, InterclubsCVL];
+const combinedSchema = makeCombinedSchemaForRulesets(...schemas);
+console.log("Combined player schema:", combinedSchema.player.toJSONSchema());
+type rulesets = (typeof schemas)[number];
 const teams: TeamInfoWithRuleset<rulesets>[] = [
   {
     id: "team-1",

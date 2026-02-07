@@ -1,9 +1,13 @@
+import z from "zod";
 import type {
   Violation,
   Ruleset,
   TeamInfoWithRuleset,
   TournamentStateOf,
   TeamCompositionOf,
+  PlayersOf,
+  TeamInfoOf,
+  ArbiterOf,
 } from "./types";
 
 export * from "./types";
@@ -30,4 +34,39 @@ export function validateTeams<TRuleset extends Ruleset<any>>(
     }
   }
   return violations;
+}
+
+export function makeCombinedSchemaForRulesets<TRulesets extends Ruleset<any>[]>(
+  ...rulesets: [...TRulesets]
+): {
+  player: z.ZodType<PlayersOf<TRulesets[number]>>;
+  teamInfo: z.ZodType<TeamInfoOf<TRulesets[number]>>;
+  arbiter: z.ZodType<ArbiterOf<TRulesets[number]>>;
+  teamComposition: z.ZodType<TeamCompositionOf<TRulesets[number]>>;
+} {
+  const allRules = rulesets.flatMap((r) => r.rules);
+
+  const playerSchemas = allRules.map((rule) => rule.schemas.player);
+  const teamInfoSchemas = allRules.map((rule) => rule.schemas.teamInfo);
+  const arbiterSchemas = allRules.map((rule) => rule.schemas.arbiter);
+  const teamCompositionSchemas = allRules.map((rule) => rule.schemas.teamComposition);
+
+  return {
+    player: playerSchemas.reduce(
+      (acc, schema) => z.object({ ...acc.shape, ...schema.shape }),
+      z.object(),
+    ),
+    teamInfo: teamInfoSchemas.reduce(
+      (acc, schema) => z.object({ ...acc.shape, ...schema.shape }),
+      z.object(),
+    ),
+    arbiter: arbiterSchemas.reduce(
+      (acc, schema) => z.object({ ...acc.shape, ...schema.shape }),
+      z.object(),
+    ),
+    teamComposition: teamCompositionSchemas.reduce(
+      (acc, schema) => z.object({ ...acc.shape, ...schema.shape }),
+      z.object(),
+    ),
+  };
 }
