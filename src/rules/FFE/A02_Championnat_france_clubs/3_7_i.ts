@@ -1,15 +1,19 @@
-import { Rule, Violation } from "../../../types";
-import { PlayerChampionnatFranceClub, TeamChampionnatFranceClub } from "./types";
+import { makeRule, Violation } from "../../../types";
+import { PlayerChampionnatFranceClubSchema, TeamChampionnatFranceClubSchema } from "./types";
 
 const id = "A02-3.7.i";
 
-const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceClub> = {
+export default makeRule(
   id,
-  description: `
+  `
   Nationalité française : en Top 16, N1, et N2, chaque équipe doit inscrire sur la feuille
   de match au moins un joueur français et au moins une joueuse française.
   `,
-  validate(teams, _tournamentState, currentTeams, teamToValidate) {
+  {
+    player: PlayerChampionnatFranceClubSchema,
+    teamInfo: TeamChampionnatFranceClubSchema,
+  },
+  (teams, _tournamentState, currentTeams, teamToValidate) => {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     const teamInfo = teams.find((team) => team.id === teamToValidate);
     if (!teamPlayers || !teamInfo) {
@@ -61,6 +65,4 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
 
     return violations;
   },
-};
-
-export default rule;
+);

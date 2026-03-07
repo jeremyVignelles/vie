@@ -1,17 +1,19 @@
-import { Player, Rule, Violation } from "../../../types";
-import { ArbiterFFE } from "../R01_Regles_generales/types";
-import { TeamChampionnatFranceClub } from "./types";
+import { makeRule, Violation } from "../../../types";
+import { TeamChampionnatFranceClubSchema } from "./types";
 
 const id = "A02-2.5-arbitre-joueur";
 
-const rule: Rule<typeof id, Player, TeamChampionnatFranceClub, ArbiterFFE> = {
+export default makeRule(
   id,
-  description: `
+  `
   L'arbitre en N1 et N2 ne peut pas être joueur/joueuse, même dans une autre division.
   En N3, l'arbitre d'un seul match ne peut jouer que dans ce même match.
   En N4, l'arbitre peut jouer son match de N4 et officier dans un maximum de 2 matches de N4 et de division inférieure.
   `,
-  validate(teams, _tournamentState, currentTeams, teamToValidate) {
+  {
+    teamInfo: TeamChampionnatFranceClubSchema,
+  },
+  (teams, _tournamentState, currentTeams, teamToValidate) => {
     const teamInfo = teams.find((team) => team.id === teamToValidate);
     const currentComposition = currentTeams.find((team) => team.teamId === teamToValidate);
 
@@ -90,6 +92,4 @@ const rule: Rule<typeof id, Player, TeamChampionnatFranceClub, ArbiterFFE> = {
 
     return violations;
   },
-};
-
-export default rule;
+);

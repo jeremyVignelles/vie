@@ -1,23 +1,26 @@
-import { Arbiter, Player, Rule, TournamentState, Violation } from "../../../types";
-import { TeamChampionnatFranceClub, TeamCompositionChampionnatFranceClub } from "./types";
+import { makeRule, TournamentState, Violation } from "../../../types";
+import {
+  TeamChampionnatFranceClub,
+  TeamChampionnatFranceClubSchema,
+  TeamCompositionChampionnatFranceClub,
+  TeamCompositionChampionnatFranceClubSchema,
+} from "./types";
 
 const id = "A02-3.7.g";
 
-const rule: Rule<
-  typeof id,
-  Player,
-  TeamChampionnatFranceClub,
-  Arbiter,
-  TeamCompositionChampionnatFranceClub
-> = {
+export default makeRule(
   id,
-  description: `
+  `
   Joueuses et joueurs mutés : pour chaque match, une équipe ne peut aligner plus de 3 personnes
   mutées (voir Règles Générales 2.2). Cette exigence est ramenée à 2 personnes s'il y a un maximum
   de 6 participants inscrits sur le PV.
   `,
-  validate: makeTransferredRuleValidator((totalPositions) => (totalPositions <= 6 ? 2 : 3)),
-};
+  {
+    teamInfo: TeamChampionnatFranceClubSchema,
+    teamComposition: TeamCompositionChampionnatFranceClubSchema(),
+  },
+  makeTransferredRuleValidator((totalPositions) => (totalPositions <= 6 ? 2 : 3)),
+);
 
 /**
  * Crée un validateur pour la règle des joueurs mutés (transférés).
@@ -83,5 +86,3 @@ export function makeTransferredRuleValidator(
     return violations;
   };
 }
-
-export default rule;

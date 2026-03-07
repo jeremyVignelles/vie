@@ -1,11 +1,11 @@
-import { Rule, Violation } from "../../../types";
-import { PlayerChampionnatFranceClub, TeamChampionnatFranceClub } from "./types";
+import { makeRule, Violation } from "../../..";
+import { PlayerChampionnatFranceClubSchema, TeamChampionnatFranceClubSchema } from "./types";
 
 const id = "A02-3.7.a";
 
-const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceClub> = {
+export default makeRule(
   id,
-  description: `
+  `
   • En Top 16, une liste de 16 joueurs/joueuses [...]
   doit être transmise à la Direction du Top 16 [...]. Les membres
   de la liste doivent, à l’exception des joueuses françaises, avoir un classement
@@ -17,7 +17,11 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
   meilleur classement Elo est considérée comme la joueuse obligatoire.
   Les autres, si elles ont un Elo inférieur à 2000, seront sanctionnées
   d'un forfait administratif.`,
-  validate(teams, _tournamentState, currentTeams, teamToValidate) {
+  {
+    player: PlayerChampionnatFranceClubSchema,
+    teamInfo: TeamChampionnatFranceClubSchema,
+  },
+  (teams, _tournamentState, currentTeams, teamToValidate) => {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     const teamInfo = teams.find((team) => team.id === teamToValidate);
     if (!teamPlayers || !teamInfo) {
@@ -63,6 +67,4 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
 
     return violations;
   },
-};
-
-export default rule;
+);

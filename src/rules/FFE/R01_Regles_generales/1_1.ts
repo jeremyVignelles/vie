@@ -1,13 +1,17 @@
-import { Rule, Violation } from "../../../types";
-import { PlayerFFE, TeamFFE } from "./types";
+import { makeRule, Violation } from "../../../types";
+import { PlayerFFESchema, TeamFFESchema } from "./types";
 
 const id = "R01-1.1";
 
-const rule: Rule<typeof id, PlayerFFE, TeamFFE> = {
+export default makeRule(
   id,
-  description: `Les joueurs et joueuses doivent être licenciés pour la saison en cours
+  `Les joueurs et joueuses doivent être licenciés pour la saison en cours
   et ne peuvent jouer que pour le compte d'un seul club dans lequel ils sont licenciés.`,
-  validate(teams, _tournamentState, currentTeams, teamToValidate) {
+  {
+    player: PlayerFFESchema,
+    teamInfo: TeamFFESchema,
+  },
+  (teams, _tournamentState, currentTeams, teamToValidate) => {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     const teamInfo = teams.find((team) => team.id === teamToValidate);
     if (!teamPlayers || !teamInfo) {
@@ -37,6 +41,4 @@ const rule: Rule<typeof id, PlayerFFE, TeamFFE> = {
 
     return violations;
   },
-};
-
-export default rule;
+);

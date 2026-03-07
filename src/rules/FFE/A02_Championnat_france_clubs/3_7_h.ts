@@ -1,18 +1,27 @@
-import { Rule, TournamentState, Violation } from "../../../types";
-import { PlayerChampionnatFranceClub, TeamChampionnatFranceClub } from "./types";
+import { makeRule, TournamentState, Violation } from "../../../types";
+import {
+  PlayerChampionnatFranceClubSchema,
+  TeamChampionnatFranceClub,
+  TeamChampionnatFranceClubSchema,
+  TeamCompositionChampionnatFranceClub,
+} from "./types";
 
 const id = "A02-3.7.h";
 
-const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceClub> = {
+export default makeRule(
   id,
-  description: `
+  `
   Nationalité étrangère : au moins cinq des joueurs ou joueuses composant une équipe
   doivent posséder la nationalité française ou être ressortissants de l'Union Européenne
   résidant en France, ou extracommunautaires résidant en France depuis 5 ans.
   Cette exigence est ramenée à 4 personnes s'il y a un maximum de 6 personnes inscrites sur le PV.
   `,
-  validate: makeQualifiedRuleValidator((teamSize) => (teamSize <= 6 ? 4 : 5)),
-};
+  {
+    player: PlayerChampionnatFranceClubSchema,
+    teamInfo: TeamChampionnatFranceClubSchema,
+  },
+  makeQualifiedRuleValidator((teamSize) => (teamSize <= 6 ? 4 : 5)),
+);
 
 /**
  * Crée un validateur pour la règle des joueurs qualifiés (français/UE/résidents).
@@ -30,7 +39,7 @@ export function makeQualifiedRuleValidator(
   return function validate(
     teams: TeamChampionnatFranceClub[],
     _tournamentState: TournamentState,
-    currentTeams: any[],
+    currentTeams: TeamCompositionChampionnatFranceClub[],
     teamToValidate: string,
   ) {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
@@ -77,5 +86,3 @@ export function makeQualifiedRuleValidator(
     return violations;
   };
 }
-
-export default rule;

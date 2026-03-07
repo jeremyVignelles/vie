@@ -1,22 +1,23 @@
-import { Arbiter, Player, Rule, Violation } from "../../../types";
-import { TeamChampionnatFranceClub, TeamCompositionChampionnatFranceClub } from "./types";
+import { makeRule, Violation } from "../../../types";
+import {
+  TeamChampionnatFranceClubSchema,
+  TeamCompositionChampionnatFranceClubSchema,
+} from "./types";
 
 const id = "A02-3.7.k";
 
-const rule: Rule<
-  typeof id,
-  Player,
-  TeamChampionnatFranceClub,
-  Arbiter,
-  TeamCompositionChampionnatFranceClub
-> = {
+export default makeRule(
   id,
-  description: `
+  `
   Matchs de barrage : [...] les joueurs ou joueuses participant à un tel match
   devront avoir joué au moins une fois dans la nationale concernée ou dans une nationale inférieure
   du Championnat de France des Clubs durant la saison en cours.
   `,
-  validate(teams, tournamentState, currentTeams, teamToValidate) {
+  {
+    teamInfo: TeamChampionnatFranceClubSchema,
+    teamComposition: TeamCompositionChampionnatFranceClubSchema(),
+  },
+  (teams, tournamentState, currentTeams, teamToValidate) => {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     const teamInfo = teams.find((team) => team.id === teamToValidate);
     const currentComposition = currentTeams.find((team) => team.teamId === teamToValidate);
@@ -81,6 +82,4 @@ const rule: Rule<
 
     return violations;
   },
-};
-
-export default rule;
+);

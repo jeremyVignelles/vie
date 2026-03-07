@@ -1,17 +1,19 @@
-import { Arbiter, Player, Rule, TeamInfo } from "../../../types";
-import { TeamCompositionFFE } from "./types";
+import { makeRule } from "../../../types";
+import { TeamCompositionFFESchema } from "./types";
 
 const id = "R02-3";
 
-const rule: Rule<typeof id, Player, TeamInfo, Arbiter, TeamCompositionFFE> = {
+export default makeRule(
   id,
-  description: `Il est interdit de jouer plusieurs parties à la fois
+  `Il est interdit de jouer plusieurs parties à la fois
     en compétition par équipes (interclubs, coupes). Si une personne est
     inscrite sur la feuille de match de plusieurs compétitions le même jour,
     le joueur ou la joueuse ne pourra débuter une
     deuxième partie qu'après avoir achevé la précédente.`,
-
-  validate(_teams, tournamentState, currentTeams, teamToValidate) {
+  {
+    teamComposition: TeamCompositionFFESchema(),
+  },
+  (_teams, tournamentState, currentTeams, teamToValidate) => {
     const teamComposition = currentTeams.find((team) => team.teamId === teamToValidate);
     if (!teamComposition) {
       throw new Error(`Équipe avec l'identifiant ${teamToValidate} non trouvée.`);
@@ -48,6 +50,4 @@ const rule: Rule<typeof id, Player, TeamInfo, Arbiter, TeamCompositionFFE> = {
 
     return violations;
   },
-};
-
-export default rule;
+);

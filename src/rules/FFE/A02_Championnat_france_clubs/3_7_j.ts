@@ -1,16 +1,20 @@
-import { Rule, Violation } from "../../../types";
-import { PlayerChampionnatFranceClub, TeamChampionnatFranceClub } from "./types";
+import { makeRule, Violation } from "../../../types";
+import { PlayerChampionnatFranceClubSchema, TeamChampionnatFranceClubSchema } from "./types";
 
 const id = "A02-3.7.j";
 
-const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceClub> = {
+export default makeRule(
   id,
-  description: `
+  `
   Elo en N4 et division inferieure : les joueurs ou joueuses ayant un classement Elo supérieur
   à 2400 ne sont pas autorisés à jouer en Nationale 4 ou en division inférieure, sauf si moins
   de deux équipes du club participent aux divisions supérieures pendant la saison en cours.
   `,
-  validate(teams, _tournamentState, currentTeams, teamToValidate) {
+  {
+    player: PlayerChampionnatFranceClubSchema,
+    teamInfo: TeamChampionnatFranceClubSchema,
+  },
+  (teams, _tournamentState, currentTeams, teamToValidate) => {
     const teamPlayers = currentTeams.find((team) => team.teamId === teamToValidate)?.players;
     const teamInfo = teams.find((team) => team.id === teamToValidate);
     if (!teamPlayers || !teamInfo) {
@@ -55,6 +59,4 @@ const rule: Rule<typeof id, PlayerChampionnatFranceClub, TeamChampionnatFranceCl
 
     return violations;
   },
-};
-
-export default rule;
+);

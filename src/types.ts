@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export interface Violation {
   /** L'identifiant unique de la règle qui a échoué */
   ruleId: string;
@@ -13,34 +15,103 @@ export interface Violation {
   message: string;
 }
 
-export interface Player {
+/**
+ * Schéma Zod pour un joueur
+ */
+export const PlayerSchema = z.looseObject({
   /**
    * Le code FFE du joueur pour les tournois de la fédération française des échecs
    */
-  id: string;
+  id: z.string(),
 
   /** Le nom complet du joueur */
-  name: string;
-}
+  name: z.string(),
+});
 
-export interface Arbiter {
+export type Player = z.infer<typeof PlayerSchema>;
+
+/**
+ * Schéma Zod pour un arbitre
+ */
+export const ArbiterSchema = z.looseObject({
   /**
    * Le code FFE de l'arbitre pour les tournois de la fédération française des échecs
    */
-  id: string;
+  id: z.string(),
 
   /** Le nom complet de l'arbitre */
-  name: string;
-}
+  name: z.string(),
+});
 
-export interface TournamentState<
+export type Arbiter = z.infer<typeof ArbiterSchema>;
+
+/**
+ * Schéma Zod pour la composition d'une équipe
+ */
+export const TeamCompositionSchema = <
+  TPlayer extends Player = Player,
+  TArbiter extends Arbiter = Arbiter,
+>(
+  playerSchema: z.ZodType<TPlayer> = PlayerSchema as z.ZodType<TPlayer>,
+  arbiterSchema: z.ZodType<TArbiter> = ArbiterSchema as z.ZodType<TArbiter>,
+) => {
+  return z.looseObject({
+    /** L'identifiant unique de l'équipe */
+    teamId: z.string(),
+
+    /**
+     * La liste des joueurs alignés pour cette équipe, ou null en cas d'absent.
+     * Il doit y avoir autant de cases dans le tableau que de joueurs prévus dans l'équipe
+     * par le règlement.
+     */
+    players: z.array(playerSchema.nullable()),
+
+    /**
+     * L'arbitre désigné pour cette équipe, ou null si aucun n'est désigné.
+     */
+    arbiter: arbiterSchema.nullable(),
+  });
+};
+
+export const DefaultTeamCompositionSchema = TeamCompositionSchema();
+
+export type TeamComposition<
+  TPlayer extends Player = Player,
+  TArbiter extends Arbiter = Arbiter,
+> = z.infer<ReturnType<typeof TeamCompositionSchema<TPlayer, TArbiter>>>;
+
+/**
+ * Schéma Zod pour l'état du tournoi
+ */
+export const TournamentStateSchema = <TTeamComposition extends TeamComposition = TeamComposition>(
+  teamCompositionSchema: z.ZodType<TTeamComposition> = DefaultTeamCompositionSchema as z.ZodType<TTeamComposition>,
+) => {
+  return z.looseObject({
+    /**
+     * L'historique des compositions, pour chaque ronde, indexé par l'identifiant de l'équipe
+     */
+    history: z.record(z.string(), z.array(teamCompositionSchema)),
+  });
+};
+
+export const DefaultTournamentStateSchema = TournamentStateSchema();
+
+export type TournamentState<
   TTeamComposition extends TeamComposition<Player, Arbiter> = TeamComposition<Player, Arbiter>,
-> {
-  /**
-   * L'historique des compositions, pour chaque ronde, indexé par l'identifiant de l'équipe
-   */
-  history: Record<string, TTeamComposition[]>;
-}
+> = z.infer<ReturnType<typeof TournamentStateSchema<TTeamComposition>>>;
+
+/**
+ * Schéma Zod pour les informations d'une équipe
+ */
+export const TeamInfoSchema = z.looseObject({
+  /** Identifiant unique de l'équipe */
+  id: z.string(),
+
+  /** Nom de l'équipe */
+  name: z.string(),
+});
+
+export type TeamInfo = z.infer<typeof TeamInfoSchema>;
 
 export interface Rule<
   TRuleId extends string,
@@ -51,12 +122,59 @@ export interface Rule<
 > {
   id: TRuleId;
   description: string;
+  schemas: {
+    player: z.ZodType<TPlayer>;
+    teamInfo: z.ZodType<TTeamInfo>;
+    arbiter: z.ZodType<TArbiter>;
+    teamComposition: z.ZodType<TTeamComposition>;
+  };
   validate(
     teams: TTeamInfo[],
     tournamentState: TournamentState<TTeamComposition>,
     currentTeams: TTeamComposition[],
     teamToValidate: string,
   ): Violation[];
+}
+
+export function makeRule<
+  TRuleId extends string,
+  TPlayer extends Player = Player,
+  TTeamInfo extends TeamInfo = TeamInfo,
+  TArbiter extends Arbiter = Arbiter,
+  TTeamComposition extends TeamComposition<TPlayer, TArbiter> = TeamComposition<TPlayer, TArbiter>,
+>(
+  id: TRuleId,
+  description: string,
+  schemas: {
+    player?: z.ZodType<TPlayer>;
+    teamInfo?: z.ZodType<TTeamInfo>;
+    arbiter?: z.ZodType<TArbiter>;
+    teamComposition?: z.ZodType<TTeamComposition>;
+  },
+  validate: (
+    teams: TTeamInfo[],
+    tournamentState: TournamentState<TTeamComposition>,
+    currentTeams: TTeamComposition[],
+    teamToValidate: string,
+  ) => Violation[],
+): Rule<TRuleId, TPlayer, TTeamInfo, TArbiter, TTeamComposition> {
+  var playerSchema = schemas.player ?? (PlayerSchema as z.ZodType<TPlayer>);
+  var teamInfoSchema = schemas.teamInfo ?? (TeamInfoSchema as z.ZodType<TTeamInfo>);
+  var arbiterSchema = schemas.arbiter ?? (ArbiterSchema as z.ZodType<TArbiter>);
+  var teamCompositionSchema =
+    schemas.teamComposition ??
+    (TeamCompositionSchema(playerSchema, arbiterSchema) as z.ZodType<TTeamComposition>);
+  return {
+    id,
+    description,
+    schemas: {
+      player: playerSchema,
+      teamInfo: teamInfoSchema,
+      arbiter: arbiterSchema,
+      teamComposition: teamCompositionSchema,
+    },
+    validate,
+  };
 }
 
 export interface Ruleset<TRules extends Rule<string>[]> {
@@ -70,38 +188,10 @@ export interface Ruleset<TRules extends Rule<string>[]> {
   rules: TRules;
 }
 
-export interface TeamInfo {
-  /** Identifiant unique de l'équipe */
-  id: string;
-
-  /** Nom de l'équipe */
-  name: string;
-}
-
 export type TeamInfoWithRuleset<TRuleset extends Ruleset<any>> = TeamInfoOf<TRuleset> & {
   /** Les règles qui vont s'appliquer à l'équipe */
   ruleset: TRuleset;
 };
-
-export interface TeamComposition<
-  TPlayer extends Player = Player,
-  TArbiter extends Arbiter = Arbiter,
-> {
-  /** L'identifiant unique de l'équipe */
-  teamId: string;
-
-  /**
-   * La liste des joueurs alignés pour cette équipe, ou null en cas d'absent.
-   * Il doit y avoir autant de cases dans le tableau que de joueurs prévus dans l'équipe
-   * par le règlement.
-   */
-  players: (TPlayer | null)[];
-
-  /**
-   * L'arbitre désigné pour cette équipe, ou null si aucun n'est désigné.
-   */
-  arbiter: TArbiter | null;
-}
 
 /**
  * Type utilitaire générique pour extraire une position spécifique des paramètres de type de Rule
