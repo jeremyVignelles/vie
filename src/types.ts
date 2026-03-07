@@ -18,7 +18,7 @@ export interface Violation {
 /**
  * Schéma Zod pour un joueur
  */
-export const PlayerSchema = z.object({
+export const PlayerSchema = z.looseObject({
   /**
    * Le code FFE du joueur pour les tournois de la fédération française des échecs
    */
@@ -33,7 +33,7 @@ export type Player = z.infer<typeof PlayerSchema>;
 /**
  * Schéma Zod pour un arbitre
  */
-export const ArbiterSchema = z.object({
+export const ArbiterSchema = z.looseObject({
   /**
    * Le code FFE de l'arbitre pour les tournois de la fédération française des échecs
    */
@@ -55,7 +55,7 @@ export const TeamCompositionSchema = <
   playerSchema: z.ZodType<TPlayer> = PlayerSchema as z.ZodType<TPlayer>,
   arbiterSchema: z.ZodType<TArbiter> = ArbiterSchema as z.ZodType<TArbiter>,
 ) => {
-  return z.object({
+  return z.looseObject({
     /** L'identifiant unique de l'équipe */
     teamId: z.string(),
 
@@ -86,7 +86,7 @@ export type TeamComposition<
 export const TournamentStateSchema = <TTeamComposition extends TeamComposition = TeamComposition>(
   teamCompositionSchema: z.ZodType<TTeamComposition> = DefaultTeamCompositionSchema as z.ZodType<TTeamComposition>,
 ) => {
-  return z.object({
+  return z.looseObject({
     /**
      * L'historique des compositions, pour chaque ronde, indexé par l'identifiant de l'équipe
      */
@@ -103,7 +103,7 @@ export type TournamentState<
 /**
  * Schéma Zod pour les informations d'une équipe
  */
-export const TeamInfoSchema = z.object({
+export const TeamInfoSchema = z.looseObject({
   /** Identifiant unique de l'équipe */
   id: z.string(),
 

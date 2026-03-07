@@ -53,20 +53,20 @@ export function makeCombinedSchemaForRulesets<TRulesets extends Ruleset<any>[]>(
 
   return {
     player: playerSchemas.reduce(
-      (acc, schema) => z.object({ ...acc.shape, ...schema.shape }),
-      z.object(),
+      (acc, schema) => z.looseObject({ ...acc.shape, ...schema.shape }),
+      z.looseObject({}),
     ),
     teamInfo: teamInfoSchemas.reduce(
-      (acc, schema) => z.object({ ...acc.shape, ...schema.shape }),
-      z.object(),
+      (acc, schema) => z.looseObject({ ...acc.shape, ...schema.shape }),
+      z.looseObject({}),
     ),
     arbiter: arbiterSchemas.reduce(
-      (acc, schema) => z.object({ ...acc.shape, ...schema.shape }),
-      z.object(),
+      (acc, schema) => z.looseObject({ ...acc.shape, ...schema.shape }),
+      z.looseObject({}),
     ),
     teamComposition: teamCompositionSchemas.reduce(
-      (acc, schema) => z.object({ ...acc.shape, ...schema.shape }),
-      z.object(),
+      (acc, schema) => z.looseObject({ ...acc.shape, ...schema.shape }),
+      z.looseObject({}),
     ),
   };
 }
