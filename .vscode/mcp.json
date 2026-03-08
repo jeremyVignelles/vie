@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "vuetify-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@vuetify/mcp"
+      ],
+      "env": {}
+    }
+  }
+}
