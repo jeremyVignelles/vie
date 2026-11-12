@@ -10,8 +10,8 @@ import {
 import { makeArbiterFFE } from "../R01_Regles_generales/types.fixtures";
 
 describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
-  const validTitles = ["AFC", "AFO1", "AFO2", "AFE1", "AFE2", "AF", "AI"] as const;
-  const invalidTitles = ["AS", "AFJ"] as const;
+  const validTitles = ["AFMatch", "AFClub", "AFOpen", "AF", "AI"] as const;
+  const invalidTitles = ["AS", "AFJeune"] as const;
   const nationalDivisions = ["T16", "N1", "N2", "N3", "N4"];
 
   describe("Divisions nationales (T16, N1, N2, N3, N4)", () => {
@@ -67,7 +67,9 @@ describe("A02-2.5-titre-arbitre - Titre de l'arbitre", () => {
               teamId: "team1",
               boardNumber: null,
             });
-            expect(violations[0].message).toContain("arbitre fédéral Elite, d'Open ou de Club");
+            expect(violations[0].message).toContain(
+              "AFMatch, AFClub, AFOpen, AF ou AI",
+            );
             expect(violations[0].message).toContain(title);
           });
         });
@@ -170,7 +172,7 @@ describe("makeArbiterTitleValidator - Fonction utilitaire", () => {
     const tournamentState: TournamentState<TeamCompositionChampionnatFranceClub> = {
       history: {},
     };
-    const arbiter = makeArbiterFFE({ id: "a1", name: "Arbitre 1", arbiterTitle: "AFC" });
+    const arbiter = makeArbiterFFE({ id: "a1", name: "Arbitre 1", arbiterTitle: "AFClub" });
     const teamComposition = makeTeamCompositionChampionnatFranceClub({
       teamId: "team1",
       players: [makePlayerChampionnatFranceClub({ id: "p1", name: "Player 1" })],
@@ -254,7 +256,7 @@ describe("makeArbiterTitleValidator - Fonction utilitaire", () => {
   it("devrait permettre différentes validations selon la division", () => {
     const validator = makeArbiterTitleValidator((division) => {
       if (division === "PRO") return ["AF", "AI"];
-      if (division === "AMATEUR") return ["AFC", "AFO1", "AFO2"];
+      if (division === "AMATEUR") return ["AFClub", "AFOpen", "AFMatch"];
       return null;
     }, "flexible-rule");
 
@@ -265,7 +267,11 @@ describe("makeArbiterTitleValidator - Fonction utilitaire", () => {
     };
 
     const arbiterAF = makeArbiterFFE({ id: "a1", name: "Arbitre Pro", arbiterTitle: "AF" });
-    const arbiterAFC = makeArbiterFFE({ id: "a2", name: "Arbitre Amateur", arbiterTitle: "AFC" });
+    const arbiterAFC = makeArbiterFFE({
+      id: "a2",
+      name: "Arbitre Amateur",
+      arbiterTitle: "AFClub",
+    });
 
     const teamCompoPro = makeTeamCompositionChampionnatFranceClub({
       teamId: "team1",

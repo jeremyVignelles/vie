@@ -18,8 +18,9 @@ import R_3_7_J from "./3_7_j";
 import R_3_7_K from "./3_7_k";
 import R_3_8 from "./3_8";
 
-const version = "2025-2026";
-const link = "https://echecs.asso.fr/Actus/2864/A02_2025_26_Championnat_de_France_des_Clubs.pdf";
+const version = "2026-2027";
+const link =
+  "https://www.echecs.asso.fr/Actus/2864/A02_2026_27_Championnat_de_France_des_Clubs.pdf";
 
 export const ChampionnatDeFranceDesClubs = extendRuleset(
   ReglesGenerales,

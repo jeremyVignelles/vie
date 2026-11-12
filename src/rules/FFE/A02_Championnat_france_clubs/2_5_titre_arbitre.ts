@@ -13,9 +13,9 @@ export default makeRule(
   id,
   `
   En Top 16, la direction de Nationale désigne les arbitres fédéraux après avis de la Direction Nationale de l'Arbitrage.
-  En N1, N2, N3 et N4, les matchs sont dirigés par une ou un arbitre fédéral Elite, d'Open ou de Club. La personne
-  responsable de la rencontre est chargée de désigner l'arbitre. En N4, une demande de dérogation est possible par les
-  Ligues.
+En N1, N2, N3 et N4, les matchs sont dirigés par une ou un arbitre fédéral AFOpen, AFClub ou AFMatch. La personne
+responsable de la rencontre est chargée de désigner l'arbitre. En N4, une demande de dérogation est possible par les
+Ligues.
   `,
   {
     arbiter: ArbiterFFESchema,
@@ -24,7 +24,7 @@ export default makeRule(
   },
   makeArbiterTitleValidator((division: string) => {
     if (["T16", "N1", "N2", "N3", "N4"].includes(division)) {
-      return ["AFC", "AFO1", "AFO2", "AFE1", "AFE2", "AF", "AI"];
+      return ["AFMatch", "AFClub", "AFOpen", "AF", "AI"];
     }
     return null;
   }, id),
@@ -66,14 +66,19 @@ export function makeArbiterTitleValidator(
       ];
     }
 
-    // Vérifier que l'arbitre a un titre fédéral Elite, Open ou Club
     if (!validTitles.includes(arbiter.arbiterTitle)) {
+      const formattedTitles =
+        validTitles.length === 0
+          ? "aucun"
+          : validTitles.length === 1
+            ? validTitles[0]
+            : `${validTitles.slice(0, -1).join(", ")} ou ${validTitles.at(-1)}`;
       return [
         {
           ruleId,
           teamId: teamToValidate,
           boardNumber: null,
-          message: `L'arbitre ${arbiter.name} doit être arbitre fédéral Elite, d'Open ou de Club (titre actuel: ${arbiter.arbiterTitle}).`,
+          message: `L'arbitre ${arbiter.name} doit posséder l'un des titres fédéraux suivants : ${formattedTitles} (titre actuel: ${arbiter.arbiterTitle}).`,
         },
       ];
     }

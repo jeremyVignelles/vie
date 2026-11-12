@@ -1,7 +1,7 @@
 import { makeRule, Violation } from "../../..";
 import { TeamChampionnatFranceClubSchema } from "../A02_Championnat_france_clubs/types";
 
-const id = "CVL-1.6";
+const id = "CVL-1.7.1";
 
 export default makeRule(
   id,

@@ -41,7 +41,7 @@ export function makeArbiterFFE(overrides: Partial<ArbiterFFE> = {}): ArbiterFFE 
   return {
     id,
     name: `Arbitre FFE Test ${arbiterFFECounter}`,
-    arbiterTitle: "AFC",
+    arbiterTitle: "AFMatch",
     ...overrides,
   };
 }

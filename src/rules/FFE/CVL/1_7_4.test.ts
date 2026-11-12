@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import rule from "./1_8";
+import rule from "./1_7_4";
 import { TournamentState } from "../../../types";
 import { TeamCompositionChampionnatFranceClub } from "../A02_Championnat_france_clubs/types";
 import {
@@ -8,7 +8,7 @@ import {
   makeTeamCompositionChampionnatFranceClub,
 } from "../A02_Championnat_france_clubs/types.fixtures";
 
-describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
+describe("CVL-1.7.4 - Joueurs mutés (Nat. IV et Régionales)", () => {
   const createPlayers = (count: number, transferredCount: number = 0) => {
     return Array.from({ length: count }, (_, i) =>
       makePlayerChampionnatFranceClub({ transferred: i < transferredCount }),
@@ -65,7 +65,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
       const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
-      expect(violations[0].ruleId).toBe("CVL-1.8");
+      expect(violations[0].ruleId).toBe("CVL-1.7.4");
       expect(violations[0].boardNumber).toBe(null);
       expect(violations[0].message).toContain("dépassé le quota de 2 joueurs mutés");
       expect(violations[0].message).toContain("3 joueurs mutés");
@@ -122,7 +122,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
       const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
-      expect(violations[0].ruleId).toBe("CVL-1.8");
+      expect(violations[0].ruleId).toBe("CVL-1.7.4");
       expect(violations[0].boardNumber).toBe(null);
       expect(violations[0].message).toContain("dépassé le quota de 1 joueurs mutés");
       expect(violations[0].message).toContain("2 joueurs mutés");
@@ -179,7 +179,7 @@ describe("CVL-1.8 - Joueurs mutés (Nat. IV et Régionales)", () => {
       const violations = rule.validate([team1], tournamentState, [teamComposition], "team1");
 
       expect(violations).toHaveLength(1);
-      expect(violations[0].ruleId).toBe("CVL-1.8");
+      expect(violations[0].ruleId).toBe("CVL-1.7.4");
       expect(violations[0].boardNumber).toBe(null);
       expect(violations[0].message).toContain("dépassé le quota de 1 joueurs mutés");
     });

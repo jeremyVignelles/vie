@@ -9,10 +9,15 @@ export default makeRule(
   Force des équipes : la Commission Technique Fédérale (la Ligue pour la N4)
   compose les groupes en numérotant les équipes appartenant à un même Club par
   ordre de force décroissante. Les Clubs sont tenus de respecter cet ordre.
+  La notion d'appartenance à une équipe d'un joueur ou d'une joueuse sera prise en compte par la CT lors de l'étude
+  de cas. Cette notion sera prédominante par rapport à la variation du Elo au cours de la saison.
   La force est calculée en fonction du résultat prévisible sur chaque échiquier
   entre deux équipes avec la composition des équipes le jour des matchs.
-  En cas de forfait sportif individuel, la valeur du Elo à retenir à l’échiquier
+  (Réf : Fonctionnement du système de classement de la FIDE - article 8.1.2)
+  En cas de forfait sportif individuel, la valeur du Elo à retenir à l'échiquier
   vacant est zéro.
+  En N4, la comparaison des équipes se fait sur le nombre d’échiquiers concernés par le règlement spécifique, c'est-à-
+  dire, sur 6 échiquiers si ce cas est prévu par le règlement de la Ligue.
   `,
   {
     player: PlayerChampionnatFranceClubSchema,

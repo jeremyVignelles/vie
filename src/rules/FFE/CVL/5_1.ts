@@ -15,7 +15,7 @@ export default makeRule(
   },
   makeArbiterTitleValidator((division: string) => {
     if (["R1", "R2"].includes(division)) {
-      return ["AS", "AFC", "AFO1", "AFO2", "AFE1", "AFE2", "AF", "AI"];
+      return ["AS", "AFMatch", "AFClub", "AFOpen", "AF", "AI"];
     }
     return null;
   }, id),

@@ -1,20 +1,20 @@
 import { extendRuleset } from "../../../tools";
 import { ChampionnatDeFranceDesClubs } from "../A02_Championnat_france_clubs";
 
-import R_1_6 from "./1_6";
-import R_1_7 from "./1_7";
-import R_1_8 from "./1_8";
-import R_1_9 from "./1_9";
+import R_1_7_1 from "./1_7_1";
+import R_1_7_3 from "./1_7_3";
+import R_1_7_4 from "./1_7_4";
+import R_1_7_5 from "./1_7_5";
 import R_5_1 from "./5_1";
 
 const version = "2025-2026";
 const link =
-  "https://echecscentre-valdeloire.fr/wp-content/uploads/2025/09/Saison-2025-2026-Ligue-CVL-Reglement-des-interclubs-v1.0-Valide-Codir-CVL-2025-09-13-CTF-2025-09-10j-Google-Docs.pdf";
+  "http://echecscentre-valdeloire.fr/wp-content/uploads/2026/08/Saison-2026-2027-Ligue-CVL-Reglement-des-interclubs-V.1.4-Valide-CoDir-CVL-2026-06-20-CTF-2026-09-04.pdf";
 
 export const InterclubsCVL = extendRuleset(
   ChampionnatDeFranceDesClubs,
   `Règles interclubs CVL (version ${version})`,
   link,
   ["A02-3.7.h", "A02-3.7.k"] as const,
-  [R_1_6, R_1_7, R_1_8, R_1_9, R_5_1] as const,
+  [R_1_7_1, R_1_7_3, R_1_7_4, R_1_7_5, R_5_1] as const,
 );

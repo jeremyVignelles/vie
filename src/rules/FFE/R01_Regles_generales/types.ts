@@ -48,14 +48,14 @@ export const ArbiterFFESchema = ArbiterSchema.extend({
   /**
    * Les titres d'arbitres reconnus par la FFE (dans l'ordre croissant de niveau):
    * - AS: Arbitre Stagiaire
-   * - AFJ: Arbitre Fédéral Jeune
-   * - AFC: Arbitre Fédéral Club
-   * - AFO (1 ou 2): Arbitre Fédéral Open (niveau 1 ou 2)
-   * - AFE (1 ou 2): Arbitre Fédéral Élite (niveau 1 ou 2)
+   * - AFJeune: Arbitre Fédéral Jeune
+   * - AFMatch: Arbitre Fédéral Match
+   * - AFClub: Arbitre Fédéral Club
+   * - AFOpen: Arbitre Fédéral Open
    * - AF: Arbitre FIDE
    * - AI: Arbitre International
    */
-  arbiterTitle: z.enum(["AS", "AFJ", "AFC", "AFO1", "AFO2", "AFE1", "AFE2", "AF", "AI"]),
+  arbiterTitle: z.enum(["AS", "AFJeune", "AFMatch", "AFClub", "AFOpen", "AF", "AI"]),
 });
 
 export type ArbiterFFE = z.infer<typeof ArbiterFFESchema>;

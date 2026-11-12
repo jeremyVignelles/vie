@@ -34,11 +34,11 @@ describe("CVL-5.1 - Titre d'arbitre Régionales 1 & 2", () => {
     expect(violations).toEqual([]);
   });
 
-  it("devrait accepter un arbitre fédéral club (AFC) en R1", () => {
+  it("devrait accepter un arbitre fédéral club (AFClub) en R1", () => {
     const team = makeTeamChampionnatFranceClub({ division: "R1" });
     const composition = makeTeamCompositionChampionnatFranceClub({
       teamId: team.id,
-      arbiter: makeArbiterFFE({ arbiterTitle: "AFC" }),
+      arbiter: makeArbiterFFE({ arbiterTitle: "AFClub" }),
     });
 
     const violations = rule.validate([team], tournamentState, [composition], team.id);
@@ -46,11 +46,11 @@ describe("CVL-5.1 - Titre d'arbitre Régionales 1 & 2", () => {
     expect(violations).toEqual([]);
   });
 
-  it("devrait accepter un arbitre fédéral open 1 (AFO1) en R2", () => {
+  it("devrait accepter un arbitre fédéral open (AFOpen) en R2", () => {
     const team = makeTeamChampionnatFranceClub({ division: "R2" });
     const composition = makeTeamCompositionChampionnatFranceClub({
       teamId: team.id,
-      arbiter: makeArbiterFFE({ arbiterTitle: "AFO1" }),
+      arbiter: makeArbiterFFE({ arbiterTitle: "AFOpen" }),
     });
 
     const violations = rule.validate([team], tournamentState, [composition], team.id);
@@ -58,11 +58,23 @@ describe("CVL-5.1 - Titre d'arbitre Régionales 1 & 2", () => {
     expect(violations).toEqual([]);
   });
 
-  it("devrait accepter un arbitre fédéral elite (AFE1) en R1", () => {
+  it("devrait accepter un arbitre fédéral match (AFMatch) en R1", () => {
     const team = makeTeamChampionnatFranceClub({ division: "R1" });
     const composition = makeTeamCompositionChampionnatFranceClub({
       teamId: team.id,
-      arbiter: makeArbiterFFE({ arbiterTitle: "AFE1" }),
+      arbiter: makeArbiterFFE({ arbiterTitle: "AFMatch" }),
+    });
+
+    const violations = rule.validate([team], tournamentState, [composition], team.id);
+
+    expect(violations).toEqual([]);
+  });
+
+  it("devrait accepter un arbitre FIDE (AF) en R2", () => {
+    const team = makeTeamChampionnatFranceClub({ division: "R2" });
+    const composition = makeTeamCompositionChampionnatFranceClub({
+      teamId: team.id,
+      arbiter: makeArbiterFFE({ arbiterTitle: "AF" }),
     });
 
     const violations = rule.validate([team], tournamentState, [composition], team.id);
@@ -82,11 +94,11 @@ describe("CVL-5.1 - Titre d'arbitre Régionales 1 & 2", () => {
     expect(violations).toEqual([]);
   });
 
-  it("devrait rejeter un arbitre fédéral jeune (AFJ) en R1", () => {
+  it("devrait rejeter un arbitre fédéral jeune (AFJeune) en R1", () => {
     const team = makeTeamChampionnatFranceClub({ division: "R1" });
     const composition = makeTeamCompositionChampionnatFranceClub({
       teamId: team.id,
-      arbiter: makeArbiterFFE({ arbiterTitle: "AFJ" }),
+      arbiter: makeArbiterFFE({ arbiterTitle: "AFJeune" }),
     });
 
     const violations = rule.validate([team], tournamentState, [composition], team.id);
@@ -97,7 +109,7 @@ describe("CVL-5.1 - Titre d'arbitre Régionales 1 & 2", () => {
       teamId: team.id,
       boardNumber: null,
     });
-    expect(violations[0].message).toContain("AFJ");
+    expect(violations[0].message).toContain("AFJeune");
   });
 
   it("devrait rejeter un arbitre sans titre en R2", () => {
@@ -168,7 +180,7 @@ describe("CVL-5.1 - Titre d'arbitre Régionales 1 & 2", () => {
     const team = makeTeamChampionnatFranceClub({ division: "R4" });
     const composition = makeTeamCompositionChampionnatFranceClub({
       teamId: team.id,
-      arbiter: makeArbiterFFE({ arbiterTitle: "AFJ" }),
+      arbiter: makeArbiterFFE({ arbiterTitle: "AFJeune" }),
     });
 
     const violations = rule.validate([team], tournamentState, [composition], team.id);
