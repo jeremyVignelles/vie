@@ -87,8 +87,8 @@ import {
   type TeamInfoWithRuleset,
   type TournamentState,
   type TeamComposition,
-} from 'vie';
-import { ChampionnatDeFranceDesClubs } from 'vie/rules/FFE/A02_Championnat_france_clubs';
+} from '@jeremyvignelles/vie';
+import { ChampionnatDeFranceDesClubs } from '@jeremyvignelles/vie/rules/FFE/A02_Championnat_france_clubs';
 
 // 1. Définir les équipes avec leurs ensembles de règles
 const teams: TeamInfoWithRuleset<typeof ChampionnatDeFranceDesClubs>[] = [

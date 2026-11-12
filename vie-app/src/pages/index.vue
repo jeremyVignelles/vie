@@ -12,9 +12,9 @@ import {
   type TeamInfoWithRuleset,
   type TournamentStateOf,
   type TeamCompositionOf,
-} from "vie";
-import { ChampionnatDeFranceDesClubs } from "vie/rules/FFE/A02_Championnat_france_clubs/index";
-import { InterclubsCVL } from "vie/rules/FFE/CVL/index";
+} from "@jeremyvignelles/vie";
+import { ChampionnatDeFranceDesClubs } from "@jeremyvignelles/vie/rules/FFE/A02_Championnat_france_clubs/index";
+import { InterclubsCVL } from "@jeremyvignelles/vie/rules/FFE/CVL/index";
 
 // TODO: temporary content
 const schemas = [ChampionnatDeFranceDesClubs, InterclubsCVL];
