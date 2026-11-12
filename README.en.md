@@ -252,7 +252,7 @@ npm run dev
 ## CI/CD
 
 This project uses GitHub Actions for:
-- Running tests on multiple Node.js versions (20.x, 22.x, 24.x)
+- Running tests on multiple Node.js versions (20.x, 24.x, 26.x)
 - Code coverage reporting
 - Automatic publishing to NPM on release
 

@@ -1,5 +1,5 @@
 {
-  "name": "vie",
+  "name": "@jeremyvignelles/vie",
   "version": "0.1.0",
   "description": "✅ Vérification Informatique des Équipes",
   "type": "module",
@@ -36,11 +36,11 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^26.6.6",
-    "@vitest/coverage-v8": "^4.0.16",
+    "@vitest/coverage-v8": "^5.1.0",
     "oxfmt": "^0.78.0",
     "oxlint": "^1.36.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.16"
+    "vitest": "^5.1.0"
   },
   "engines": {
     "node": ">=20.0.0"
