@@ -1,6 +1,6 @@
 {
   "name": "vie",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "✅ Vérification Informatique des Équipes",
   "type": "module",
   "module": "./dist/index.js",
@@ -35,9 +35,9 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^25.0.3",
+    "@types/node": "^26.6.6",
     "@vitest/coverage-v8": "^4.0.16",
-    "oxfmt": "^0.21.0",
+    "oxfmt": "^0.78.0",
     "oxlint": "^1.36.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.16"

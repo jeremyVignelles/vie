@@ -1,6 +1,6 @@
 {
   "name": "VIE TypeScript Library",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:24",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:26",
 
   "features": {
     "ghcr.io/devcontainers/features/git:1": {}
@@ -32,7 +32,7 @@
     }
   },
 
-  "postCreateCommand": "npm install",
+  "postCreateCommand": "npm install && cd vie-app && npm install",
 
   "remoteUser": "node"
 }
